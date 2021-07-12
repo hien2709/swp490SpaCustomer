@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:spa_customer/constant.dart';
 import 'package:spa_customer/size_config.dart';
+import 'package:spa_customer/ui/chat/chat_screen.dart';
 import 'package:spa_customer/ui/search/search_screen.dart';
 import 'package:spa_customer/ui/wish_list/wish_list_screen.dart';
 
@@ -26,7 +27,7 @@ class HomeHeader extends StatelessWidget {
             );
             FocusScope.of(context).unfocus();
           },
-          width: SizeConfig.screenWidth * 0.75,
+          width: SizeConfig.screenWidth * 0.6,
           autoFocus: false,
         ),
         Container(
@@ -45,6 +46,26 @@ class HomeHeader extends StatelessWidget {
             },
             child: Icon(
               Icons.shopping_cart,
+              color: Color(0xff808080),
+            ),
+          ),
+        ),
+        Container(
+          height: 50,
+          width: 50,
+          decoration: BoxDecoration(
+            color: kSecondaryColor.withOpacity(0.1),
+            shape: BoxShape.circle,
+          ),
+          child: InkWell(
+            onTap: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ChatScreen()),
+              );
+            },
+            child: Icon(
+              Icons.chat_outlined,
               color: Color(0xff808080),
             ),
           ),

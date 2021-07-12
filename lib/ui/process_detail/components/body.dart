@@ -3,7 +3,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:spa_customer/constant.dart';
 import 'package:spa_customer/helper/Helper.dart';
+import 'package:spa_customer/main.dart';
 import 'package:spa_customer/models/BookingDetail.dart';
+import 'package:spa_customer/services/firebase_service.dart';
+import 'package:spa_customer/ui/chat/chat_screen.dart';
 
 class Body extends StatefulWidget {
   final Datum processDetail;
@@ -38,6 +41,7 @@ class _BodyState extends State<Body> {
         StaffSection(
           name: widget.processDetail.bookingDetailSteps[0].consultant.user.fullname==null?"Chưa có tư vấn viên":widget.processDetail.bookingDetailSteps[0].consultant.user.fullname,
           phone: widget.processDetail.bookingDetailSteps[0].consultant.user.fullname==null?"Chưa có tư vấn viên":widget.processDetail.bookingDetailSteps[0].consultant.user.phone,
+          id: widget.processDetail.bookingDetailSteps[0].consultant.user.fullname==null?"Chưa có tư vấn viên":widget.processDetail.bookingDetailSteps[0].consultant.user.id,
         ),
         Divider(
           thickness: 1,
@@ -203,14 +207,49 @@ class ProcessStepSection extends StatelessWidget {
   }
 }
 
-class StaffSection extends StatelessWidget {
+class StaffSection extends StatefulWidget {
   final String name, phone;
+  final int id;
+
 
   const StaffSection({
     Key key,
     @required this.name,
     @required this.phone,
+    @required this.id,
   }) : super(key: key);
+
+  @override
+  _StaffSectionState createState() => _StaffSectionState();
+}
+
+class _StaffSectionState extends State<StaffSection> {
+
+  createChatRoom(){
+    List<int> users = [MyApp.storage.getItem("customerId"), widget.id];
+    FirebaseMethod firebaseMethod = FirebaseMethod();
+
+    String chatRoomId = "${MyApp.storage.getItem("customerId")}_${widget.id}";
+
+    Map<String, dynamic> chatRoom = {
+      "users": users,
+      "chatRoomId" : chatRoomId,
+    };
+
+    firebaseMethod.createChatRoom(chatRoomId, chatRoom );
+
+    Navigator.push(context, MaterialPageRoute(
+        builder: (context) => ChatScreen()
+    ));
+  }
+
+  getChatRoomId(int a, int b) {
+    if (a > b) {
+      return "$b\_$a";
+    } else {
+      return "$a\_$b";
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -247,7 +286,7 @@ class StaffSection extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("$name - $phone"),
+                    Text("${widget.name} - ${widget.phone}"),
                   ],
                 ),
               )
@@ -256,9 +295,14 @@ class StaffSection extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.only(right: 20),
-          child: Icon(
-            Icons.chat,
-            color: kPrimaryColor,
+          child: GestureDetector(
+            onTap: (){
+              createChatRoom();
+            },
+            child: Icon(
+              Icons.chat,
+              color: kPrimaryColor,
+            ),
           ),
         ),
       ],

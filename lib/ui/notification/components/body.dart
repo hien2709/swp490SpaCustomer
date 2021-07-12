@@ -1,3 +1,5 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 class Body extends StatefulWidget {
@@ -6,6 +8,51 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
+
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
+  getToken() async {
+    await Firebase.initializeApp();
+    _firebaseMessaging.getToken().then((value) {
+      print("Device Token: $value");
+    });
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    getToken();
+    _firebaseMessaging.configure(
+
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
+        setState(() {
+          print("Nhận dc thông báo onMessage");
+        });
+      },
+
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+        setState(() {
+          print("Nhận dc thông báo onResume");
+        });
+      },
+
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+        setState(() {
+          print("Nhận dc thông báo onLaunch");
+        });
+      },
+
+
+
+    );
+    _firebaseMessaging.requestNotificationPermissions(
+        const IosNotificationSettings(sound: true, badge: true, alert: true));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(

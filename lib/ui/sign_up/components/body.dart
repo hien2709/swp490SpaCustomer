@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:spa_customer/constant.dart';
+import 'package:spa_customer/services/firebase_service.dart';
 import 'package:spa_customer/ui/components/form_error.dart';
 import 'package:spa_customer/ui/login/components/default_button.dart';
 import 'package:spa_customer/ui/sign_up/components/otp.dart';
@@ -72,6 +73,9 @@ class _SignUpFormState extends State<SignUpForm> {
 
       print("Response status: ${res.statusCode}");
       print("Response body: ${res.body}");
+
+
+
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => OtpScreen(phone: phoneNumber,)),

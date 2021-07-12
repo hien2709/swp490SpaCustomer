@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "182313803250",
+    "firebase_url": "https://testuploadimgae-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "testuploadimgae",
+    "storage_bucket": "testuploadimgae.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:182313803250:android:e942570b1995bdae209f6b",
+        "android_client_info": {
+          "package_name": "com.example.spa_customer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "182313803250-o4vce76kk3omifgjja8dlqcmhnnsv720.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfUW2cMCdIh9jKedC_5nFXQRNayqrItVQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "182313803250-o4vce76kk3omifgjja8dlqcmhnnsv720.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
