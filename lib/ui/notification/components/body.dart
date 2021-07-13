@@ -2,81 +2,90 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
+
+
 class Body extends StatefulWidget {
   @override
   _BodyState createState() => _BodyState();
 }
 
 class _BodyState extends State<Body> {
-
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  String token;
+  String title = "";
 
   getToken() async {
     await Firebase.initializeApp();
-    _firebaseMessaging.getToken().then((value) {
-      print("Device Token: $value");
-    });
+    token = await FirebaseMessaging.instance.getToken();
+    print("token: " + token);
   }
 
+  Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+    await Firebase.initializeApp();
+    print('Handling a background message ${message.messageId}');
+    RemoteNotification notification = message.notification;
+    print("Notification title: " + notification.title);
+    print("Notification body: " + notification.body);
+    print(message.data['message']);
+    setState(() {
+      title = notification.title;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
     getToken();
-    _firebaseMessaging.configure(
 
-      onMessage: (Map<String, dynamic> message) async {
-        print("onMessage: $message");
-        setState(() {
-          print("Nhận dc thông báo onMessage");
-        });
-      },
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-      onResume: (Map<String, dynamic> message) async {
-        print("onResume: $message");
-        setState(() {
-          print("Nhận dc thông báo onResume");
-        });
-      },
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      RemoteNotification notification = message.notification;
+      print("Notification title: " + notification.title);
+      print("Notification body: " + notification.body);
+      setState(() {
+        title = notification.title;
+      });
+    });
 
-      onLaunch: (Map<String, dynamic> message) async {
-        print("onLaunch: $message");
-        setState(() {
-          print("Nhận dc thông báo onLaunch");
-        });
-      },
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      RemoteNotification notification = message.notification;
+      print("Notification title: " + notification.title);
+      print("Notification body: " + notification.body);
+      setState(() {
+        title = notification.title;
+      });
+    });
 
-
-
-    );
-    _firebaseMessaging.requestNotificationPermissions(
-        const IosNotificationSettings(sound: true, badge: true, alert: true));
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        NotificationBookingSuccessItem(
-          image: "assets/images/beauty.png",
-          companyName: "Eri international",
-          serviceName: "BIO ACNE",
-          date: "25/03/2021",
-        ),
-        NotificationBookingSuccessItem(
-          image: "assets/images/body.png",
-          companyName: "Eri international",
-          serviceName: "Massage JiaczHoiz",
-          date: "26/03/2021",
-        ),
-        NotificationBookingSuccessItem(
-          image: "assets/images/Skin.png",
-          companyName: "Eri international",
-          serviceName: "AQUA DETOX",
-          date: "27/03/2021",
-        ),
-      ],
+    return Container(
+      child: Text("Title: " + title),
     );
+    // return Column(
+    //   children: [
+    //     NotificationBookingSuccessItem(
+    //       image: "assets/images/beauty.png",
+    //       companyName: "Eri international",
+    //       serviceName: "BIO ACNE",
+    //       date: "25/03/2021",
+    //     ),
+    //     NotificationBookingSuccessItem(
+    //       image: "assets/images/body.png",
+    //       companyName: "Eri international",
+    //       serviceName: "Massage JiaczHoiz",
+    //       date: "26/03/2021",
+    //     ),
+    //     NotificationBookingSuccessItem(
+    //       image: "assets/images/Skin.png",
+    //       companyName: "Eri international",
+    //       serviceName: "AQUA DETOX",
+    //       date: "27/03/2021",
+    //     ),
+    //   ],
+    // );
+
   }
 }
 

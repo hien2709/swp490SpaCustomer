@@ -1,25 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:spa_customer/services/firebase_service.dart';
 
 import 'conversation_screen.dart';
 
 class ChatCard extends StatefulWidget {
-  String staffId = "";
+  String consultantId = "";
   String chatRoomId = "";
+  String consultantImage = "";
+  String consultantName = "";
+  String consultantPhone = "";
 
-  ChatCard({this.staffId, this.chatRoomId});
+
+  ChatCard(
+      {this.consultantId,
+      this.chatRoomId,
+      this.consultantImage,
+      this.consultantName,
+      this.consultantPhone});
 
   @override
   _ChatCardState createState() => _ChatCardState();
 }
 
 class _ChatCardState extends State<ChatCard> {
-  String staffName;
-  String staffPhone;
-  String staffImage;
-  bool loading = true;
 
+  bool loading = true;
+  String consultantName;
+  String consultantPhone;
+  String consultantImage;
 
 
   @override
@@ -30,9 +38,9 @@ class _ChatCardState extends State<ChatCard> {
 
 
   getStaffInfo() async {
-    staffName = "Nguyễn Toàn Thắng";
-    staffPhone = "097";
-    staffImage = "https://static2.yan.vn/YanNews/2167221/201908/linh-ka-dap-tra-xeo-sac-khi-bi-noi-don-nguc-c95f3626.jpg";
+    consultantName = widget.consultantName;
+    consultantPhone = widget.consultantPhone;
+    consultantImage = widget.consultantImage;
     loading = false;
   }
 
@@ -55,9 +63,9 @@ class _ChatCardState extends State<ChatCard> {
                   builder: (context) =>
                       ConversationScreen(
                         chatRoomId: widget.chatRoomId,
-                        phone: staffPhone,
-                        name: staffName,
-                        image: staffImage,
+                        phone: consultantPhone,
+                        name: consultantName,
+                        image: consultantImage,
                       )
               ));
         },
@@ -69,7 +77,7 @@ class _ChatCardState extends State<ChatCard> {
                 child: Row(
                   children: <Widget>[
                     CircleAvatar(
-                      backgroundImage: NetworkImage(staffImage),
+                      backgroundImage: NetworkImage(consultantImage),
                       maxRadius: 30,
                     ),
                     SizedBox(
@@ -82,7 +90,7 @@ class _ChatCardState extends State<ChatCard> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              staffName,
+                              consultantName,
                               style: TextStyle(
                                 color: Colors.black,
                               ),
@@ -91,7 +99,7 @@ class _ChatCardState extends State<ChatCard> {
                               height: 6,
                             ),
                             Text(
-                              staffPhone,
+                              consultantPhone,
                               style: TextStyle(
                                   fontSize: 14, color: Colors.grey.shade500),
                             ),

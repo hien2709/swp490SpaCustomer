@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:spa_customer/main.dart';
+import 'package:spa_customer/models/ConsultantProfileToChat.dart';
+import 'package:spa_customer/services/ConsultantProfileServices.dart';
 import 'package:spa_customer/services/firebase_service.dart';
 
+import '../../../main.dart';
 import 'chat_card.dart';
 
 
@@ -20,19 +22,45 @@ class _BodyState extends State<Body> {
   QuerySnapshot searchResult;
   TextEditingController searchInput = TextEditingController();
   bool isSearch = false;
+  ConsultantProfileToChat consultantProfileToChat = ConsultantProfileToChat();
 
   getChatRoom() async {
+    await getListConsultantForChat();
+    await createChatRoom();
     print("customerId: " + MyApp.storage.getItem("customerId").toString());
     await firebaseMethod.getChatRoomStream(MyApp.storage.getItem("customerId")).then((value) {
       setState(() {
         chatRoomStream = value;
         loading = false;
-        print("Có lấy dc ChatRoom");
       });
     });
   }
 
+  getListConsultantForChat() async{
+    await ConsultantProfileServices.getConsultantProfileToChat(MyApp.storage.getItem("customerId"))
+        .then((value) => {
+      setState(() {
+        consultantProfileToChat = value;
+        loading = false;
+        print("Fullname: " + consultantProfileToChat.data[0].user.fullname);
+      })
+    });
+  }
 
+  createChatRoom() {
+      for(int i = 0; i < consultantProfileToChat.data.length; i++){
+      List<int> users = [MyApp.storage.getItem("customerId"), consultantProfileToChat.data[i].id];
+      FirebaseMethod firebaseMethod = FirebaseMethod();
+
+      String chatRoomId = "${MyApp.storage.getItem("customerId")}_${consultantProfileToChat.data[i].id}";
+
+      Map<String, dynamic> chatRoom = {
+        "users": users,
+        "chatRoomId" : chatRoomId,
+      };
+      firebaseMethod.createChatRoom(chatRoomId, chatRoom );
+    }
+  }
 
   Widget searchList() {
     return searchResult != null
@@ -41,7 +69,7 @@ class _BodyState extends State<Body> {
       itemCount: searchResult.docs.length,
       itemBuilder: (context, index) {
         return ChatCard(
-          staffId: searchResult.docs[index]["id"],
+          consultantId: searchResult.docs[index]["id"],
           chatRoomId: getChatRoomId(
               int.parse(searchResult.docs[index]["id"]),
               MyApp.storage.getItem("staffId")),
@@ -69,13 +97,17 @@ class _BodyState extends State<Body> {
             itemCount: snapshot.data.docs.length,
             itemBuilder: (context, index) {
               return ChatCard(
-                  staffId: snapshot
+                consultantId: snapshot
                       .data.docs[index]["chatRoomId"]
                       .toString()
                       .replaceAll("_", "")
                       .replaceAll("${MyApp.storage.getItem("customerId")}", ""),
                   chatRoomId:
-                  snapshot.data.docs[index]["chatRoomId"]);
+                  snapshot.data.docs[index]["chatRoomId"],
+                  consultantName: consultantProfileToChat.data[index].user.fullname,
+                  consultantPhone: consultantProfileToChat.data[index].user.phone,
+                  consultantImage: consultantProfileToChat.data[index].user.image == null ? "https://huyhoanhotel.com/wp-content/uploads/2016/05/765-default-avatar.png" : consultantProfileToChat.data[index].user.image,
+              );
             }
         )
             : Container();
@@ -101,6 +133,7 @@ class _BodyState extends State<Body> {
   void initState() {
     super.initState();
     getChatRoom();
+
   }
 
   @override
