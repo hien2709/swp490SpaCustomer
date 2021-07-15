@@ -63,9 +63,9 @@ class _ChatCardState extends State<ChatCard> {
                   builder: (context) =>
                       ConversationScreen(
                         chatRoomId: widget.chatRoomId,
-                        phone: consultantPhone,
-                        name: consultantName,
-                        image: consultantImage,
+                        consultantPhone: consultantPhone,
+                        consultantName: consultantName,
+                        consultantImage: consultantImage,
                       )
               ));
         },

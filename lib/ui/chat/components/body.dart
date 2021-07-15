@@ -51,9 +51,7 @@ class _BodyState extends State<Body> {
       for(int i = 0; i < consultantProfileToChat.data.length; i++){
       List<int> users = [MyApp.storage.getItem("customerId"), consultantProfileToChat.data[i].id];
       FirebaseMethod firebaseMethod = FirebaseMethod();
-
       String chatRoomId = "${MyApp.storage.getItem("customerId")}_${consultantProfileToChat.data[i].id}";
-
       Map<String, dynamic> chatRoom = {
         "users": users,
         "chatRoomId" : chatRoomId,

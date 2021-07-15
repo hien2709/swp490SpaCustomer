@@ -1,5 +1,8 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:spa_customer/constant.dart';
+import 'package:spa_customer/main.dart';
 import 'package:spa_customer/size_config.dart';
 import 'package:spa_customer/ui/appointment_schedule/appointment_schedule.dart';
 import 'package:spa_customer/ui/home_screen/home_screen.dart';
@@ -27,9 +30,9 @@ class _BottomNavigationState extends State<BottomNavigation> {
   void  onBottomNavigationItemSelect(int index){
     setState(() {
       selectedIndex = index;
-
     });
   }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig.init(context);

@@ -7,6 +7,7 @@ import 'package:spa_customer/main.dart';
 import 'package:spa_customer/models/BookingDetail.dart';
 import 'package:spa_customer/services/firebase_service.dart';
 import 'package:spa_customer/ui/chat/chat_screen.dart';
+import 'package:spa_customer/ui/chat/components/conversation_screen.dart';
 
 class Body extends StatefulWidget {
   final Datum processDetail;
@@ -40,8 +41,9 @@ class _BodyState extends State<Body> {
         ),
         StaffSection(
           name: widget.processDetail.bookingDetailSteps[0].consultant.user.fullname==null?"Chưa có tư vấn viên":widget.processDetail.bookingDetailSteps[0].consultant.user.fullname,
-          phone: widget.processDetail.bookingDetailSteps[0].consultant.user.fullname==null?"Chưa có tư vấn viên":widget.processDetail.bookingDetailSteps[0].consultant.user.phone,
-          id: widget.processDetail.bookingDetailSteps[0].consultant.user.fullname==null?"Chưa có tư vấn viên":widget.processDetail.bookingDetailSteps[0].consultant.user.id,
+          phone: widget.processDetail.bookingDetailSteps[0].consultant.user.phone==null?"Chưa có tư vấn viên":widget.processDetail.bookingDetailSteps[0].consultant.user.phone,
+          id: widget.processDetail.bookingDetailSteps[0].consultant.user.id==null?"Chưa có tư vấn viên":widget.processDetail.bookingDetailSteps[0].consultant.user.id,
+          image: widget.processDetail.bookingDetailSteps[0].consultant.user.image==null?"https://huyhoanhotel.com/wp-content/uploads/2016/05/765-default-avatar.png":widget.processDetail.bookingDetailSteps[0].consultant.user.image,
         ),
         Divider(
           thickness: 1,
@@ -208,7 +210,7 @@ class ProcessStepSection extends StatelessWidget {
 }
 
 class StaffSection extends StatefulWidget {
-  final String name, phone;
+  final String name, phone, image;
   final int id;
 
 
@@ -217,6 +219,7 @@ class StaffSection extends StatefulWidget {
     @required this.name,
     @required this.phone,
     @required this.id,
+    @required this.image,
   }) : super(key: key);
 
   @override
@@ -225,30 +228,18 @@ class StaffSection extends StatefulWidget {
 
 class _StaffSectionState extends State<StaffSection> {
 
-  createChatRoom(){
-    List<int> users = [MyApp.storage.getItem("customerId"), widget.id];
-    FirebaseMethod firebaseMethod = FirebaseMethod();
-
-    String chatRoomId = "${MyApp.storage.getItem("customerId")}_${widget.id}";
-
-    Map<String, dynamic> chatRoom = {
-      "users": users,
-      "chatRoomId" : chatRoomId,
-    };
-
-    firebaseMethod.createChatRoom(chatRoomId, chatRoom );
-
-    Navigator.push(context, MaterialPageRoute(
-        builder: (context) => ChatScreen()
-    ));
-  }
-
-  getChatRoomId(int a, int b) {
-    if (a > b) {
-      return "$b\_$a";
-    } else {
-      return "$a\_$b";
-    }
+  conversationScreen(){
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                ConversationScreen(
+                  chatRoomId: "${MyApp.storage.getItem("customerId")}_${widget.id}",
+                  consultantPhone: widget.phone,
+                  consultantName: widget.name,
+                  consultantImage: widget.image,
+                )
+        ));
   }
 
   @override
@@ -297,7 +288,7 @@ class _StaffSectionState extends State<StaffSection> {
           padding: const EdgeInsets.only(right: 20),
           child: GestureDetector(
             onTap: (){
-              createChatRoom();
+              conversationScreen();
             },
             child: Icon(
               Icons.chat,

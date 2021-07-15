@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -65,12 +67,13 @@ class _SignFormState extends State<SignForm> {
   String password;
   final List<String> errors = [];
 
-  void onClickSignIn(String phoneNumber, String password) async {
+  void onClickSignIn(String phoneNumber, String password, String tokenFCM) async {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
     }
 
     String url = "https://swp490spa.herokuapp.com/api/public/login";
+    print("tokenFCM: " + tokenFCM);
 
     var jsonResponse;
     final res = await http.post(url,
@@ -81,7 +84,9 @@ class _SignFormState extends State<SignForm> {
         body: jsonEncode({
           "phone": phoneNumber,
           "password": password,
-          "role": "CUSTOMER"
+          "role": "CUSTOMER",
+          "tokenFCM": tokenFCM,
+
         }));
     if (res.statusCode == 200) {
       jsonResponse = json.decode(res.body);
@@ -127,6 +132,49 @@ class _SignFormState extends State<SignForm> {
     }
   }
 
+  getToken() async {
+    await Firebase.initializeApp();
+    String token = await FirebaseMessaging.instance.getToken();
+    MyApp.storage.setItem('tokenFCM', token);
+  }
+
+  Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+    await Firebase.initializeApp();
+    print('Handling a background message ${message.messageId}');
+    RemoteNotification notification = message.notification;
+    print(message.notification);
+    print(message.data);
+    setState(() {
+
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getToken();
+
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      RemoteNotification notification = message.notification;
+      print("Notification title: " + notification.title);
+      print("Notification body: " + notification.body);
+      setState(() {
+        print("ALL: $message");
+      });
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      RemoteNotification notification = message.notification;
+      print("Notification title: " + notification.title);
+      print("Notification body: " + notification.body);
+      setState(() {
+
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -151,7 +199,7 @@ class _SignFormState extends State<SignForm> {
           DefaultButton(
             text: "Đăng nhập",
             press: () {
-              onClickSignIn(phoneNumber, password);
+              onClickSignIn(phoneNumber, password, MyApp.storage.getItem('tokenFCM'));
             },
           ),
           SizedBox(height: SizeConfig.screenHeight * 0.08),

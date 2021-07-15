@@ -6,11 +6,11 @@ import 'conversation_appBar.dart';
 
 class ConversationScreen extends StatefulWidget {
   final String chatRoomId;
-  final String name;
-  final String phone;
-  final String image;
+  final String consultantName;
+  final String consultantPhone;
+  final String consultantImage;
 
-  ConversationScreen({this.chatRoomId, this.name, this.phone, this.image});
+  ConversationScreen({this.chatRoomId, this.consultantName, this.consultantPhone, this.consultantImage});
 
   @override
   _ConversationScreenState createState() => _ConversationScreenState();
@@ -20,7 +20,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
   FirebaseMethod firebaseMethod = FirebaseMethod();
   TextEditingController messageInput = TextEditingController();
   Stream chatMessageStream;
-  int staffId;
+  int customerId;
   int prevUserId;
 
   ChatMessageList() {
@@ -33,7 +33,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                 itemCount: snapshot.data.docs.length,
                 itemBuilder: (context, index) {
                   final bool isMe =
-                      snapshot.data.docs[index]["sendBy"] == staffId;
+                      snapshot.data.docs[index]["sendBy"] == customerId;
                   final bool isSameUser =
                       prevUserId == snapshot.data.docs[index]["sendBy"];
                   prevUserId = snapshot.data.docs[index]["sendBy"];
@@ -50,7 +50,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
     if (messageInput.text.isNotEmpty) {
       Map<String, dynamic> messageMap = {
         "message": messageInput.text,
-        "sendBy": staffId,
+        "sendBy": customerId,
         "time": DateTime.now().millisecondsSinceEpoch
       };
       firebaseMethod.addConversationMessage(widget.chatRoomId, messageMap);
@@ -70,8 +70,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
 
   getData() async {
     await MyApp.storage.ready;
-    //staffId = MyApp.storage.getItem("staffId");
-    staffId = 3;
+    customerId = MyApp.storage.getItem("staffId");
   }
 
   @override
@@ -85,7 +84,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: ConversationAppBar(
-          image: widget.image, name: widget.name, phone: widget.phone),
+          image: widget.consultantImage, name: widget.consultantName, phone: widget.consultantPhone),
       body: Column(
         children: [
           Expanded(
@@ -105,12 +104,6 @@ class _ConversationScreenState extends State<ConversationScreen> {
       color: Colors.grey[300],
       child: Row(
         children: <Widget>[
-          IconButton(
-            icon: Icon(Icons.photo),
-            iconSize: 25,
-            color: Colors.blue,
-            onPressed: () {},
-          ),
           Expanded(
             child: TextField(
               controller: messageInput,
@@ -251,7 +244,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                         child: CircleAvatar(
                           radius: 15,
                           backgroundImage: NetworkImage(
-                              widget.image == null ? "https://huyhoanhotel.com/wp-content/uploads/2016/05/765-default-avatar.png" : widget.image),
+                              widget.consultantImage == null ? "https://huyhoanhotel.com/wp-content/uploads/2016/05/765-default-avatar.png" : widget.consultantImage),
                         ),
                       ),
                     ],
