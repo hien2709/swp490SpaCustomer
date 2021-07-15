@@ -6,9 +6,9 @@ import 'package:spa_customer/models/AvailableTime.dart';
 class AvailableTimeServices {
   static final String GET_AVAILABLE_TIME_FOR_BOOKING = "https://swp490spa.herokuapp.com/api/customer/getlisttimebook?";
 
-  static Future<AvailableTime> getAvailableTimeForBooking(int packageId, String dateBooking) async{
+  static Future<AvailableTime> getAvailableTimeForBooking(int packageId, String dateBooking, int spaId) async{
     try{
-      final response = await http.get(GET_AVAILABLE_TIME_FOR_BOOKING+"customerId=${MyApp.storage.getItem("customerId")}"+"&spaPackageId=${packageId}&dateBooking=${dateBooking}",
+      final response = await http.get(GET_AVAILABLE_TIME_FOR_BOOKING+"customerId=${MyApp.storage.getItem("customerId")}"+"&dateBooking=${dateBooking}&spaId=${spaId}&spaPackageId=${packageId}",
           headers: {
             "authorization": "Bearer " + MyApp.storage.getItem("token"),
           });

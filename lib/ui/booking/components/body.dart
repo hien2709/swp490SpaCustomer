@@ -7,6 +7,7 @@ import 'package:spa_customer/main.dart';
 import 'package:spa_customer/models/AvailableTime.dart';
 import 'package:spa_customer/models/Package.dart';
 import 'package:spa_customer/models/RequestBookingDetail.dart';
+import 'package:spa_customer/models/Spa.dart';
 import 'package:spa_customer/services/AvailableTimeServices.dart';
 import 'package:spa_customer/services/BookingServices.dart';
 import 'package:spa_customer/size_config.dart';
@@ -20,12 +21,13 @@ class BookingBody extends StatefulWidget {
   _BookingBodyState createState() => _BookingBodyState();
 
   @required
-  final Datum package;
+  final PackageInstance package;
+  final SpaInstance spa;
   @required
   final bool isBookNow;
   final List<RequestBookingDetail> listRequestBookingDetail;
 
-  const BookingBody({Key key, @required this.package, @required this.isBookNow, this.listRequestBookingDetail})
+  const BookingBody({Key key, @required this.package, @required this.isBookNow, this.listRequestBookingDetail, this.spa})
       : super(key: key);
 }
 
@@ -47,7 +49,7 @@ class _BookingBodyState extends State<BookingBody> {
 
     requestDate = MyHelper.getMachineDate(DateTime.now());
     AvailableTimeServices.getAvailableTimeForBooking(
-            widget.package.id, requestDate)
+            widget.package.id, requestDate, widget.spa.id)
         .then((availableTime) => {
               setState(() {
                 _availableTime = availableTime;
@@ -155,7 +157,7 @@ class _BookingBodyState extends State<BookingBody> {
                                   DateTime.now().add(Duration(days: index)));
                               requestDate = selectedDay;
                               AvailableTimeServices.getAvailableTimeForBooking(
-                                      widget.package.id, requestDate)
+                                      widget.package.id, requestDate,widget.spa.id)
                                   .then((availableTime) => {
                                         setState(() {
                                           _availableTime = availableTime;
@@ -280,7 +282,7 @@ class _BookingBodyState extends State<BookingBody> {
                                         timeBooking:
                                             _availableTime.data[slotId]));
                                 BookingServices.createBookingRequest(
-                                        listRequestBookingDetail)
+                                        listRequestBookingDetail, widget.spa.id)
                                     .then((value) {
                                   Navigator.pop(context);
                                   value.compareTo("200") == 0
@@ -339,7 +341,7 @@ class ChoosenPackage extends StatelessWidget {
 
   }) : super(key: key);
 
-  final Datum package;
+  final PackageInstance package;
 
   @override
   Widget build(BuildContext context) {
@@ -373,13 +375,13 @@ class ChoosenPackage extends StatelessWidget {
                       : Text(package.description
                               .substring(0, 49) +
                           "..."),
-                  Container(
-                    width: double.infinity,
-                    child: Text(
-                      package.spaId.name,
-                      textAlign: TextAlign.right,
-                    ),
-                  ),
+                  // Container(
+                  //   width: double.infinity,
+                  //   child: Text(
+                  //     package.spaId.name,
+                  //     textAlign: TextAlign.right,
+                  //   ),
+                  // ),
                 ],
               ),
             )
@@ -457,7 +459,7 @@ class DateBox extends StatefulWidget {
     this.package,
   }) : super(key: key);
   final DateTime date;
-  final Datum package;
+  final PackageInstance package;
 
   @override
   _DateBoxState createState() => _DateBoxState();

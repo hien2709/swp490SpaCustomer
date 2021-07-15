@@ -10,7 +10,7 @@ class WishListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    MyApp.storage.getItem("cart") == null ? MyApp.storage.setItem("cart", cartItemToJson(new List<Datum>())) :  HomeScreen.cart = cartItemFromJson(MyApp.storage.getItem("cart"));
+    MyApp.storage.getItem("cart") == null ? MyApp.storage.setItem("cart", cartItemToJson(new List<PackageInstance>())) :  HomeScreen.cart = cartItemFromJson(MyApp.storage.getItem("cart"));
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,

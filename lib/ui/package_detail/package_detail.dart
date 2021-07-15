@@ -4,7 +4,7 @@ import 'package:spa_customer/models/Package.dart';
 import 'package:spa_customer/ui/package_detail/components/body.dart';
 
 class PackageDetailScreen extends StatefulWidget {
-  final Datum package;
+  final PackageInstance package;
 
   const PackageDetailScreen({Key key, this.package}) : super(key: key);
 

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:spa_customer/models/Package.dart';
+import 'package:spa_customer/models/Spa.dart';
 import 'package:spa_customer/ui/booking/components/body.dart';
 
 class CustomerBookingScreen extends StatefulWidget {
-  final Datum package;
-  const CustomerBookingScreen({Key key, this.package}) : super(key: key);
+  final PackageInstance package;
+  final SpaInstance spa;
+  const CustomerBookingScreen({Key key, this.package, this.spa}) : super(key: key);
 
   @override
   _CustomerBookingScreenState createState() => _CustomerBookingScreenState();
@@ -24,7 +26,7 @@ class _CustomerBookingScreenState extends State<CustomerBookingScreen> {
           ),
         ),
       ),
-      body: BookingBody(package: widget.package, isBookNow: true,),
+      body: BookingBody(package: widget.package, isBookNow: true, spa: widget.spa,),
     );
   }
 }

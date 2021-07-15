@@ -73,7 +73,10 @@ class _SignFormState extends State<SignForm> {
     }
 
     String url = "https://swp490spa.herokuapp.com/api/public/login";
-    print("tokenFCM: " + tokenFCM);
+    if(tokenFCM == null){
+      print("token FCM bi null");
+    }else{
+    print("tokenFCM: " + tokenFCM);}
 
     var jsonResponse;
     final res = await http.post(url,
@@ -91,7 +94,6 @@ class _SignFormState extends State<SignForm> {
     if (res.statusCode == 200) {
       jsonResponse = json.decode(res.body);
 
-      print(phoneNumber + password);
       print("Response status: ${res.statusCode}");
       print("Response body: ${res.body}");
 

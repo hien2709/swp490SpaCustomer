@@ -21,7 +21,7 @@ class SectionTitle extends StatefulWidget {
 }
 
 class _SectionTitleState extends State<SectionTitle> {
-  List<Datum> listPackage = [];
+  List<PackageInstance> listPackage = [];
 
   getListPackage(){
     for(int i = 0; i < widget.package.data.length; i++){

@@ -4,7 +4,7 @@ import 'package:spa_customer/models/Package.dart';
 import 'package:spa_customer/ui/home_screen/home_screen.dart';
 
 class PackageDetailImage extends StatelessWidget {
-  final Datum package;
+  final PackageInstance package;
   const PackageDetailImage({Key key, this.package}) : super(key: key);
 
   @override

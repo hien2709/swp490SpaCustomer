@@ -242,7 +242,7 @@ class CartItemCard extends StatefulWidget {
   @required
   final GestureTapCallback press;
   @required
-  final Datum cartItem;
+  final PackageInstance cartItem;
 
   @override
   _CartItemCardState createState() => _CartItemCardState();

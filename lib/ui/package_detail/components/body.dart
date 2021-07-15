@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:spa_customer/constant.dart';
 import 'package:spa_customer/models/Package.dart';
+import 'package:spa_customer/ui/booking/components/choose_spa.dart';
 import 'package:spa_customer/ui/booking/customer_booking_screen.dart';
 import 'package:spa_customer/ui/login/components/default_button.dart';
 import 'package:spa_customer/ui/package_detail/components/package_detail_image.dart';
 
 class Body extends StatefulWidget {
-  final Datum package;
+  final PackageInstance package;
 
   const Body({Key key, this.package}) : super(key: key);
 
@@ -149,7 +150,7 @@ class _BodyState extends State<Body> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => CustomerBookingScreen(package:widget.package),
+                                  builder: (context) => ChooseSpaScreen(package:widget.package),
                                 ),
                               );
                             },
