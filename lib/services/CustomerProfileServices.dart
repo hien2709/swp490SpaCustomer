@@ -7,7 +7,7 @@ import 'package:spa_customer/models/CustomerProfile.dart';
 class CustomerProfileServices {
 
   static final String GET_CUSTOMER_PROFILE_SERVICE = "https://swp490spa.herokuapp.com/api/customer/getprofile?userId=";
-  static final String urlGetAllSpa = "https://swp490spa.herokuapp.com/api/public/spa/findall";
+  static final String urlGetAllSpa = "https://swp490spa.herokuapp.com/api/public/spa/findAll";
 
   static Future<CustomerProfile> getCustomerProfile() async {
     try{
