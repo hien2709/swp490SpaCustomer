@@ -5,7 +5,7 @@ import 'package:spa_customer/ui/home_screen/components/body.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key key}) : super(key: key);
-  static List<Datum> cart = new List<Datum>();
+  static List<PackageInstance> cart = new List<PackageInstance>();
 
   @override
   _HomeScreenState createState() => _HomeScreenState();

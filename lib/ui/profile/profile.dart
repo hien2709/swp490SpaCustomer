@@ -16,7 +16,7 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return Container(
       child: MyApp.storage.getItem("token") == null
-          ? Login()
+          ? Login(isMainLogin: true,)
           : CustomerProfileWidget(),
     );
   }

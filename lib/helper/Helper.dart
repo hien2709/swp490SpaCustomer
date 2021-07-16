@@ -32,7 +32,7 @@ class  MyHelper{
     return date.year.toString()+ "-" + month +"-"+ day;
   }
 
-  static AvailableTime getAvailableTimeForCart(AvailableTime availableTime, List<RequestBookingDetail> listRequestBookingDetail, Datum package, String requestDate){
+  static AvailableTime getAvailableTimeForCart(AvailableTime availableTime, List<RequestBookingDetail> listRequestBookingDetail, PackageInstance package, String requestDate){
     DateFormat formatter = new DateFormat("hh:mm:ss");
     // chạy từng phần tử trong list request
     for(var i = 0 ; i<listRequestBookingDetail.length ; i++){
@@ -77,8 +77,8 @@ class  MyHelper{
     return availableTime;
   }
 
-  static List<Datum> getListPackageFromListRequestBooking( List<RequestBookingDetail> listRequestBookingDetail){
-    List<Datum> result = [];
+  static List<PackageInstance> getListPackageFromListRequestBooking( List<RequestBookingDetail> listRequestBookingDetail){
+    List<PackageInstance> result = [];
     for(var i = 0 ; i<listRequestBookingDetail.length ; i++){
       for(var j = 0 ; j<HomeScreen.cart.length ; j++){
         if(listRequestBookingDetail[i].packageId == HomeScreen.cart[j].id){

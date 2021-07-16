@@ -5,7 +5,7 @@ import 'package:spa_customer/models/Package.dart';
 class ServiceCard extends StatelessWidget {
   const ServiceCard({
     Key key,
-    @required List<Datum> services,
+    @required List<PackageInstance> services,
     this.width = 140,
     this.aspectRatio = 1.02,
     @required this.service,
@@ -13,7 +13,7 @@ class ServiceCard extends StatelessWidget {
   })  ;
 
   final double width, aspectRatio;
-  final Datum service;
+  final PackageInstance service;
   final GestureTapCallback press;
 
   @override

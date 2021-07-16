@@ -16,7 +16,7 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Datum> listPackage =
+    List<PackageInstance> listPackage =
         MyHelper.getListPackageFromListRequestBooking(listRequestBooking);
     return Column(
       children: [
@@ -75,7 +75,7 @@ class Body extends StatelessWidget {
                 },
               );
               BookingServices.createBookingRequest(
-                  listRequestBooking)
+                  listRequestBooking, 1)
                   .then((value) {
                 Navigator.pop(context);
                 value.compareTo("200") == 0

@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:spa_customer/models/Package.dart';
 
 class PackageServices {
-  static final String GET_ALL_PACKAGES = "https://swp490spa.herokuapp.com/api/public/getallspapackage";
+  static final String GET_ALL_PACKAGES = "https://swp490spa.herokuapp.com/api/public/getAllSpaPackage";
 
   static Future<Package> getAllPackages() async {
     try{

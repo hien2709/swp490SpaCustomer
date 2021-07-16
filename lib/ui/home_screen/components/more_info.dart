@@ -3,7 +3,7 @@ import 'package:spa_customer/models/Package.dart';
 import 'package:spa_customer/ui/home_screen/components/search_widget.dart';
 
 class MoreInfo extends StatefulWidget {
-  List<Datum> listPackage;
+  List<PackageInstance> listPackage;
 
   MoreInfo(this.listPackage);
 
@@ -12,7 +12,7 @@ class MoreInfo extends StatefulWidget {
 }
 
 class _MoreInfoState extends State<MoreInfo> {
-  List<Datum> packages;
+  List<PackageInstance> packages;
   String query = '';
 
   Widget buildSearch() => SearchWidget(
@@ -34,7 +34,7 @@ class _MoreInfoState extends State<MoreInfo> {
     });
   }
 
-  Widget buildPackage(Datum package) => ListTile(
+  Widget buildPackage(PackageInstance package) => ListTile(
         leading: Image.network(
           package.image,
           fit: BoxFit.cover,

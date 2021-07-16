@@ -7,7 +7,7 @@ class BookingServices {
   static final String CREATE_BOOKING_REQUEST = "https://swp490spa.herokuapp.com/api/customer/booking/create";
 
   static Future<String> createBookingRequest(
-      List<RequestBookingDetail> listRequestBookingDetail) async {
+      List<RequestBookingDetail> listRequestBookingDetail, int spaId) async {
     var jsonResponse;
     final res = await http.post(CREATE_BOOKING_REQUEST,
         headers: {
@@ -18,7 +18,8 @@ class BookingServices {
       body: jsonEncode(
           {
             "customerId": MyApp.storage.getItem("customerId"),
-            "bookingDataList": listRequestBookingDetail
+            "bookingDataList": listRequestBookingDetail,
+            "spaId": spaId
           }));
     if (res.statusCode == 200){
       jsonResponse = utf8.decode(res.bodyBytes);
