@@ -70,7 +70,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
 
   getData() async {
     await MyApp.storage.ready;
-    customerId = MyApp.storage.getItem("staffId");
+    customerId = MyApp.storage.getItem("customerId");
   }
 
   @override

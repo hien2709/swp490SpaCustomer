@@ -9,6 +9,8 @@ import 'package:spa_customer/models/BookingDetail.dart';
 import 'package:spa_customer/models/SpaToShow.dart';
 import 'package:spa_customer/services/CustomerProfileServices.dart';
 
+import 'MapUtils.dart';
+
 class NearBySpa extends StatefulWidget {
   @override
   _NearBySpaState createState() => _NearBySpaState();
@@ -60,8 +62,10 @@ class _NearBySpaState extends State<NearBySpa> {
       String street = allSpa.data[i].street;
       String image = allSpa.data[i].image;
       String name = allSpa.data[i].name;
+      String latitude = allSpa.data[i].latitude;
+      String longtitude = allSpa.data[i].longtitude;
       listSpaAfterCaculateDistance.add(new SpaToShow(
-          name: name, street: street, distance: distance, image: image));
+          name: name, street: street, distance: distance, image: image, latitude: latitude, longtitude: longtitude,));
     }
   }
 
@@ -140,7 +144,7 @@ class _NearBySpaState extends State<NearBySpa> {
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: NetworkImage(
-                         "https://waki.vn/wp-content/uploads/2020/03/Pasted-into-60-%E1%BA%A3nh-spa-%C4%91%E1%BA%B9p-nh%E1%BA%A5t-n%C4%83m-2020-9.png"),
+                         spa.image == null ? "https://toplist.vn/images/800px/dang-ngoc-spa-149960.jpg" : spa.image),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -171,11 +175,30 @@ class _NearBySpaState extends State<NearBySpa> {
                         SizedBox(
                           height: 6,
                         ),
-                        Text(
-                          spa.distance.toStringAsFixed(2) + " km",
-                          style: TextStyle(
-                              fontSize: 14, color: Colors.grey.shade500),
+                        Row(
+                          children: [
+                            Text(
+                              spa.distance.toStringAsFixed(2) + " km",
+                              style: TextStyle(
+                                  fontSize: 14, color: Colors.grey.shade500),
+                            ),
+                            SizedBox(width: 20),
+                            GestureDetector(
+                              onTap: () {
+                                MapUtils.openMap(currentPosition.latitude,currentPosition.longitude,double.tryParse(spa.latitude),double.tryParse(spa.longtitude));
+                              },
+                              child: Text(
+                                "xem trên map",
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.blue,
+                                  decoration: TextDecoration.underline,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
+
                       ],
                     ),
                   ),
