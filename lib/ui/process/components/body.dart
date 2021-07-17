@@ -115,17 +115,17 @@ class ProcessItem extends StatelessWidget {
                     Divider(
                       color: Colors.black,
                     ),
-                    Text("Cửa hàng  : ${_processItem.spaPackage.spa.name}"),
+                    Text("Cửa hàng  : ${_processItem.booking.spa.name}"),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text("Địa chỉ       : "),
                         Flexible(
-                            child: Text(_processItem.spaPackage.spa.street +
+                            child: Text(_processItem.booking.spa.street +
                                 " " +
-                                _processItem.spaPackage.spa.district +
+                                _processItem.booking.spa.district +
                                 " " +
-                                _processItem.spaPackage.spa.city)),
+                                _processItem.booking.spa.city)),
                       ],
                     ),
                   ],

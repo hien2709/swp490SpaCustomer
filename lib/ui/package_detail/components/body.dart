@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:spa_customer/constant.dart';
+import 'package:spa_customer/main.dart';
 import 'package:spa_customer/models/Package.dart';
 import 'package:spa_customer/ui/booking/components/choose_spa.dart';
 import 'package:spa_customer/ui/booking/customer_booking_screen.dart';
 import 'package:spa_customer/ui/login/components/default_button.dart';
+import 'package:spa_customer/ui/login/login.dart';
 import 'package:spa_customer/ui/package_detail/components/package_detail_image.dart';
 
 class Body extends StatefulWidget {
@@ -145,14 +147,26 @@ class _BodyState extends State<Body> {
                             height: 20,
                           ),
                           DefaultButton(
-                            text: "Đặt lịch ngay",
+                            text: MyApp.storage.getItem("token") == null ?"Đăng nhập để đặt lịch" :"Đặt lịch ngay",
                             press: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ChooseSpaScreen(package:widget.package),
-                                ),
-                              );
+                              if (MyApp.storage.getItem("token") == null) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Login(
+                                        isMainLogin: false,
+                                      )),
+                                ).then((value) => setState(() {}));
+                              }else {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        ChooseSpaScreen(package: widget.package,
+                                          isManyBooking: false,),
+                                  ),
+                                );
+                              }
                             },
                           ),
                         ],

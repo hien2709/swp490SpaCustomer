@@ -12,6 +12,7 @@ import 'package:spa_customer/services/AvailableTimeServices.dart';
 import 'package:spa_customer/services/BookingServices.dart';
 import 'package:spa_customer/size_config.dart';
 import 'package:spa_customer/ui/booking/components/time_slot.dart';
+import 'package:spa_customer/ui/booking_confirm/booking_confirm_screen.dart';
 import 'package:spa_customer/ui/bottom_navigation/bottom_navigation.dart';
 import 'package:spa_customer/ui/components/wrap_toggle_button.dart';
 import 'package:spa_customer/ui/login/components/default_button.dart';
@@ -53,12 +54,19 @@ class _BookingBodyState extends State<BookingBody> {
         .then((availableTime) => {
               setState(() {
                 _availableTime = availableTime;
-                if(widget.listRequestBookingDetail != null){
-                  _availableTime = MyHelper.getAvailableTimeForCart(availableTime, widget.listRequestBookingDetail, widget.package, requestDate);
+                if(_availableTime.data!=null) {
+                  if (widget.listRequestBookingDetail != null) {
+                    _availableTime = MyHelper.getAvailableTimeForCart(
+                        availableTime, widget.listRequestBookingDetail,
+                        widget.package, requestDate);
+                  }
                 }
                 _loading = false;
-                isSelected =
-                    List.generate(_availableTime.data.length, (index) => false);
+                if(_availableTime.data != null) {
+                  isSelected =
+                      List.generate(
+                          _availableTime.data.length, (index) => false);
+                }
               })
             });
   }
@@ -149,7 +157,9 @@ class _BookingBodyState extends State<BookingBody> {
                           isSelected: _selections,
                           onPressed: (int index) {
                             setState(() {
+                              print("loading ne");
                               _loadingSlot = true;
+                              print("loading: ${_loadingSlot.toString()}");
                               for (int i = 0; i < _selections.length; i++) {
                                 _selections[i] = (i == index);
                               }
@@ -161,12 +171,26 @@ class _BookingBodyState extends State<BookingBody> {
                                   .then((availableTime) => {
                                         setState(() {
                                           _availableTime = availableTime;
-                                          if(widget.listRequestBookingDetail != null){
-                                            _availableTime = MyHelper.getAvailableTimeForCart(availableTime, widget.listRequestBookingDetail, widget.package, requestDate);
+                                          if(_availableTime.data != null) {
+                                            if (widget
+                                                .listRequestBookingDetail !=
+                                                null) {
+                                              _availableTime = MyHelper
+                                                  .getAvailableTimeForCart(
+                                                  availableTime, widget
+                                                  .listRequestBookingDetail,
+                                                  widget.package, requestDate);
+                                            }
                                           }
-                                          isSelected =
-                                              List.generate(_availableTime.data.length, (index) => false);
+                                          if(_availableTime.data!=null) {
+                                            isSelected =
+                                                List.generate(
+                                                    _availableTime.data
+                                                        .length, (
+                                                    index) => false);
+                                          }
                                           _loadingSlot = false;
+                                          print("loading: ${_loadingSlot.toString()}");
                                         })
                                       });
                             });
@@ -190,6 +214,7 @@ class _BookingBodyState extends State<BookingBody> {
                       SizedBox(
                         height: 20,
                       ),
+                      _availableTime.data != null ?
                       Container(
                         child: _loadingSlot
                             ? Container(
@@ -240,7 +265,16 @@ class _BookingBodyState extends State<BookingBody> {
                                   });
                                 },
                               ),
-                      ),
+                      )
+                      :_loadingSlot
+                          ? Container(
+                        height: 200,
+                        width: double.infinity,
+                        child:
+                        Lottie.asset("assets/lottie/loading.json"),
+                      )
+                          :Container(child: Text("Không có nhân viên rảnh"))
+                      ,
                       SizedBox(
                         height: 40,
                       ),
@@ -258,22 +292,22 @@ class _BookingBodyState extends State<BookingBody> {
                           : DefaultButton(
                               text: "Tiếp theo",
                               press: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (builder) {
-                                    return Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 80),
-                                      child: Dialog(
-                                        child: Container(
-                                          height: 150,
-                                          child: Lottie.asset(
-                                              "assets/lottie/circle_loading.json"),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
+                                // showDialog(
+                                //   context: context,
+                                //   builder: (builder) {
+                                //     return Padding(
+                                //       padding: const EdgeInsets.symmetric(
+                                //           horizontal: 80),
+                                //       child: Dialog(
+                                //         child: Container(
+                                //           height: 150,
+                                //           child: Lottie.asset(
+                                //               "assets/lottie/circle_loading.json"),
+                                //         ),
+                                //       ),
+                                //     );
+                                //   },
+                                // );
                                 List<RequestBookingDetail> listRequestBookingDetail = new List<RequestBookingDetail>();
                                 listRequestBookingDetail.add(
                                     new RequestBookingDetail(
@@ -281,51 +315,57 @@ class _BookingBodyState extends State<BookingBody> {
                                         dateBooking: requestDate,
                                         timeBooking:
                                             _availableTime.data[slotId]));
-                                BookingServices.createBookingRequest(
-                                        listRequestBookingDetail, widget.spa.id)
-                                    .then((value) {
-                                  Navigator.pop(context);
-                                  value.compareTo("200") == 0
-                                      ? showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            return MyCustomDialog(
-                                              height: 250,
-                                              press: () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          BottomNavigation()),
-                                                );
-                                              },
-                                              title: "Thành Công !",
-                                              description:
-                                                  "Dịch vụ của bạn đã được đặt lịch thành công, vui lòng chờ xác nhận từ cửa hàng",
-                                              buttonTitle: "Quay về trang chủ",
-                                              lottie:
-                                                  "assets/lottie/success.json",
-                                            );
-                                          },
-                                        )
-                                      : showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            return MyCustomDialog(
-                                              height: 250,
-                                              press: () {
-                                                Navigator.pop(context);
-                                              },
-                                              title: "Thất bại !",
-                                              description:
-                                                  "Đặt dịch vụ không thành công, vui lòng thử lại sau",
-                                              buttonTitle: "Thoát",
-                                              lottie: "assets/lottie/fail.json",
-                                            );
-                                          },
-                                        );
-                                });
-                              }),
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => BookingConfirmScreen(spa: widget.spa, listRequestBooking: listRequestBookingDetail,packageInstance: widget.package,)),
+                                );
+                                // BookingServices.createBookingRequest(
+                                //         listRequestBookingDetail, widget.spa.id)
+                                //     .then((value) {
+                                //   Navigator.pop(context);
+                                //   value.compareTo("200") == 0
+                                //       ? showDialog(
+                                //           context: context,
+                                //           builder: (context) {
+                                //             return MyCustomDialog(
+                                //               height: 250,
+                                //               press: () {
+                                //                 Navigator.push(
+                                //                   context,
+                                //                   MaterialPageRoute(
+                                //                       builder: (context) =>
+                                //                           BottomNavigation()),
+                                //                 );
+                                //               },
+                                //               title: "Thành Công !",
+                                //               description:
+                                //                   "Dịch vụ của bạn đã được đặt lịch thành công, vui lòng chờ xác nhận từ cửa hàng",
+                                //               buttonTitle: "Quay về trang chủ",
+                                //               lottie:
+                                //                   "assets/lottie/success.json",
+                                //             );
+                                //           },
+                                //         )
+                                //       : showDialog(
+                                //           context: context,
+                                //           builder: (context) {
+                                //             return MyCustomDialog(
+                                //               height: 250,
+                                //               press: () {
+                                //                 Navigator.pop(context);
+                                //               },
+                                //               title: "Thất bại !",
+                                //               description:
+                                //                   "Đặt dịch vụ không thành công, vui lòng thử lại sau",
+                                //               buttonTitle: "Thoát",
+                                //               lottie: "assets/lottie/fail.json",
+                                //             );
+                                //           },
+                                //         );
+                                // }
+                                // );
+                              }
+                        ),
                     ],
                   ),
                 ),

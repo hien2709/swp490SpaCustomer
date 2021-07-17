@@ -5,6 +5,7 @@ import 'package:spa_customer/ui/home_screen/home_screen.dart';
 
 class PackageDetailImage extends StatelessWidget {
   final PackageInstance package;
+
   const PackageDetailImage({Key key, this.package}) : super(key: key);
 
   @override
@@ -17,7 +18,8 @@ class PackageDetailImage extends StatelessWidget {
           image: DecorationImage(
               image: package.image == null
                   ? AssetImage("assets/images/Splash_1.PNG")
-                  :NetworkImage(package.image), fit: BoxFit.cover)),
+                  : NetworkImage(package.image),
+              fit: BoxFit.cover)),
       child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(30),
@@ -33,7 +35,7 @@ class PackageDetailImage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(50),
                 ),
                 child: InkWell(
-                  onTap: (){
+                  onTap: () {
                     Navigator.pop(context);
                   },
                   child: Icon(
@@ -50,21 +52,30 @@ class PackageDetailImage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(50),
                 ),
                 child: InkWell(
-                  onTap: (){
+                  onTap: () {
                     bool isExist = false;
-                    for (var i = 0; i < HomeScreen.cart.length ; i++){
-                      if(HomeScreen.cart[i].id == package.id){
+                    for (var i = 0; i < HomeScreen.cart.length; i++) {
+                      if (HomeScreen.cart[i].id == package.id) {
                         isExist = true;
                       }
                     }
-                    if(isExist == false) {
+                    if (isExist == false) {
                       HomeScreen.cart.add(package);
-                      MyApp.storage.setItem(
-                          "cart", cartItemToJson(HomeScreen.cart));
+                      MyApp.storage
+                          .setItem("cart", cartItemToJson(HomeScreen.cart));
                       print("Item da duoc them vao cart : $package");
-                    }
-                    else{
+                      Scaffold.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text("Đã thêm dịch vụ vào wishlist"),
+                        ),
+                      );
+                    } else {
                       print("Item da ton tai trong cart");
+                      Scaffold.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text("Dịch vụ đã tồn tại"),
+                        ),
+                      );
                     }
                   },
                   child: Icon(
@@ -73,7 +84,6 @@ class PackageDetailImage extends StatelessWidget {
                   ),
                 ),
               ),
-
             ],
           ),
         ),

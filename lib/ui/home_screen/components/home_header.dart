@@ -3,7 +3,8 @@ import 'package:spa_customer/constant.dart';
 import 'package:spa_customer/size_config.dart';
 import 'package:spa_customer/ui/chat/chat_screen.dart';
 import 'package:spa_customer/ui/search/search_screen.dart';
-import 'package:spa_customer/ui/wish_list/wish_list_screen.dart';
+import 'package:spa_customer/ui/wish_list/wish_list.dart';
+import 'package:spa_customer/ui/wish_list/wish_list_booking_screen.dart';
 
 import 'search_field.dart';
 
