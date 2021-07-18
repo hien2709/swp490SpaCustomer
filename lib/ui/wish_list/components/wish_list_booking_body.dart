@@ -4,20 +4,22 @@ import 'package:spa_customer/constant.dart';
 import 'package:spa_customer/main.dart';
 import 'package:spa_customer/models/Package.dart';
 import 'package:spa_customer/models/RequestBookingDetail.dart';
+import 'package:spa_customer/models/Spa.dart';
 import 'package:spa_customer/size_config.dart';
 import 'package:spa_customer/ui/booking/components/body.dart';
 import 'package:spa_customer/ui/booking_confirm/booking_confirm_screen.dart';
 import 'package:spa_customer/ui/home_screen/home_screen.dart';
-import 'package:spa_customer/ui/login/components/default_button.dart';
 
-class Body extends StatefulWidget {
-  const Body({Key key}) : super(key: key);
+class WishListBookingBody extends StatefulWidget {
+  final SpaInstance spa;
+
+  const WishListBookingBody({Key key, this.spa}) : super(key: key);
 
   @override
-  _BodyState createState() => _BodyState();
+  _WishListBookingBodyState createState() => _WishListBookingBodyState();
 }
 
-class _BodyState extends State<Body> {
+class _WishListBookingBodyState extends State<WishListBookingBody> {
   List<bool> checkList =
       List<bool>.generate(HomeScreen.cart.length, (index) => false);
   List<RequestBookingDetail> listRequestBookingDetail = new List<RequestBookingDetail>();
@@ -89,7 +91,7 @@ class _BodyState extends State<Body> {
                                                   Navigator.of(context).pop();
                                                 },
                                               ),
-                                              BookingBody(package: HomeScreen.cart[index], isBookNow: false, listRequestBookingDetail: listRequestBookingDetail)
+                                              BookingBody(package: HomeScreen.cart[index], isBookNow: false, listRequestBookingDetail: listRequestBookingDetail, spa: widget.spa,)
                                             ],
                                           ),
                                         );
@@ -163,7 +165,7 @@ class _BodyState extends State<Body> {
                                               Navigator.of(context).pop();
                                             },
                                           ),
-                                          BookingBody(package: HomeScreen.cart[index], isBookNow: false,listRequestBookingDetail: listRequestBookingDetail)
+                                          BookingBody(package: HomeScreen.cart[index], isBookNow: false,listRequestBookingDetail: listRequestBookingDetail,spa: widget.spa,)
                                         ],
                                       ),
                                     );
@@ -221,7 +223,7 @@ class _BodyState extends State<Body> {
               onPressed: (){
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => BookingConfirmScreen(listRequestBooking: listRequestBookingDetail,)),
+                  MaterialPageRoute(builder: (context) => BookingConfirmScreen(listRequestBooking: listRequestBookingDetail,spa: widget.spa,)),
                 );
               },
             )

@@ -28,22 +28,22 @@ class _BodyState extends State<Body> {
           height: 10,
         ),
         CompanySection(
-          address: widget.processDetail.spaPackage.spa.street +
+          address: widget.processDetail.booking.spa.street +
               " " +
-              widget.processDetail.spaPackage.spa.district +
+              widget.processDetail.booking.spa.district +
               " " +
-              widget.processDetail.spaPackage.spa.city,
-          name: widget.processDetail.spaPackage.spa.name,
+              widget.processDetail.booking.spa.city,
+          name: widget.processDetail.booking.spa.name,
         ),
         Divider(
           thickness: 1,
           height: 20,
         ),
         StaffSection(
-          name: widget.processDetail.bookingDetailSteps[0].consultant.user.fullname==null?"Chưa có tư vấn viên":widget.processDetail.bookingDetailSteps[0].consultant.user.fullname,
-          phone: widget.processDetail.bookingDetailSteps[0].consultant.user.phone==null?"Chưa có tư vấn viên":widget.processDetail.bookingDetailSteps[0].consultant.user.phone,
-          id: widget.processDetail.bookingDetailSteps[0].consultant.user.id==null?"Chưa có tư vấn viên":widget.processDetail.bookingDetailSteps[0].consultant.user.id,
-          image: widget.processDetail.bookingDetailSteps[0].consultant.user.image==null?"https://huyhoanhotel.com/wp-content/uploads/2016/05/765-default-avatar.png":widget.processDetail.bookingDetailSteps[0].consultant.user.image,
+          name: widget.processDetail.bookingDetailSteps[0].consultant==null?"Chưa có tư vấn viên":widget.processDetail.bookingDetailSteps[0].consultant.user.fullname,
+          phone: widget.processDetail.bookingDetailSteps[0].consultant==null?"Chưa có tư vấn viên":widget.processDetail.bookingDetailSteps[0].consultant.user.phone,
+          id: widget.processDetail.bookingDetailSteps[0].consultant==null?null:widget.processDetail.bookingDetailSteps[0].consultant.user.id,
+          image: widget.processDetail.bookingDetailSteps[0].consultant==null?"https://huyhoanhotel.com/wp-content/uploads/2016/05/765-default-avatar.png":widget.processDetail.bookingDetailSteps[0].consultant.user.image,
         ),
         Divider(
           thickness: 1,
@@ -290,9 +290,12 @@ class _StaffSectionState extends State<StaffSection> {
             onTap: (){
               conversationScreen();
             },
-            child: Icon(
-              Icons.chat,
-              color: kPrimaryColor,
+            child: Visibility(
+              visible: widget.id!=null,
+              child: Icon(
+                Icons.chat,
+                color: kPrimaryColor,
+              ),
             ),
           ),
         ),
