@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
 import 'package:spa_customer/constant.dart';
 import 'package:spa_customer/main.dart';
@@ -66,6 +67,9 @@ class _SignFormState extends State<SignForm> {
   String phoneNumber;
   String password;
   final List<String> errors = [];
+  String title = "";
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+  FlutterLocalNotificationsPlugin();
 
   void onClickSignIn(String phoneNumber, String password, String tokenFCM) async {
     if (_formKey.currentState.validate()) {
@@ -104,6 +108,8 @@ class _SignFormState extends State<SignForm> {
         if (jsonResponse['errorMessage'] == null) {
           MyApp.storage.setItem("token", jsonResponse['jsonWebToken']);
           MyApp.storage.setItem("customerId", jsonResponse['idAccount']);
+          MyApp.storage.setItem("password", password);
+
           widget.isMainLogin
               ? Navigator.push(
                   context,
@@ -129,7 +135,6 @@ class _SignFormState extends State<SignForm> {
       setState(() {
         isLoading = false;
       });
-
       print("Response status ????:  ${res.body}");
     }
   }
@@ -151,10 +156,23 @@ class _SignFormState extends State<SignForm> {
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    getToken();
+  Future showNotification(NotiTitle, NotiBody) async {
+    var androidDetails = new AndroidNotificationDetails(
+        "channelId", "Local Notification", "channelDescription",
+        importance: Importance.high);
+    var iosDetails = new IOSNotificationDetails();
+    var generalNotification =
+    new NotificationDetails(android: androidDetails, iOS: iosDetails);
+    await flutterLocalNotificationsPlugin.show(
+        0, NotiTitle, NotiBody, generalNotification);
+  }
+
+  getNotification(){
+    var initialzationSettingsAndroid =
+    AndroidInitializationSettings('@mipmap/ic_launcher');
+    var initializationSettings =
+    InitializationSettings(android: initialzationSettingsAndroid);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
@@ -163,8 +181,9 @@ class _SignFormState extends State<SignForm> {
       print("Notification title: " + notification.title);
       print("Notification body: " + notification.body);
       setState(() {
-        print("ALL: $message");
+        title = notification.title;
       });
+      showNotification(notification.title, notification.body);
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
@@ -172,9 +191,16 @@ class _SignFormState extends State<SignForm> {
       print("Notification title: " + notification.title);
       print("Notification body: " + notification.body);
       setState(() {
-
+        title = notification.title;
       });
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getToken();
+    getNotification();
   }
 
   @override

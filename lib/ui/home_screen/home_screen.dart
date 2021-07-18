@@ -18,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
     print(MyApp.storage.getItem("cart"));
 
     return Scaffold(
-      body: Body(),
+      body: BodyHomeScreen(),
     );
   }
 }

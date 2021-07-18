@@ -131,7 +131,6 @@ class _BodyState extends State<Body> {
   void initState() {
     super.initState();
     getChatRoom();
-
   }
 
   @override

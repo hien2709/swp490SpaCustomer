@@ -15,11 +15,8 @@ class _MoreInfoState extends State<MoreInfo> {
   List<PackageInstance> packages;
   String query = '';
 
-  Widget buildSearch() => SearchWidget(
-        query,
-        searchPackage,
-        'search package...',
-      );
+  Widget buildSearch() =>
+      SearchWidget(query, searchPackage, 'search package...', false);
 
   void searchPackage(String query) {
     final packageSearch = widget.listPackage.where((package) {
@@ -32,6 +29,59 @@ class _MoreInfoState extends State<MoreInfo> {
       this.query = query;
       this.packages = packageSearch;
     });
+  }
+
+  ListPackage(PackageInstance package) {
+    return Container(
+      padding: EdgeInsets.only(left: 16, right: 16, top: 10, bottom: 10),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: Row(
+              children: <Widget>[
+                Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: NetworkImage(package.image == null
+                          ? "https://toplist.vn/images/800px/dang-ngoc-spa-149960.jpg"
+                          : package.image),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 16,
+                ),
+                Expanded(
+                  child: Container(
+                    color: Colors.transparent,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          package.name,
+                          style: TextStyle(
+                            color: Colors.black,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 6,
+                        ),
+                        SizedBox(
+                          height: 6,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget buildPackage(PackageInstance package) => ListTile(
@@ -69,13 +119,14 @@ class _MoreInfoState extends State<MoreInfo> {
       body: Column(
         children: <Widget>[
           buildSearch(),
+          SizedBox(height: 20),
           Expanded(
             child: ListView.builder(
               itemCount: packages.length,
               itemBuilder: (context, index) {
                 final package = packages[index];
 
-                return buildPackage(package);
+                return ListPackage(package);
               },
             ),
           ),

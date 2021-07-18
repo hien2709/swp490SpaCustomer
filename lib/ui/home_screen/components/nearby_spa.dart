@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:spa_customer/models/AllSpa.dart';
-import 'package:spa_customer/models/BookingDetail.dart';
 import 'package:spa_customer/models/SpaToShow.dart';
 import 'package:spa_customer/services/CustomerProfileServices.dart';
 
@@ -100,11 +99,13 @@ class _NearBySpaState extends State<NearBySpa> {
   @override
   Widget build(BuildContext context) {
     if (loading) {
-      return Center(
-          child: SpinKitWave(
-        color: Colors.orange,
-        size: 50,
-      ));
+      return Scaffold(
+        body: Center(
+            child: SpinKitWave(
+          color: Colors.orange,
+          size: 50,
+        )),
+      );
     } else {
       return Scaffold(
           appBar: AppBar(

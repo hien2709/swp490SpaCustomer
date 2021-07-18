@@ -37,22 +37,26 @@ class Data {
     this.id,
     this.customType,
     this.user,
+    this.tokenFcm,
   });
 
   int id;
   String customType;
   User user;
+  String tokenFcm;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
     id: json["id"],
     customType: json["customType"],
     user: User.fromJson(json["user"]),
+    tokenFcm: json["tokenFCM"],
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
     "customType": customType,
     "user": user.toJson(),
+    "tokenFCM": tokenFcm,
   };
 }
 
@@ -65,6 +69,7 @@ class User {
     this.gender,
     this.birthdate,
     this.email,
+    this.image,
     this.address,
     this.active,
   });
@@ -74,8 +79,9 @@ class User {
   String phone;
   String password;
   String gender;
-  String birthdate;
+  DateTime birthdate;
   String email;
+  dynamic image;
   String address;
   bool active;
 
@@ -85,8 +91,9 @@ class User {
     phone: json["phone"],
     password: json["password"],
     gender: json["gender"],
-    birthdate: json["birthdate"],
+    birthdate: DateTime.parse(json["birthdate"]),
     email: json["email"],
+    image: json["image"],
     address: json["address"],
     active: json["active"],
   );
@@ -97,8 +104,9 @@ class User {
     "phone": phone,
     "password": password,
     "gender": gender,
-    "birthdate": birthdate,
+    "birthdate": "${birthdate.year.toString().padLeft(4, '0')}-${birthdate.month.toString().padLeft(2, '0')}-${birthdate.day.toString().padLeft(2, '0')}",
     "email": email,
+    "image": image,
     "address": address,
     "active": active,
   };

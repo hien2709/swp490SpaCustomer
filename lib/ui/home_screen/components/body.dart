@@ -12,14 +12,15 @@ import 'package:spa_customer/ui/package_detail/package_detail.dart';
 
 import 'nearby_spa.dart';
 
-class Body extends StatefulWidget {
-  const Body({Key key}) : super(key: key);
+class BodyHomeScreen extends StatefulWidget {
+  const BodyHomeScreen({Key key}) : super(key: key);
+  static List<PackageInstance> listPackageDefault;
 
   @override
   _BodyState createState() => _BodyState();
 }
 
-class _BodyState extends State<Body> {
+class _BodyState extends State<BodyHomeScreen> {
   bool _loading = true;
   Package _package;
   Category _category;
@@ -28,6 +29,7 @@ class _BodyState extends State<Body> {
     await CategoryServices.getAllCategory().then((category) => {
           setState(() {
             _category = category;
+
           })
         });
   }
@@ -36,6 +38,7 @@ class _BodyState extends State<Body> {
     await PackageServices.getAllPackages().then((package) => {
           setState(() {
             _package = package;
+            BodyHomeScreen.listPackageDefault = package.data;
           })
         });
   }

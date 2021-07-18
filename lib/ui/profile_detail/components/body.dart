@@ -1,38 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:spa_customer/main.dart';
-import 'package:spa_customer/models/CustomerProfile.dart';
-import 'package:spa_customer/services/CustomerProfileServices.dart';
+import 'package:spa_customer/ui/components/profile_pic.dart';
+import 'package:spa_customer/ui/profile_detail/components/profile_form.dart';
 
-class Body extends StatefulWidget {
-  const Body({Key key}) : super(key: key);
+import '../../../main.dart';
 
-  @override
-  _BodyState createState() => _BodyState();
-}
+class Body extends StatelessWidget {
 
-class _BodyState extends State<Body> {
-  bool _loading;
-  CustomerProfile _customerProfile;
+  bool edit;
+  bool enableDropDown;
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    CustomerProfileServices.getCustomerProfile().then((customerProfile) => {
-      setState(() {
-        _customerProfile = customerProfile;
-        _loading = false;
-      })
-    });
 
-    super.initState();
-
-    print(MyApp.storage.getItem("token"));
-  }
+  Body(this.edit, this.enableDropDown);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text("Full name: "+_customerProfile.data.user.fullname),
+    return Padding(
+      padding: const EdgeInsets.all(30),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            ProfilePic(),
+            SizedBox(height: 20),
+            // Text(MyApp.storage.getItem("email"),
+            //     textAlign: TextAlign.center),
+            SizedBox(height: 40),
+            ProfileForm(edit, enableDropDown),
+          ],
+        ),
+      ),
     );
   }
 }
+

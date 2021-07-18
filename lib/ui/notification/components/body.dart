@@ -3,12 +3,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-const AndroidNotificationChannel channel = AndroidNotificationChannel(
-  'high_importance_channel', // id
-  'High Importance Notifications', // title
-  'This channel is used for important notifications.', // description
-  importance: Importance.high,
-);
 
 class Body extends StatefulWidget {
   @override
@@ -16,83 +10,12 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  String token;
-  String title = "";
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
 
-  getToken() async {
-    await Firebase.initializeApp();
-    token = await FirebaseMessaging.instance.getToken();
-    print("token: " + token);
-  }
-
-  Future<void> _firebaseMessagingBackgroundHandler(
-      RemoteMessage message) async {
-    await Firebase.initializeApp();
-    print('Handling a background message ${message.messageId}');
-    RemoteNotification notification = message.notification;
-    print("Notification title: " + notification.title);
-    print("Notification body: " + notification.body);
-    print(message.data['message']);
-    setState(() {
-      title = notification.title;
-    });
-  }
-
-  Future showNotification(NotiTitle, NotiBody) async {
-    var androidDetails = new AndroidNotificationDetails(
-        "channelId", "Local Notification", "channelDescription",
-        importance: Importance.high);
-    var iosDetails = new IOSNotificationDetails();
-    var generalNotification =
-        new NotificationDetails(android: androidDetails, iOS: iosDetails);
-    await flutterLocalNotificationsPlugin.show(
-        0, NotiTitle, NotiBody, generalNotification);
-  }
 
   @override
   void initState() {
     super.initState();
-    getToken();
 
-    var initialzationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
-    var initializationSettings =
-        InitializationSettings(android: initialzationSettingsAndroid);
-    flutterLocalNotificationsPlugin.initialize(initializationSettings);
-
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      RemoteNotification notification = message.notification;
-      print("Notification title: " + notification.title);
-      print("Notification body: " + notification.body);
-      setState(() {
-        title = notification.title;
-      });
-      // flutterLocalNotificationsPlugin.show(
-      //     notification.hashCode,
-      //     notification.title,
-      //     notification.body,
-      //     NotificationDetails(
-      //       android: AndroidNotificationDetails(
-      //         channel.id,
-      //         channel.name,
-      //         channel.description,
-      //       ),
-      //     ));
-      showNotification(notification.title, notification.body);
-    });
-
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      RemoteNotification notification = message.notification;
-      print("Notification title: " + notification.title);
-      print("Notification body: " + notification.body);
-      setState(() {
-        title = notification.title;
-      });
-    });
   }
 
   @override
@@ -111,24 +34,6 @@ class _BodyState extends State<Body> {
           },
         ),
 
-        // NotificationBookingSuccessItem(
-        //   image: "assets/images/beauty.png",
-        //   companyName: "Eri international",
-        //   serviceName: "BIO ACNE",
-        //   date: "25/03/2021",
-        // ),
-        // NotificationBookingSuccessItem(
-        //   image: "assets/images/body.png",
-        //   companyName: "Eri international",
-        //   serviceName: "Massage JiaczHoiz",
-        //   date: "26/03/2021",
-        // ),
-        // NotificationBookingSuccessItem(
-        //   image: "assets/images/Skin.png",
-        //   companyName: "Eri international",
-        //   serviceName: "AQUA DETOX",
-        //   date: "27/03/2021",
-        // ),
       ],
     );
   }
@@ -149,6 +54,12 @@ class NotificationBookingSuccessItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: Colors.white,
+            width: 5
+          ),
+        ),
         color: Colors.grey.withOpacity(0.1),
       ),
       child: Padding(
@@ -208,10 +119,10 @@ class NotificationBookingSuccessItem extends StatelessWidget {
                 ],
               ),
             ),
-            Icon(Icons.more_horiz),
           ],
         ),
       ),
+
     );
   }
 }

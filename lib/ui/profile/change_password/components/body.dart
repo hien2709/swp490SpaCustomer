@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spa_customer/services/CustomerProfileServices.dart';
 import 'package:spa_customer/ui/components/profile_pic.dart';
 import 'package:spa_customer/ui/login/components/default_button.dart';
 
@@ -117,13 +118,14 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
             ),
           );
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          // final res = await StaffService().editStaffPassword(
-          //     MyApp.storage.getItem("token"), newPasswordTextController.text);
-          // print(res.body);
+          final res = await CustomerProfileServices().editCustomerPassword(
+              newPasswordTextController.text);
+          print(res.body);
           setState(() {
-            oldPasswordTextController.text == "";
-            newPasswordTextController.text == "";
-            confirmPasswordTextController.text == "";
+            MyApp.storage.setItem("password", newPasswordTextController.text);
+            oldPasswordTextController.clear();
+            newPasswordTextController.clear();
+            confirmPasswordTextController.clear();
           });
 
         }

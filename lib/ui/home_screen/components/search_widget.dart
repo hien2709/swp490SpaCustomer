@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 
+import '../../../constant.dart';
+
 class SearchWidget extends StatefulWidget {
    String text;
    ValueChanged<String> onChanged;
    String hintText;
+   bool autoFocus;
 
-   SearchWidget(this.text, this.onChanged, this.hintText);
+   SearchWidget(this.text, this.onChanged, this.hintText, this.autoFocus);
 
   @override
   _SearchWidgetState createState() => _SearchWidgetState();
@@ -20,34 +23,34 @@ class _SearchWidgetState extends State<SearchWidget> {
     final styleHint = TextStyle(color: Colors.black54);
     final style = widget.text.isEmpty ? styleHint : styleActive;
     return Container(
-      height: 42,
-      margin: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+      width: double.infinity,
+      height: 50,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: Colors.white,
-        border: Border.all(color: Colors.black26),
+        color: kSecondaryColor.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(15),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 8),
       child: TextField(
+        autofocus: widget.autoFocus,
         controller: controller,
-        decoration: InputDecoration(
-          icon: Icon(Icons.search, color: style.color),
-          suffixIcon: widget.text.isNotEmpty
-              ? GestureDetector(
-            child: Icon(Icons.close, color: style.color),
-            onTap: () {
-              controller.clear();
-              widget.onChanged('');
-              FocusScope.of(context).requestFocus(FocusNode());
-            },
-          )
-              : null,
-          hintText: widget.hintText,
-          hintStyle: style,
-          border: InputBorder.none,
-        ),
-        style: style,
         onChanged: widget.onChanged,
+        decoration: InputDecoration(
+            enabledBorder: InputBorder.none,
+            focusedBorder: InputBorder.none,
+            hintText: "Tìm kiếm...",
+            prefixIcon: Icon(Icons.search),
+            contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+            suffixIcon: widget.text.isNotEmpty
+                ? GestureDetector(
+              child: Icon(Icons.close, color: style.color),
+              onTap: () {
+                controller.clear();
+                widget.onChanged('');
+                FocusScope.of(context).requestFocus(FocusNode());
+              },
+            )
+                : null,
+
+        ),
       ),
     );
   }
