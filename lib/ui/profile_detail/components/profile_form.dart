@@ -144,7 +144,7 @@ class _ProfileFormState extends State<ProfileForm> {
   TextFormField EmailTextField() {
     return TextFormField(
       controller: emailTextController,
-      enabled: widget.edit,
+      enabled: false,
       decoration: InputDecoration(
         labelText: "Email",
         floatingLabelBehavior: FloatingLabelBehavior.always,
