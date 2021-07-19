@@ -24,37 +24,10 @@ class ChatCard extends StatefulWidget {
 
 class _ChatCardState extends State<ChatCard> {
 
-  bool loading = true;
-  String consultantName;
-  String consultantPhone;
-  String consultantImage;
-
-
-  @override
-  void initState() {
-    super.initState();
-    getStaffInfo();
-  }
-
-
-  getStaffInfo() async {
-    consultantName = widget.consultantName;
-    consultantPhone = widget.consultantPhone;
-    consultantImage = widget.consultantImage;
-    loading = false;
-  }
 
   @override
   Widget build(BuildContext context) {
-    if(loading){
-      return Center(
-          child: SpinKitWave(
-            color: Colors.orange,
-            size: 50,
-          )
-      );
-    }
-    else{
+
       return GestureDetector(
         onTap: () {
           Navigator.push(
@@ -63,9 +36,9 @@ class _ChatCardState extends State<ChatCard> {
                   builder: (context) =>
                       ConversationScreen(
                         chatRoomId: widget.chatRoomId,
-                        consultantPhone: consultantPhone,
-                        consultantName: consultantName,
-                        consultantImage: consultantImage,
+                        consultantPhone: widget.consultantPhone,
+                        consultantName: widget.consultantName,
+                        consultantImage: widget.consultantImage,
                       )
               ));
         },
@@ -77,7 +50,7 @@ class _ChatCardState extends State<ChatCard> {
                 child: Row(
                   children: <Widget>[
                     CircleAvatar(
-                      backgroundImage: NetworkImage(consultantImage),
+                      backgroundImage: NetworkImage(widget.consultantImage),
                       maxRadius: 30,
                     ),
                     SizedBox(
@@ -90,7 +63,7 @@ class _ChatCardState extends State<ChatCard> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              consultantName,
+                              widget.consultantName,
                               style: TextStyle(
                                 color: Colors.black,
                               ),
@@ -99,7 +72,7 @@ class _ChatCardState extends State<ChatCard> {
                               height: 6,
                             ),
                             Text(
-                              consultantPhone,
+                              widget.consultantPhone,
                               style: TextStyle(
                                   fontSize: 14, color: Colors.grey.shade500),
                             ),
@@ -115,6 +88,4 @@ class _ChatCardState extends State<ChatCard> {
         ),
       );
     }
-
-  }
 }

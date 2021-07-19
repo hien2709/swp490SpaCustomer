@@ -23,6 +23,9 @@ class _BodyState extends State<Body> {
   TextEditingController searchInput = TextEditingController();
   bool isSearch = false;
   ConsultantProfileToChat consultantProfileToChat = ConsultantProfileToChat();
+  String consultantName;
+  String consultantPhone;
+  String consultantImage;
 
   getChatRoom() async {
     await getListConsultantForChat();
@@ -60,6 +63,16 @@ class _BodyState extends State<Body> {
     }
   }
 
+  getConsultantInfo(consultantId){
+    for(int i = 0; i < consultantProfileToChat.data.length; i++){
+      if(consultantProfileToChat.data[i].user.id == consultantId){
+        consultantName = consultantProfileToChat.data[i].user.fullname;
+        consultantPhone = consultantProfileToChat.data[i].user.phone;
+        consultantImage = consultantProfileToChat.data[i].user.image;
+      }
+    }
+  }
+
   Widget searchList() {
     return searchResult != null
         ? ListView.builder(
@@ -94,17 +107,19 @@ class _BodyState extends State<Body> {
             shrinkWrap: true,
             itemCount: snapshot.data.docs.length,
             itemBuilder: (context, index) {
+              String consultantId = snapshot
+                  .data.docs[index]["chatRoomId"]
+                  .toString()
+                  .replaceAll("_", "")
+                  .replaceAll("${MyApp.storage.getItem("customerId")}", "");
+              getConsultantInfo(consultantId);
               return ChatCard(
-                consultantId: snapshot
-                      .data.docs[index]["chatRoomId"]
-                      .toString()
-                      .replaceAll("_", "")
-                      .replaceAll("${MyApp.storage.getItem("customerId")}", ""),
+                consultantId: consultantId,
                   chatRoomId:
                   snapshot.data.docs[index]["chatRoomId"],
-                  consultantName: consultantProfileToChat.data[index].user.fullname,
-                  consultantPhone: consultantProfileToChat.data[index].user.phone,
-                  consultantImage: consultantProfileToChat.data[index].user.image == null ? "https://huyhoanhotel.com/wp-content/uploads/2016/05/765-default-avatar.png" : consultantProfileToChat.data[index].user.image,
+                  consultantName:consultantName,
+                  consultantPhone: consultantPhone,
+                  consultantImage: consultantImage == null ? "https://huyhoanhotel.com/wp-content/uploads/2016/05/765-default-avatar.png" : consultantImage,
               );
             }
         )

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:spa_customer/services/CustomerProfileServices.dart';
 import 'package:spa_customer/services/firebase_service.dart';
 import '../../../main.dart';
 import 'conversation_appBar.dart';
@@ -22,6 +23,15 @@ class _ConversationScreenState extends State<ConversationScreen> {
   Stream chatMessageStream;
   int customerId;
   int prevUserId;
+  String customerImage;
+
+  getCustomerImage() async{
+    await CustomerProfileServices.getCustomerProfile().then((value) => {
+      setState(() {
+        customerImage = value.data.user.image;
+      })
+    });
+  }
 
   ChatMessageList() {
     return StreamBuilder(
@@ -75,6 +85,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
 
   @override
   void initState() {
+    getCustomerImage();
     getData();
     getConversationMessage();
     super.initState();
@@ -184,7 +195,7 @@ class _ConversationScreenState extends State<ConversationScreen> {
                         child: CircleAvatar(
                           radius: 15,
                           backgroundImage:
-                              NetworkImage(MyApp.storage.getItem("image") == null ? "https://huyhoanhotel.com/wp-content/uploads/2016/05/765-default-avatar.png" : MyApp.storage.getItem("image")),
+                              NetworkImage(customerImage == null ? "https://huyhoanhotel.com/wp-content/uploads/2016/05/765-default-avatar.png" : customerImage),
                         ),
                       ),
                     ],
