@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:spa_customer/services/CustomerProfileServices.dart';
 
-import '../../../../main.dart';
 
 class ProfilePic extends StatefulWidget {
   @override
