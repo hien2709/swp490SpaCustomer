@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:spa_customer/models/Package.dart';
-import 'package:spa_customer/services/PackageServices.dart';
 import 'package:spa_customer/ui/home_screen/components/body.dart';
 import 'package:spa_customer/ui/home_screen/components/search_widget.dart';
+import 'package:spa_customer/ui/package_detail/package_detail.dart';
 
 class Body extends StatefulWidget {
-
   @override
   _BodyState createState() => _BodyState();
 }
@@ -13,7 +12,7 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   bool loading;
   List<PackageInstance> packagesToShow = BodyHomeScreen.listPackageDefault;
-  String query = '';
+  String query = "";
 
   void searchPackage(String query) {
     final packageSearch = BodyHomeScreen.listPackageDefault.where((package) {
@@ -28,11 +27,10 @@ class _BodyState extends State<Body> {
   }
 
   Widget buildSearch() => SearchWidget(
-    query,
-    searchPackage,
-    'Tìm kiếm package...',
-    true,
-  );
+        query,
+        searchPackage,
+        true,
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -47,15 +45,16 @@ class _BodyState extends State<Body> {
                 height: 20,
               ),
               Expanded(
-                          child: ListView.builder(
-                            itemCount: packagesToShow.length == null ? 0 : packagesToShow.length,
-                            itemBuilder: (context, index) {
-                              final package = packagesToShow[index];
+                child: ListView.builder(
+                  itemCount:
+                      packagesToShow.length == null ? 0 : packagesToShow.length,
+                  itemBuilder: (context, index) {
+                    final package = packagesToShow[index];
 
-                              return ListPackage(package);
-                            },
-                          ),
-                        ),
+                    return query == "" ? SizedBox() : ListPackage(package);
+                  },
+                ),
+              ),
             ],
           ),
         ),
@@ -64,54 +63,66 @@ class _BodyState extends State<Body> {
   }
 
   ListPackage(PackageInstance package) {
-    return Container(
-      padding: EdgeInsets.only(left: 16, right: 16, top: 10, bottom: 10),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: Row(
-              children: <Widget>[
-                Container(
-                  width: 100,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: NetworkImage(
-                          package.image == null ? "https://toplist.vn/images/800px/dang-ngoc-spa-149960.jpg" : package.image),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 16,
-                ),
-                Expanded(
-                  child: Container(
-                    color: Colors.transparent,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          package.name,
-                          style: TextStyle(
-                            color: Colors.black,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 6,
-                        ),
-
-                        SizedBox(
-                          height: 6,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PackageDetailScreen(
+              package: package,
             ),
           ),
-        ],
+        );
+      },
+      child: Container(
+        padding: EdgeInsets.only(left: 16, right: 16, top: 10, bottom: 10),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    width: 100,
+                    height: 100,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: NetworkImage(package.image == null
+                            ? "https://toplist.vn/images/800px/dang-ngoc-spa-149960.jpg"
+                            : package.image),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 16,
+                  ),
+                  Expanded(
+                    child: Container(
+                      color: Colors.transparent,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            package.name,
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 6,
+                          ),
+                          SizedBox(
+                            height: 6,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -5,10 +5,9 @@ import '../../../constant.dart';
 class SearchWidget extends StatefulWidget {
    String text;
    ValueChanged<String> onChanged;
-   String hintText;
    bool autoFocus;
 
-   SearchWidget(this.text, this.onChanged, this.hintText, this.autoFocus);
+   SearchWidget(this.text, this.onChanged, this.autoFocus);
 
   @override
   _SearchWidgetState createState() => _SearchWidgetState();

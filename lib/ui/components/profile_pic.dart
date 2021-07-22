@@ -2,6 +2,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:spa_customer/services/CustomerProfileServices.dart';
+import 'package:http/http.dart' as http;
+import 'package:path/path.dart';
+import 'dart:convert';
+import 'package:async/async.dart';
+
+import '../../main.dart';
 
 
 class ProfilePic extends StatefulWidget {
@@ -20,6 +26,7 @@ class _ProfilePicState extends State<ProfilePic> {
       imageFile = pickedFile;
       print("imageFilePath: " + imageFile.path);
     });
+    uploadFile(imageFile);
   }
 
   getCustomerProfile() async{
@@ -27,6 +34,36 @@ class _ProfilePicState extends State<ProfilePic> {
       setState(() {
         image = value.data.user.image;
       })
+    });
+  }
+
+  uploadFile(File imageFile) async {
+    // open a bytestream
+    var stream =
+    new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
+    // get file length
+    var length = await imageFile.length();
+    // string to uri
+    var uri = Uri.parse(
+        "https://swp490spa.herokuapp.com/api/customer/image/edit/" + MyApp.storage.getItem("customerId").toString());
+    // create multipart request
+    var request = new http.MultipartRequest("PUT", uri);
+    request.headers.addAll({
+      "Content-type": "multipart/form-data",
+      "Authorization": "Bearer " + MyApp.storage.getItem("token"),
+    });
+    // multipart that takes file
+    var multipartFile = new http.MultipartFile('file', stream, length,
+        filename: basename(imageFile.path));
+    // add file to multipart
+    request.files.add(multipartFile);
+    // send
+    var response = await request.send();
+    print(response.statusCode);
+
+    // listen for response
+    response.stream.transform(utf8.decoder).listen((value) {
+      print(value);
     });
   }
 
@@ -84,7 +121,7 @@ class _ProfilePicState extends State<ProfilePic> {
   Widget bottomSheet() {
     return Container(
       height: 100,
-      width: MediaQuery.of(context).size.width,
+      width: MediaQuery.of(this.context).size.width,
       margin: EdgeInsets.symmetric(
         horizontal: 20,
         vertical: 20,

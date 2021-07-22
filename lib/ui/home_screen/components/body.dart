@@ -29,7 +29,6 @@ class _BodyState extends State<BodyHomeScreen> {
     await CategoryServices.getAllCategory().then((category) => {
           setState(() {
             _category = category;
-
           })
         });
   }

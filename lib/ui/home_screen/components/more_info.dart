@@ -16,7 +16,7 @@ class _MoreInfoState extends State<MoreInfo> {
   String query = '';
 
   Widget buildSearch() =>
-      SearchWidget(query, searchPackage, 'search package...', false);
+      SearchWidget(query, searchPackage, false);
 
   void searchPackage(String query) {
     final packageSearch = widget.listPackage.where((package) {

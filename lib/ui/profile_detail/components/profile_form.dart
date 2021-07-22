@@ -144,11 +144,11 @@ class _ProfileFormState extends State<ProfileForm> {
   TextFormField EmailTextField() {
     return TextFormField(
       controller: emailTextController,
-      enabled: false,
+      enabled: widget.edit,
       decoration: InputDecoration(
         labelText: "Email",
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: Icon(Icons.drive_file_rename_outline),
+        suffixIcon: Icon(Icons.mail),
       ),
     );
   }
@@ -169,6 +169,8 @@ class _ProfileFormState extends State<ProfileForm> {
     return TextFormField(
       controller: districtTextController,
       enabled: widget.edit,
+      minLines: 1,
+      maxLines: 4,
       decoration: InputDecoration(
         labelText: "Địa chỉ",
         floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -196,7 +198,7 @@ class _ProfileFormState extends State<ProfileForm> {
       decoration: InputDecoration(
         labelText: "Số điện thoại",
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: Icon(Icons.edit_road),
+        suffixIcon: Icon(Icons.phone),
       ),
     );
   }
