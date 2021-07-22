@@ -20,15 +20,15 @@ class CustomerProfile {
   Data data;
 
   factory CustomerProfile.fromJson(Map<String, dynamic> json) => CustomerProfile(
-    code: json["code"],
-    status: json["status"],
-    data: Data.fromJson(json["data"]),
+    code: json["code"] == null ? null : json["code"],
+    status: json["status"] == null ? null : json["status"],
+    data: json["data"] == null ? null : Data.fromJson(json["data"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "code": code,
-    "status": status,
-    "data": data.toJson(),
+    "code": code == null ? null : code,
+    "status": status == null ? null : status,
+    "data": data == null ? null : data.toJson(),
   };
 }
 
@@ -46,17 +46,17 @@ class Data {
   String tokenFcm;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    id: json["id"],
-    customType: json["customType"],
-    user: User.fromJson(json["user"]),
-    tokenFcm: json["tokenFCM"],
+    id: json["id"] == null ? null : json["id"],
+    customType: json["customType"] == null ? null : json["customType"],
+    user: json["user"] == null ? null : User.fromJson(json["user"]),
+    tokenFcm: json["tokenFCM"] == null ? null : json["tokenFCM"],
   );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "customType": customType,
-    "user": user.toJson(),
-    "tokenFCM": tokenFcm,
+    "id": id == null ? null : id,
+    "customType": customType == null ? null : customType,
+    "user": user == null ? null : user.toJson(),
+    "tokenFCM": tokenFcm == null ? null : tokenFcm,
   };
 }
 
@@ -86,28 +86,28 @@ class User {
   bool active;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-    id: json["id"],
-    fullname: json["fullname"],
-    phone: json["phone"],
-    password: json["password"],
-    gender: json["gender"],
-    birthdate: DateTime.parse(json["birthdate"]),
-    email: json["email"],
+    id: json["id"] == null ? null : json["id"],
+    fullname: json["fullname"] == null ? null : json["fullname"],
+    phone: json["phone"] == null ? null : json["phone"],
+    password: json["password"] == null ? null : json["password"],
+    gender: json["gender"] == null ? null : json["gender"],
+    birthdate: json["birthdate"] == null ? null : DateTime.parse(json["birthdate"]),
+    email: json["email"] == null ? null : json["email"],
     image: json["image"],
-    address: json["address"],
-    active: json["active"],
+    address: json["address"] == null ? null : json["address"],
+    active: json["active"] == null ? null : json["active"],
   );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "fullname": fullname,
-    "phone": phone,
-    "password": password,
-    "gender": gender,
-    "birthdate": "${birthdate.year.toString().padLeft(4, '0')}-${birthdate.month.toString().padLeft(2, '0')}-${birthdate.day.toString().padLeft(2, '0')}",
-    "email": email,
+    "id": id == null ? null : id,
+    "fullname": fullname == null ? null : fullname,
+    "phone": phone == null ? null : phone,
+    "password": password == null ? null : password,
+    "gender": gender == null ? null : gender,
+    "birthdate": birthdate == null ? null : "${birthdate.year.toString().padLeft(4, '0')}-${birthdate.month.toString().padLeft(2, '0')}-${birthdate.day.toString().padLeft(2, '0')}",
+    "email": email == null ? null : email,
     "image": image,
-    "address": address,
-    "active": active,
+    "address": address == null ? null : address,
+    "active": active == null ? null : active,
   };
 }
