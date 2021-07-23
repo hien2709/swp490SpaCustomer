@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:lottie/lottie.dart';
 import 'package:spa_customer/constant.dart';
 import 'package:spa_customer/helper/Helper.dart';
 import 'package:spa_customer/main.dart';
 import 'package:spa_customer/models/BookingDetail.dart';
-import 'package:spa_customer/services/firebase_service.dart';
-import 'package:spa_customer/ui/chat/chat_screen.dart';
+import 'package:spa_customer/services/GeneralServices.dart';
 import 'package:spa_customer/ui/chat/components/conversation_screen.dart';
+import 'package:rating_dialog/rating_dialog.dart';
 
 class Body extends StatefulWidget {
   final Datum processDetail;
+
   const Body({Key key, this.processDetail}) : super(key: key);
 
   @override
@@ -20,41 +20,54 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        StatusSection(),
-        SizedBox(
-          height: 10,
-        ),
-        CompanySection(
-          address: widget.processDetail.booking.spa.street +
-              " " +
-              widget.processDetail.booking.spa.district +
-              " " +
-              widget.processDetail.booking.spa.city,
-          name: widget.processDetail.booking.spa.name,
-        ),
-        Divider(
-          thickness: 1,
-          height: 20,
-        ),
-        StaffSection(
-          name: widget.processDetail.bookingDetailSteps[0].consultant==null?"Chưa có tư vấn viên":widget.processDetail.bookingDetailSteps[0].consultant.user.fullname,
-          phone: widget.processDetail.bookingDetailSteps[0].consultant==null?"Chưa có tư vấn viên":widget.processDetail.bookingDetailSteps[0].consultant.user.phone,
-          id: widget.processDetail.bookingDetailSteps[0].consultant==null?null:widget.processDetail.bookingDetailSteps[0].consultant.user.id,
-          image: widget.processDetail.bookingDetailSteps[0].consultant==null?"https://huyhoanhotel.com/wp-content/uploads/2016/05/765-default-avatar.png":widget.processDetail.bookingDetailSteps[0].consultant.user.image,
-        ),
-        Divider(
-          thickness: 1,
-          height: 20,
-        ),
-        ProcessSection(
-          serviceName: widget.processDetail.spaPackage.name,
-          serviceId: widget.processDetail.spaPackage.id,
-          processDetail: widget.processDetail,
-        )
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          StatusSection(),
+          SizedBox(
+            height: 10,
+          ),
+          CompanySection(
+            address: widget.processDetail.booking.spa.street +
+                " " +
+                widget.processDetail.booking.spa.district +
+                " " +
+                widget.processDetail.booking.spa.city,
+            name: widget.processDetail.booking.spa.name,
+          ),
+          Divider(
+            thickness: 1,
+            height: 20,
+          ),
+          StaffSection(
+            name: widget.processDetail.bookingDetailSteps[0].consultant == null
+                ? "Chưa có tư vấn viên"
+                : widget
+                .processDetail.bookingDetailSteps[0].consultant.user.fullname,
+            phone: widget.processDetail.bookingDetailSteps[0].consultant == null
+                ? "Chưa có tư vấn viên"
+                : widget
+                .processDetail.bookingDetailSteps[0].consultant.user.phone,
+            id: widget.processDetail.bookingDetailSteps[0].consultant == null
+                ? null
+                : widget.processDetail.bookingDetailSteps[0].consultant.user.id,
+            image: widget.processDetail.bookingDetailSteps[0].consultant == null
+                ? "https://huyhoanhotel.com/wp-content/uploads/2016/05/765-default-avatar.png"
+                : widget
+                .processDetail.bookingDetailSteps[0].consultant.user.image,
+          ),
+          Divider(
+            thickness: 1,
+            height: 20,
+          ),
+          ProcessSection(
+            serviceName: widget.processDetail.spaPackage.name,
+            serviceId: widget.processDetail.spaPackage.id,
+            processDetail: widget.processDetail,
+          )
+        ],
+      ),
     );
   }
 }
@@ -77,8 +90,6 @@ class ProcessSection extends StatefulWidget {
 
 class _ProcessSectionState extends State<ProcessSection> {
   bool _loading;
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -121,15 +132,30 @@ class _ProcessSectionState extends State<ProcessSection> {
                 ),
                 ...List.generate(
                   widget.processDetail.bookingDetailSteps.length,
-                      (index) => ProcessStepSection(
-                    status: widget.processDetail.bookingDetailSteps[index].statusBooking,
-                    date: widget.processDetail.bookingDetailSteps[index].dateBooking == null
-                        ? "Chưa đặt lịch"
-                        : MyHelper.getUserDate(widget.processDetail.bookingDetailSteps[index].dateBooking) +
-                        " Lúc " +
-                        widget.processDetail.bookingDetailSteps[index].startTime.substring(0, 5),
-                    stepName: widget.processDetail.bookingDetailSteps[index].treatmentService==null?"Tư Vấn":widget.processDetail.bookingDetailSteps[index].treatmentService.spaService.name,
-                  ),
+                      (index) =>
+                      ProcessStepSection(
+                        ratingId: widget.processDetail.bookingDetailSteps[index].rating == null ? null : widget.processDetail.bookingDetailSteps[index].rating.id,
+                        staffId: widget.processDetail.bookingDetailSteps[index].staff == null ? null : widget.processDetail.bookingDetailSteps[index].staff.id,
+                        status: widget
+                            .processDetail.bookingDetailSteps[index]
+                            .statusBooking,
+                        date: widget.processDetail.bookingDetailSteps[index]
+                            .dateBooking ==
+                            null
+                            ? "Chưa đặt lịch"
+                            : MyHelper.getUserDate(widget.processDetail
+                            .bookingDetailSteps[index].dateBooking) +
+                            " Lúc " +
+                            widget.processDetail.bookingDetailSteps[index]
+                                .startTime
+                                .substring(0, 5),
+                        stepName: widget.processDetail.bookingDetailSteps[index]
+                            .treatmentService ==
+                            null
+                            ? "Tư Vấn"
+                            : widget.processDetail.bookingDetailSteps[index]
+                            .treatmentService.spaService.name,
+                      ),
                 ),
               ],
             ),
@@ -142,12 +168,13 @@ class _ProcessSectionState extends State<ProcessSection> {
 
 class ProcessStepSection extends StatelessWidget {
   final String date, stepName, status;
+  final int ratingId, staffId;
 
   const ProcessStepSection({
     Key key,
     this.date,
     this.stepName,
-    this.status,
+    this.status, this.ratingId, this.staffId,
   }) : super(key: key);
 
   @override
@@ -183,24 +210,65 @@ class ProcessStepSection extends StatelessWidget {
                       : status == "PENDING"
                       ? Colors.black
                       : kYellow,
-                  fontSize: 17
-              ),
+                  fontSize: 17),
             ),
           ],
         ),
         Container(
           height: 40,
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              VerticalDivider(
-                thickness: 1,
-                width: 10,
-                color: Colors.grey,
+              Row(
+                children: [
+                  VerticalDivider(
+                    thickness: 1,
+                    width: 10,
+                    color: Colors.grey,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text("Ngày hẹn : $date"),
+                ],
               ),
-              SizedBox(
-                width: 10,
+              Container(
+                padding: EdgeInsets.only(right: 10),
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            barrierDismissible: true,
+                            builder: (context) {
+                              return RatingDialog(
+                                  title: "Đánh giá dịch vụ",
+                                  image: Icon(
+                                    Icons.star_rate,
+                                    color: Colors.amberAccent,
+                                    size: 100,
+                                  ),
+                                  message: "Bạn có hài lòng về dịch vụ không?",
+                                  commentHint: "nhận xét của bạn",
+                                  submitButton: "Gửi",
+                                  onSubmitted: (response) {
+                                    print("rating: " +
+                                        response.rating.toString());
+                                    print("comment: " + response.comment);
+                                    GeneralServices.editRating(
+                                        staffId, ratingId, response.comment, response.rating.toDouble());
+                                  });
+                            });
+                      },
+                      child: Icon(
+                        Icons.rate_review,
+                        color: kGreen,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              Text("Ngày hẹn : $date"),
             ],
           ),
         ),
@@ -212,7 +280,6 @@ class ProcessStepSection extends StatelessWidget {
 class StaffSection extends StatefulWidget {
   final String name, phone, image;
   final int id;
-
 
   const StaffSection({
     Key key,
@@ -227,19 +294,18 @@ class StaffSection extends StatefulWidget {
 }
 
 class _StaffSectionState extends State<StaffSection> {
-
-  conversationScreen(){
+  conversationScreen() {
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) =>
                 ConversationScreen(
-                  chatRoomId: "${MyApp.storage.getItem("customerId")}_${widget.id}",
+                  chatRoomId:
+                  "${MyApp.storage.getItem("customerId")}_${widget.id}",
                   consultantPhone: widget.phone,
                   consultantName: widget.name,
                   consultantImage: widget.image,
-                )
-        ));
+                )));
   }
 
   @override
@@ -287,11 +353,11 @@ class _StaffSectionState extends State<StaffSection> {
         Padding(
           padding: const EdgeInsets.only(right: 20),
           child: GestureDetector(
-            onTap: (){
+            onTap: () {
               conversationScreen();
             },
             child: Visibility(
-              visible: widget.id!=null,
+              visible: widget.id != null,
               child: Icon(
                 Icons.chat,
                 color: kPrimaryColor,
