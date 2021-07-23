@@ -56,6 +56,51 @@ class _ProfileFormState extends State<ProfileForm> {
     });
   }
 
+   validate(email, name, address){
+    bool emailValid = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email);
+    bool check = true;
+    if(!emailValid){
+      final snackBar = SnackBar(
+        content: Text('Email sai format'),
+        action: SnackBarAction(
+          label: 'Undo',
+          onPressed: () {
+          },
+        ),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      check = false;
+      return check;
+    }
+    if(name.toString().trim() == ""){
+      final snackBar = SnackBar(
+        content: Text('Vui lòng nhập tên'),
+        action: SnackBarAction(
+          label: 'Undo',
+          onPressed: () {
+          },
+        ),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      check = false;
+      return check;
+    }
+    if(address.toString().trim() == ""){
+      final snackBar = SnackBar(
+        content: Text('Vui lòng nhập địa chỉ'),
+        action: SnackBarAction(
+          label: 'Undo',
+          onPressed: () {
+          },
+        ),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      check = false;
+      return check;
+    }
+    return check;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -103,28 +148,31 @@ class _ProfileFormState extends State<ProfileForm> {
     return DefaultButton(
       text: "Cập nhật",
       press: () async {
-        final res = await CustomerProfileServices().updateCustomerProfile(
-          token: MyApp.storage.getItem("token"),
-          active: true,
-          address: districtTextController.text,
-          birthdate: dateOfBirthTextController.text,
-          email: customerProfile.data.user.email,
-          fullname: fullnameTextController.text,
-          gender: genderTextController.text,
-          id: MyApp.storage.getItem("customerId"),
-          image: customerProfile.data.user.image,
-          password: customerProfile.data.user.password,
-          phone: phoneTextController.text,
-        );
-        print("Status: ${res.body}");
-        if(res.statusCode == 200){
-         print("update thành công");
+        if(validate(emailTextController.text, fullnameTextController.text, districtTextController.text)){
+          final res = await CustomerProfileServices().updateCustomerProfile(
+            token: MyApp.storage.getItem("token"),
+            active: true,
+            address: districtTextController.text,
+            birthdate: dateOfBirthTextController.text,
+            email: emailTextController.text,
+            fullname: fullnameTextController.text,
+            gender: genderTextController.text,
+            id: MyApp.storage.getItem("customerId"),
+            image: customerProfile.data.user.image,
+            password: customerProfile.data.user.password,
+            phone: phoneTextController.text,
+          );
+          print("Status: ${res.body}");
+          if(res.statusCode == 200){
+            print("update thành công");
+          }
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => ProfileDetail()),
+          );
+        };
         }
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => ProfileDetail()),
-        );
-      },
+
 
     );
   }
