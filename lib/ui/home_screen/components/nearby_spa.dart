@@ -57,14 +57,14 @@ class _NearBySpaState extends State<NearBySpa> {
           double.parse("${currentPosition.latitude}"),
           double.tryParse("${currentPosition.longitude}"),
           double.tryParse("${allSpa.data[i].latitude}"),
-          double.tryParse("${allSpa.data[i].longtitude}"));
+          double.tryParse("${allSpa.data[i].longitude}"));
       String street = allSpa.data[i].street;
       String image = allSpa.data[i].image;
       String name = allSpa.data[i].name;
       String latitude = allSpa.data[i].latitude;
-      String longtitude = allSpa.data[i].longtitude;
+      String longitude = allSpa.data[i].longitude;
       listSpaAfterCaculateDistance.add(new SpaToShow(
-          name: name, street: street, distance: distance, image: image, latitude: latitude, longtitude: longtitude,));
+          name: name, street: street, distance: distance, image: image, latitude: latitude, longitude: longitude,));
     }
   }
 
@@ -186,7 +186,7 @@ class _NearBySpaState extends State<NearBySpa> {
                             SizedBox(width: 20),
                             GestureDetector(
                               onTap: () {
-                                MapUtils.openMap(currentPosition.latitude,currentPosition.longitude,double.tryParse(spa.latitude),double.tryParse(spa.longtitude));
+                                MapUtils.openMap(currentPosition.latitude,currentPosition.longitude,double.tryParse(spa.latitude),double.tryParse(spa.longitude));
                               },
                               child: Text(
                                 "xem trên map",

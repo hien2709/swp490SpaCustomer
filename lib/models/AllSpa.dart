@@ -45,7 +45,7 @@ class Datum {
     this.district,
     this.city,
     this.latitude,
-    this.longtitude,
+    this.longitude,
     this.createBy,
     this.createTime,
     this.status,
@@ -58,7 +58,7 @@ class Datum {
   String district;
   String city;
   String latitude;
-  String longtitude;
+  String longitude;
   String createBy;
   DateTime createTime;
   String status;
@@ -71,7 +71,7 @@ class Datum {
     district: json["district"],
     city: json["city"],
     latitude: json["latitude"],
-    longtitude: json["longtitude"],
+    longitude: json["longitude"],
     createBy: json["create_by"],
     createTime: DateTime.parse(json["create_time"]),
     status: json["status"],
@@ -85,7 +85,7 @@ class Datum {
     "district": district,
     "city": city,
     "latitude": latitude,
-    "longtitude": longtitude,
+    "longitude": longitude,
     "create_by": createBy,
     "create_time": "${createTime.year.toString().padLeft(4, '0')}-${createTime.month.toString().padLeft(2, '0')}-${createTime.day.toString().padLeft(2, '0')}",
     "status": status,

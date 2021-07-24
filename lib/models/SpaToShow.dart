@@ -6,7 +6,7 @@ class SpaToShow{
   double distance;
   String image;
   String latitude;
-  String longtitude;
+  String longitude;
 
   SpaToShow(
       {this.name,
@@ -14,5 +14,5 @@ class SpaToShow{
       this.distance,
       this.image,
       this.latitude,
-      this.longtitude});
+      this.longitude});
 }

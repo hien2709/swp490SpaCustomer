@@ -45,7 +45,7 @@ class SpaInstance {
     this.district,
     this.city,
     this.latitude,
-    this.longtitude,
+    this.longitude,
     this.createBy,
     this.createTime,
     this.status,
@@ -58,7 +58,7 @@ class SpaInstance {
   String district;
   String city;
   String latitude;
-  String longtitude;
+  String longitude;
   String createBy;
   DateTime createTime;
   String status;
@@ -71,7 +71,7 @@ class SpaInstance {
     district: json["district"] == null ? null : json["district"],
     city: json["city"] == null ? null : json["city"],
     latitude: json["latitude"] == null ? null : json["latitude"],
-    longtitude: json["longtitude"] == null ? null : json["longtitude"],
+    longitude: json["longitude"] == null ? null : json["longitude"],
     createBy: json["create_by"] == null ? null : json["create_by"],
     createTime: json["create_time"] == null ? null : DateTime.parse(json["create_time"]),
     status: json["status"] == null ? null : json["status"],
@@ -85,7 +85,7 @@ class SpaInstance {
     "district": district == null ? null : district,
     "city": city == null ? null : city,
     "latitude": latitude == null ? null : latitude,
-    "longtitude": longtitude == null ? null : longtitude,
+    "longitude": longitude == null ? null : longitude,
     "create_by": createBy == null ? null : createBy,
     "create_time": createTime == null ? null : "${createTime.year.toString().padLeft(4, '0')}-${createTime.month.toString().padLeft(2, '0')}-${createTime.day.toString().padLeft(2, '0')}",
     "status": status == null ? null : status,
