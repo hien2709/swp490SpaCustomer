@@ -30,7 +30,6 @@ class _BodyState extends State<Body> {
   getChatRoom() async {
     await getListConsultantForChat();
     await createChatRoom();
-    print("customerId: " + MyApp.storage.getItem("customerId").toString());
     await firebaseMethod.getChatRoomStream(MyApp.storage.getItem("customerId")).then((value) {
       setState(() {
         chatRoomStream = value;
@@ -65,36 +64,11 @@ class _BodyState extends State<Body> {
 
   getConsultantInfo(consultantId){
     for(int i = 0; i < consultantProfileToChat.data.length; i++){
-      if(consultantProfileToChat.data[i].user.id == consultantId){
+      if(consultantProfileToChat.data[i].user.id.toString() == consultantId){
         consultantName = consultantProfileToChat.data[i].user.fullname;
         consultantPhone = consultantProfileToChat.data[i].user.phone;
         consultantImage = consultantProfileToChat.data[i].user.image;
       }
-    }
-  }
-
-  Widget searchList() {
-    return searchResult != null
-        ? ListView.builder(
-      shrinkWrap: true,
-      itemCount: searchResult.docs.length,
-      itemBuilder: (context, index) {
-        return ChatCard(
-          consultantId: searchResult.docs[index]["id"],
-          chatRoomId: getChatRoomId(
-              int.parse(searchResult.docs[index]["id"]),
-              MyApp.storage.getItem("staffId")),
-        );
-      },
-    )
-        : Container();
-  }
-
-  getChatRoomId(int a, int b) {
-    if (a > b) {
-      return "$b\_$a";
-    } else {
-      return "$a\_$b";
     }
   }
 
@@ -128,17 +102,7 @@ class _BodyState extends State<Body> {
     );
   }
 
-  searchButton() async {
-    if (searchInput.text != "") {
-      await firebaseMethod.getUserByUsername(searchInput.text).then((value) {
-        setState(() {
-          isSearch = true;
-          searchResult = value;
-        });
-      });
-    }
-    return;
-  }
+
 
 
 
@@ -195,7 +159,7 @@ class _BodyState extends State<Body> {
                       color: Colors.grey.shade400,
                       iconSize: 25,
                       onPressed: () {
-                        searchButton();
+
                       },
                     ),
                     filled: true,
@@ -207,7 +171,7 @@ class _BodyState extends State<Body> {
                   ),
                 ),
               ),
-              isSearch ? searchList() : showChatRoomList(),
+              showChatRoomList(),
             ],
           ),
         ),

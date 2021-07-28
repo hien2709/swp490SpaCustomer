@@ -13,10 +13,10 @@ class CustomerNotification extends StatefulWidget {
 class _CustomerNotificationState extends State<CustomerNotification> {
   @override
   Widget build(BuildContext context) {
-    DateFormat formater = new DateFormat("hh:mm:ss");
-    DateTime time = formater.parse("21:00:00");
-    print("Time ne");
-    print(time.toString().substring(11,19));
+    // DateFormat formater = new DateFormat("hh:mm:ss");
+    // DateTime time = formater.parse("21:00:00");
+    // print("Time ne");
+    // print(time.toString().substring(11,19));
     return Container(
       child: Scaffold(
         appBar: AppBar(

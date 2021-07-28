@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:spa_customer/main.dart';
 import 'package:spa_customer/models/AllSpa.dart';
 import 'package:spa_customer/models/CustomerProfile.dart';
+import 'package:spa_customer/models/Notification.dart';
 
 class CustomerProfileServices {
 
@@ -10,6 +11,7 @@ class CustomerProfileServices {
   static final String urlGetAllSpa = "https://swp490spa.herokuapp.com/api/public/spa/findAll";
   static final String urlEditPassword = "https://swp490spa.herokuapp.com/api/customer/editpassword";
   static final String urlUpdateProfile = "https://swp490spa.herokuapp.com/api/customer/user/edit";
+  static final String urlGetNotification = "https://swp490spa.herokuapp.com/api/customer/getAllNotification/";
 
   static Future<CustomerProfile> getCustomerProfile() async {
     try{
@@ -27,7 +29,30 @@ class CustomerProfileServices {
         return CustomerProfile();
       }
     }catch(e){
+      print(e);
       return CustomerProfile();
+    }
+  }
+
+  static Future<NotificationCustomer> getCustomerNotification() async {
+    try{
+      final response = await http.get(urlGetNotification + MyApp.storage.getItem("customerId").toString(),
+          headers: {
+            "authorization": "Bearer " + MyApp.storage.getItem("token"),
+          });
+      print(response.statusCode);
+      print(response.body);
+      if(200 == response.statusCode){
+        print (utf8.decode(response.bodyBytes));
+        final NotificationCustomer notification = notificationCustomerFromJson(utf8.decode(response.bodyBytes));
+
+        return notification;
+      }else{
+        return NotificationCustomer();
+      }
+    }catch(e){
+      print(e);
+      return NotificationCustomer();
     }
   }
 
@@ -44,6 +69,7 @@ class CustomerProfileServices {
         return AllSpa();
       }
     }catch(e){
+      print(e);
       return AllSpa();
     }
   }

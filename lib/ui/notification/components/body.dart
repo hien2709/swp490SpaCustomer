@@ -1,8 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:spa_customer/models/Notification.dart';
+import 'package:spa_customer/services/CustomerProfileServices.dart';
 
 class Body extends StatefulWidget {
   @override
@@ -10,32 +13,71 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
+  NotificationCustomer notification = NotificationCustomer();
+  bool loading = true;
+  String image = "";
 
+  getNotification() async {
+    await CustomerProfileServices.getCustomerNotification().then((value) => {
+          setState(() {
+            notification = value;
+            loading = false;
+          })
+        });
+  }
 
   @override
   void initState() {
     super.initState();
-
+    getNotification();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ListView.builder(
-          shrinkWrap: true,
-          itemCount: 3,
-          itemBuilder: (context, index) {
-            return NotificationBookingSuccessItem(
-                image: "https://bizweb.dktcdn.net/100/110/917/files/ms-da-nong.jpg?v=1568863806870",
-                companyName: "test",
-                date: index.toString(),
-                serviceName: "test");
-          },
-        ),
-
-      ],
-    );
+    if (loading) {
+      return Center(
+          child: SpinKitWave(
+        color: Colors.orange,
+        size: 50,
+      ));
+    } else {
+      return Column(
+        children: [
+          notification.data.length != null ?
+          ListView.builder(
+            shrinkWrap: true,
+            itemCount: notification.data.length,
+            itemBuilder: (context, index) {
+              if(notification.data[index].type == "STEP_FINISH"){
+                image = 'assets/notification/finish.jpg';
+              }else if(notification.data[index].type == "TREATMENT_FINISH"){
+                image = 'assets/notification/finish.jpg';
+              }else if(notification.data[index].type == "REMIND"){
+                image = 'assets/notification/remind.jpg';
+              }else if(notification.data[index].type == "CHANG_STAFF"){
+                image = 'assets/notification/changStaff.jpg';
+              }else if(notification.data[index].type == "SKIP"){
+                image = 'assets/notification/skip.jpg';
+              }else if(notification.data[index].type == "CANCEL"){
+                image = 'assets/notification/cancel.jpg';
+              }
+              return NotificationBookingSuccessItem(
+                image: image,
+                title: notification.data[index].title,
+                message: notification.data[index].message,
+              );
+            },
+          ) : Center(
+              child: Text(
+                "Chưa có thông báo nào",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              )),
+        ],
+      );
+    }
   }
 }
 
@@ -43,22 +85,18 @@ class NotificationBookingSuccessItem extends StatelessWidget {
   const NotificationBookingSuccessItem({
     Key key,
     @required this.image,
-    @required this.companyName,
-    @required this.serviceName,
-    @required this.date,
+    @required this.title,
+    @required this.message,
   }) : super(key: key);
 
-  final String image, companyName, serviceName, date;
+  final String image, title, message;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         border: Border(
-          bottom: BorderSide(
-            color: Colors.white,
-            width: 5
-          ),
+          bottom: BorderSide(color: Colors.white, width: 5),
         ),
         color: Colors.grey.withOpacity(0.1),
       ),
@@ -67,9 +105,7 @@ class NotificationBookingSuccessItem extends StatelessWidget {
         child: Row(
           children: [
             Container(
-              child: Image.network(
-                image,
-              ),
+              child: Image.asset(image),
               width: 80,
               height: 80,
             ),
@@ -81,48 +117,31 @@ class NotificationBookingSuccessItem extends StatelessWidget {
                 children: [
                   Container(
                     height: 60,
-                    child: Text.rich(
-                      TextSpan(
-                        children: [
-                          TextSpan(
-                            text: "Dịch vụ ",
-                          ),
-                          TextSpan(
-                            text: serviceName,
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          TextSpan(
-                            text: " tại ",
-                          ),
-                          TextSpan(
-                            text: companyName,
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          TextSpan(
-                            text:
-                                " đã được đặt thành công, vui lòng đợi xác nhận từ phía cửa hàng",
-                          ),
-                        ],
-                      ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              title,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Text(
+                          message,
+                        ),
+                      ],
                     ),
                   ),
-                  Container(
-                    height: 20,
-                    width: double.infinity,
-                    child: Text(
-                      date,
-                      style: TextStyle(
-                        fontStyle: FontStyle.italic,
-                      ),
-                    ),
-                  )
                 ],
               ),
             ),
           ],
         ),
       ),
-
     );
   }
 }
