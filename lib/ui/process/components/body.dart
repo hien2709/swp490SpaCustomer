@@ -36,27 +36,29 @@ class _BodyState extends State<Body> {
         child: Lottie.asset("assets/lottie/loading.json"),
       );
     }
-    return Column(
-      children: [
-        ...List.generate(
-            _bookingDetail.data.length,
-            (index) => Column(
-                  children: [
-                    ProcessItem(
-                      processItem: _bookingDetail.data[index],
-                      press: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => CustomerProcessDetail(processDetail: _bookingDetail.data[index],)),
-                        );
-                      },
-                    ),
-                    Divider(
-                      height: 10,
-                    )
-                  ],
-                )),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          ...List.generate(
+              _bookingDetail.data.length,
+              (index) => Column(
+                    children: [
+                      ProcessItem(
+                        processItem: _bookingDetail.data[index],
+                        press: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => CustomerProcessDetail(processDetail: _bookingDetail.data[index],)),
+                          );
+                        },
+                      ),
+                      Divider(
+                        height: 10,
+                      )
+                    ],
+                  )),
+        ],
+      ),
     );
   }
 }
