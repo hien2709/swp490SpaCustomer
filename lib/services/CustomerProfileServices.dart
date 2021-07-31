@@ -8,10 +8,10 @@ import 'package:spa_customer/models/Notification.dart';
 class CustomerProfileServices {
 
   static final String GET_CUSTOMER_PROFILE_SERVICE = "https://swp490spa.herokuapp.com/api/customer/getprofile?userId=";
-  static final String urlGetAllSpa = "https://swp490spa.herokuapp.com/api/public/spa/findAll";
-  static final String urlEditPassword = "https://swp490spa.herokuapp.com/api/customer/editpassword";
-  static final String urlUpdateProfile = "https://swp490spa.herokuapp.com/api/customer/user/edit";
-  static final String urlGetNotification = "https://swp490spa.herokuapp.com/api/customer/getAllNotification/";
+  static final String GET_ALL_SPA = "https://swp490spa.herokuapp.com/api/public/spa/findAll";
+  static final String EDIT_PASSWORD = "https://swp490spa.herokuapp.com/api/customer/editpassword";
+  static final String UPDATE_PROFILE = "https://swp490spa.herokuapp.com/api/customer/user/edit";
+  static final String GET_NOTIFICATION = "https://swp490spa.herokuapp.com/api/customer/getAllNotification/";
 
   static Future<CustomerProfile> getCustomerProfile() async {
     try{
@@ -36,7 +36,7 @@ class CustomerProfileServices {
 
   static Future<NotificationCustomer> getCustomerNotification() async {
     try{
-      final response = await http.get(urlGetNotification + MyApp.storage.getItem("customerId").toString(),
+      final response = await http.get(GET_NOTIFICATION + MyApp.storage.getItem("customerId").toString(),
           headers: {
             "authorization": "Bearer " + MyApp.storage.getItem("token"),
           });
@@ -58,7 +58,7 @@ class CustomerProfileServices {
 
   static Future<AllSpa> getAllSpa() async {
     try{
-      final response = await http.get(urlGetAllSpa);
+      final response = await http.get(GET_ALL_SPA);
       print(response.statusCode);
       if(response.statusCode == 200){
         print (utf8.decode(response.bodyBytes));
@@ -76,7 +76,7 @@ class CustomerProfileServices {
 
   Future<http.Response> editCustomerPassword(password) {
     return http.put(
-      Uri.parse(urlEditPassword),
+      Uri.parse(EDIT_PASSWORD),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
@@ -103,7 +103,7 @@ class CustomerProfileServices {
     phone,
   }) {
     return http.put(
-      Uri.parse(urlUpdateProfile),
+      Uri.parse(UPDATE_PROFILE),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
