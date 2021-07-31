@@ -1,43 +1,15 @@
 // To parse this JSON data, do
 //
-//     final bookingDetail = bookingDetailFromJson(jsonString);
+//     final customerSchedule = customerScheduleFromJson(jsonString);
 
 import 'dart:convert';
 
-BookingDetail bookingDetailFromJson(String str) => BookingDetail.fromJson(json.decode(str));
+CustomerSchedule customerScheduleFromJson(String str) => CustomerSchedule.fromJson(json.decode(str));
 
-String bookingDetailToJson(BookingDetail data) => json.encode(data.toJson());
+String customerScheduleToJson(CustomerSchedule data) => json.encode(data.toJson());
 
-BookingDetailResponse bookingDetailResponseFromJson(String str) => BookingDetailResponse.fromJson(json.decode(str));
-
-String bookingDetailResponseToJson(BookingDetailResponse data) => json.encode(data.toJson());
-
-class BookingDetailResponse {
-  BookingDetailResponse({
-    this.code,
-    this.status,
-    this.data,
-  });
-
-  int code;
-  String status;
-  Datum data;
-
-  factory BookingDetailResponse.fromJson(Map<String, dynamic> json) => BookingDetailResponse(
-    code: json["code"] == null ? null : json["code"],
-    status: json["status"] == null ? null : json["status"],
-    data: json["data"] == null ? null : Datum.fromJson(json["data"]),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "code": code == null ? null : code,
-    "status": status == null ? null : status,
-    "data": data == null ? null : data.toJson(),
-  };
-}
-
-class BookingDetail {
-  BookingDetail({
+class CustomerSchedule {
+  CustomerSchedule({
     this.code,
     this.status,
     this.data,
@@ -49,7 +21,7 @@ class BookingDetail {
   List<Datum> data;
   Paging paging;
 
-  factory BookingDetail.fromJson(Map<String, dynamic> json) => BookingDetail(
+  factory CustomerSchedule.fromJson(Map<String, dynamic> json) => CustomerSchedule(
     code: json["code"] == null ? null : json["code"],
     status: json["status"] == null ? null : json["status"],
     data: json["data"] == null ? null : List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
@@ -66,49 +38,133 @@ class BookingDetail {
 
 class Datum {
   Datum({
-    this.booking,
+    this.dateBooking,
+    this.bookingDetailSteps,
+  });
+
+  DateTime dateBooking;
+  List<BookingDetailStep> bookingDetailSteps;
+
+  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+    dateBooking: json["dateBooking"] == null ? null : DateTime.parse(json["dateBooking"]),
+    bookingDetailSteps: json["bookingDetailSteps"] == null ? null : List<BookingDetailStep>.from(json["bookingDetailSteps"].map((x) => BookingDetailStep.fromJson(x))),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "dateBooking": dateBooking == null ? null : "${dateBooking.year.toString().padLeft(4, '0')}-${dateBooking.month.toString().padLeft(2, '0')}-${dateBooking.day.toString().padLeft(2, '0')}",
+    "bookingDetailSteps": bookingDetailSteps == null ? null : List<dynamic>.from(bookingDetailSteps.map((x) => x.toJson())),
+  };
+}
+
+class BookingDetailStep {
+  BookingDetailStep({
+    this.id,
+    this.dateBooking,
+    this.startTime,
+    this.endTime,
+    this.bookingPrice,
+    this.statusBooking,
+    this.reason,
+    this.isConsultation,
+    this.treatmentService,
+    this.staff,
+    this.consultant,
+    this.bookingDetail,
+    this.rating,
+    this.consultationContent,
+  });
+
+  int id;
+  DateTime dateBooking;
+  String startTime;
+  String endTime;
+  double bookingPrice;
+  String statusBooking;
+  dynamic reason;
+  String isConsultation;
+  TreatmentService treatmentService;
+  Consultant staff;
+  Consultant consultant;
+  BookingDetail bookingDetail;
+  dynamic rating;
+  ConsultationContent consultationContent;
+
+  factory BookingDetailStep.fromJson(Map<String, dynamic> json) => BookingDetailStep(
+    id: json["id"] == null ? null : json["id"],
+    dateBooking: json["dateBooking"] == null ? null : DateTime.parse(json["dateBooking"]),
+    startTime: json["startTime"] == null ? null : json["startTime"],
+    endTime: json["endTime"] == null ? null : json["endTime"],
+    bookingPrice: json["bookingPrice"] == null ? null : json["bookingPrice"],
+    statusBooking: json["statusBooking"] == null ? null : json["statusBooking"],
+    reason: json["reason"],
+    isConsultation: json["isConsultation"] == null ? null : json["isConsultation"],
+    treatmentService: json["treatmentService"] == null ? null : TreatmentService.fromJson(json["treatmentService"]),
+    staff: json["staff"] == null ? null : Consultant.fromJson(json["staff"]),
+    consultant: json["consultant"] == null ? null : Consultant.fromJson(json["consultant"]),
+    bookingDetail: json["bookingDetail"] == null ? null : BookingDetail.fromJson(json["bookingDetail"]),
+    rating: json["rating"],
+    consultationContent: json["consultationContent"] == null ? null : ConsultationContent.fromJson(json["consultationContent"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id == null ? null : id,
+    "dateBooking": dateBooking == null ? null : "${dateBooking.year.toString().padLeft(4, '0')}-${dateBooking.month.toString().padLeft(2, '0')}-${dateBooking.day.toString().padLeft(2, '0')}",
+    "startTime": startTime == null ? null : startTime,
+    "endTime": endTime == null ? null : endTime,
+    "bookingPrice": bookingPrice == null ? null : bookingPrice,
+    "statusBooking": statusBooking == null ? null : statusBooking,
+    "reason": reason,
+    "isConsultation": isConsultation == null ? null : isConsultation,
+    "treatmentService": treatmentService == null ? null : treatmentService.toJson(),
+    "staff": staff == null ? null : staff.toJson(),
+    "consultant": consultant == null ? null : consultant.toJson(),
+    "bookingDetail": bookingDetail == null ? null : bookingDetail.toJson(),
+    "rating": rating,
+    "consultationContent": consultationContent == null ? null : consultationContent.toJson(),
+  };
+}
+
+class BookingDetail {
+  BookingDetail({
     this.id,
     this.totalTime,
     this.type,
     this.totalPrice,
     this.statusBooking,
-    this.treatment,
+    this.booking,
+    this.spaTreatment,
     this.spaPackage,
-    this.bookingDetailSteps,
   });
 
-  Booking booking;
   int id;
   int totalTime;
   String type;
   double totalPrice;
   String statusBooking;
-  Treatment treatment;
+  Booking booking;
+  SpaTreatment spaTreatment;
   SpaPackage spaPackage;
-  List<BookingDetailStep> bookingDetailSteps;
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-    booking: json["booking"] == null ? null : Booking.fromJson(json["booking"]),
+  factory BookingDetail.fromJson(Map<String, dynamic> json) => BookingDetail(
     id: json["id"] == null ? null : json["id"],
-    totalTime: json["total_time"] == null ? null : json["total_time"],
+    totalTime: json["totalTime"] == null ? null : json["totalTime"],
     type: json["type"] == null ? null : json["type"],
-    totalPrice: json["total_price"] == null ? null : json["total_price"],
-    statusBooking: json["status_booking"] == null ? null : json["status_booking"],
-    treatment: json["treatment"] == null ? null : Treatment.fromJson(json["treatment"]),
-    spaPackage: json["spa_package"] == null ? null : SpaPackage.fromJson(json["spa_package"]),
-    bookingDetailSteps: json["booking_detail_steps"] == null ? null : List<BookingDetailStep>.from(json["booking_detail_steps"].map((x) => BookingDetailStep.fromJson(x))),
+    totalPrice: json["totalPrice"] == null ? null : json["totalPrice"],
+    statusBooking: json["statusBooking"] == null ? null : json["statusBooking"],
+    booking: json["booking"] == null ? null : Booking.fromJson(json["booking"]),
+    spaTreatment: json["spaTreatment"] == null ? null : SpaTreatment.fromJson(json["spaTreatment"]),
+    spaPackage: json["spaPackage"] == null ? null : SpaPackage.fromJson(json["spaPackage"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "booking": booking == null ? null : booking.toJson(),
     "id": id == null ? null : id,
-    "total_time": totalTime == null ? null : totalTime,
+    "totalTime": totalTime == null ? null : totalTime,
     "type": type == null ? null : type,
-    "total_price": totalPrice == null ? null : totalPrice,
-    "status_booking": statusBooking == null ? null : statusBooking,
-    "treatment": treatment == null ? null : treatment.toJson(),
-    "spa_package": spaPackage == null ? null : spaPackage.toJson(),
-    "booking_detail_steps": bookingDetailSteps == null ? null : List<dynamic>.from(bookingDetailSteps.map((x) => x.toJson())),
+    "totalPrice": totalPrice == null ? null : totalPrice,
+    "statusBooking": statusBooking == null ? null : statusBooking,
+    "booking": booking == null ? null : booking.toJson(),
+    "spaTreatment": spaTreatment == null ? null : spaTreatment.toJson(),
+    "spaPackage": spaPackage == null ? null : spaPackage.toJson(),
   };
 }
 
@@ -240,6 +296,7 @@ class Spa {
     this.street,
     this.district,
     this.city,
+    this.phone,
     this.latitude,
     this.longitude,
     this.createBy,
@@ -249,10 +306,11 @@ class Spa {
 
   int id;
   String name;
-  dynamic image;
+  String image;
   String street;
   String district;
   String city;
+  String phone;
   String latitude;
   String longitude;
   String createBy;
@@ -262,10 +320,11 @@ class Spa {
   factory Spa.fromJson(Map<String, dynamic> json) => Spa(
     id: json["id"] == null ? null : json["id"],
     name: json["name"] == null ? null : json["name"],
-    image: json["image"],
+    image: json["image"] == null ? null : json["image"],
     street: json["street"] == null ? null : json["street"],
     district: json["district"] == null ? null : json["district"],
     city: json["city"] == null ? null : json["city"],
+    phone: json["phone"] == null ? null : json["phone"],
     latitude: json["latitude"] == null ? null : json["latitude"],
     longitude: json["longitude"] == null ? null : json["longitude"],
     createBy: json["createBy"] == null ? null : json["createBy"],
@@ -276,127 +335,16 @@ class Spa {
   Map<String, dynamic> toJson() => {
     "id": id == null ? null : id,
     "name": name == null ? null : name,
-    "image": image,
+    "image": image == null ? null : image,
     "street": street == null ? null : street,
     "district": district == null ? null : district,
     "city": city == null ? null : city,
+    "phone": phone == null ? null : phone,
     "latitude": latitude == null ? null : latitude,
     "longitude": longitude == null ? null : longitude,
     "createBy": createBy == null ? null : createBy,
     "createTime": createTime == null ? null : "${createTime.year.toString().padLeft(4, '0')}-${createTime.month.toString().padLeft(2, '0')}-${createTime.day.toString().padLeft(2, '0')}",
     "status": status == null ? null : status,
-  };
-}
-
-class BookingDetailStep {
-  BookingDetailStep({
-    this.bookingDetail,
-    this.id,
-    this.dateBooking,
-    this.startTime,
-    this.endTime,
-    this.bookingPrice,
-    this.statusBooking,
-    this.reason,
-    this.isConsultation,
-    this.consultationContent,
-    this.rating,
-    this.treatmentService,
-    this.staff,
-    this.consultant,
-  });
-
-  BookingDetailClass bookingDetail;
-  int id;
-  DateTime dateBooking;
-  String startTime;
-  String endTime;
-  double bookingPrice;
-  String statusBooking;
-  dynamic reason;
-  String isConsultation;
-  ConsultationContent consultationContent;
-  Rating rating;
-  TreatmentService treatmentService;
-  Consultant staff;
-  Consultant consultant;
-
-  factory BookingDetailStep.fromJson(Map<String, dynamic> json) => BookingDetailStep(
-    bookingDetail: json["bookingDetail"] == null ? null : BookingDetailClass.fromJson(json["bookingDetail"]),
-    id: json["id"] == null ? null : json["id"],
-    dateBooking: json["date_booking"] == null ? null : DateTime.parse(json["date_booking"]),
-    startTime: json["start_time"] == null ? null : json["start_time"],
-    endTime: json["end_time"] == null ? null : json["end_time"],
-    bookingPrice: json["booking_price"] == null ? null : json["booking_price"],
-    statusBooking: json["status_booking"] == null ? null : json["status_booking"],
-    reason: json["reason"],
-    isConsultation: json["is_consultation"] == null ? null : json["is_consultation"],
-    consultationContent: json["consultation_content"] == null ? null : ConsultationContent.fromJson(json["consultation_content"]),
-    rating: json["rating"] == null ? null : Rating.fromJson(json["rating"]),
-    treatmentService: json["treatment_service"] == null ? null : TreatmentService.fromJson(json["treatment_service"]),
-    staff: json["staff"] == null ? null : Consultant.fromJson(json["staff"]),
-    consultant: json["consultant"] == null ? null : Consultant.fromJson(json["consultant"]),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "bookingDetail": bookingDetail == null ? null : bookingDetail.toJson(),
-    "id": id == null ? null : id,
-    "date_booking": dateBooking == null ? null : "${dateBooking.year.toString().padLeft(4, '0')}-${dateBooking.month.toString().padLeft(2, '0')}-${dateBooking.day.toString().padLeft(2, '0')}",
-    "start_time": startTime == null ? null : startTime,
-    "end_time": endTime == null ? null : endTime,
-    "booking_price": bookingPrice == null ? null : bookingPrice,
-    "status_booking": statusBooking == null ? null : statusBooking,
-    "reason": reason,
-    "is_consultation": isConsultation == null ? null : isConsultation,
-    "consultation_content": consultationContent == null ? null : consultationContent.toJson(),
-    "rating": rating == null ? null : rating.toJson(),
-    "treatment_service": treatmentService == null ? null : treatmentService.toJson(),
-    "staff": staff == null ? null : staff.toJson(),
-    "consultant": consultant == null ? null : consultant.toJson(),
-  };
-}
-
-class BookingDetailClass {
-  BookingDetailClass({
-    this.id,
-    this.totalTime,
-    this.type,
-    this.totalPrice,
-    this.statusBooking,
-    this.booking,
-    this.spaTreatment,
-    this.spaPackage,
-  });
-
-  int id;
-  int totalTime;
-  String type;
-  double totalPrice;
-  String statusBooking;
-  Booking booking;
-  Treatment spaTreatment;
-  SpaPackage spaPackage;
-
-  factory BookingDetailClass.fromJson(Map<String, dynamic> json) => BookingDetailClass(
-    id: json["id"] == null ? null : json["id"],
-    totalTime: json["totalTime"] == null ? null : json["totalTime"],
-    type: json["type"] == null ? null : json["type"],
-    totalPrice: json["totalPrice"] == null ? null : json["totalPrice"],
-    statusBooking: json["statusBooking"] == null ? null : json["statusBooking"],
-    booking: json["booking"] == null ? null : Booking.fromJson(json["booking"]),
-    spaTreatment: json["spaTreatment"] == null ? null : Treatment.fromJson(json["spaTreatment"]),
-    spaPackage: json["spaPackage"] == null ? null : SpaPackage.fromJson(json["spaPackage"]),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "id": id == null ? null : id,
-    "totalTime": totalTime == null ? null : totalTime,
-    "type": type == null ? null : type,
-    "totalPrice": totalPrice == null ? null : totalPrice,
-    "statusBooking": statusBooking == null ? null : statusBooking,
-    "booking": booking == null ? null : booking.toJson(),
-    "spaTreatment": spaTreatment == null ? null : spaTreatment.toJson(),
-    "spaPackage": spaPackage == null ? null : spaPackage.toJson(),
   };
 }
 
@@ -488,8 +436,8 @@ class Category {
   };
 }
 
-class Treatment {
-  Treatment({
+class SpaTreatment {
+  SpaTreatment({
     this.id,
     this.name,
     this.description,
@@ -509,7 +457,7 @@ class Treatment {
   int createBy;
   SpaPackage spaPackage;
 
-  factory Treatment.fromJson(Map<String, dynamic> json) => Treatment(
+  factory SpaTreatment.fromJson(Map<String, dynamic> json) => SpaTreatment(
     id: json["id"] == null ? null : json["id"],
     name: json["name"] == null ? null : json["name"],
     description: json["description"] == null ? null : json["description"],
@@ -575,64 +523,24 @@ class ConsultationContent {
 
   int id;
   String description;
-  String expectation;
+  dynamic expectation;
   dynamic result;
-  String note;
+  dynamic note;
 
   factory ConsultationContent.fromJson(Map<String, dynamic> json) => ConsultationContent(
     id: json["id"] == null ? null : json["id"],
     description: json["description"] == null ? null : json["description"],
-    expectation: json["expectation"] == null ? null : json["expectation"],
+    expectation: json["expectation"],
     result: json["result"],
-    note: json["note"] == null ? null : json["note"],
+    note: json["note"],
   );
 
   Map<String, dynamic> toJson() => {
     "id": id == null ? null : id,
     "description": description == null ? null : description,
-    "expectation": expectation == null ? null : expectation,
+    "expectation": expectation,
     "result": result,
-    "note": note == null ? null : note,
-  };
-}
-
-class Rating {
-  Rating({
-    this.id,
-    this.rate,
-    this.comment,
-    this.createTime,
-    this.expireTime,
-    this.statusRating,
-    this.customer,
-  });
-
-  int id;
-  dynamic rate;
-  String comment;
-  dynamic createTime;
-  dynamic expireTime;
-  dynamic statusRating;
-  dynamic customer;
-
-  factory Rating.fromJson(Map<String, dynamic> json) => Rating(
-    id: json["id"] == null ? null : json["id"],
-    rate: json["rate"],
-    comment: json["comment"] == null ? null : json["comment"],
-    createTime: json["createTime"],
-    expireTime: json["expireTime"],
-    statusRating: json["statusRating"],
-    customer: json["customer"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "id": id == null ? null : id,
-    "rate": rate,
-    "comment": comment == null ? null : comment,
-    "createTime": createTime,
-    "expireTime": expireTime,
-    "statusRating": statusRating,
-    "customer": customer,
+    "note": note,
   };
 }
 

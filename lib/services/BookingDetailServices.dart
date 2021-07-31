@@ -5,6 +5,7 @@ import 'package:spa_customer/models/BookingDetail.dart';
 
 class BookingDetailServices{
   static final String GET_BOOKING_DETAIL_MORE_STEP = "https://swp490spa.herokuapp.com/api/customer/bookingdetail/";
+  static final String GET_BOOKING_DETAIL_BY_ID = "https://swp490spa.herokuapp.com/api/customer/bookingDetail/findByBookingDetailId/";
 
   static Future<BookingDetail> getAllBookingDetailMoreStepByCustomerId() async{
     try{
@@ -21,6 +22,23 @@ class BookingDetailServices{
       }
     }catch(e){
       return BookingDetail();
+    }
+  }
+  static Future<BookingDetailResponse> getBookingDetailById(int bookingDetailId) async{
+    try{
+      final response = await http.get(GET_BOOKING_DETAIL_BY_ID+bookingDetailId.toString(),
+          headers: {
+        "authorization": "Bearer " + MyApp.storage.getItem("token"),
+      });
+      print(response.statusCode);
+      if(response.statusCode == 200){
+        final BookingDetailResponse bookingDetail = bookingDetailResponseFromJson(utf8.decode(response.bodyBytes));
+        return bookingDetail;
+      }else{
+        return BookingDetailResponse();
+      }
+    }catch(e){
+      return BookingDetailResponse();
     }
   }
 }
