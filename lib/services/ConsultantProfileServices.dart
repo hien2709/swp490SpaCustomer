@@ -6,11 +6,11 @@ import '../main.dart';
 
 class ConsultantProfileServices {
 
-  static final String urlGetConsultantProfileToChat = "https://swp490spa.herokuapp.com/api/customer/getListConsultantForChat?customerId=";
+  static final String GET_CONSULTANT_PROFILE_TO_CHAT = "https://swp490spa.herokuapp.com/api/customer/getListConsultantForChat?customerId=";
 
   static Future<ConsultantProfileToChat> getConsultantProfileToChat(customerId) async {
     try{
-      final response = await http.get(urlGetConsultantProfileToChat + customerId.toString(),
+      final response = await http.get(GET_CONSULTANT_PROFILE_TO_CHAT + customerId.toString(),
           headers: {
             "authorization": "Bearer " + MyApp.storage.getItem("token"),
           });
