@@ -79,9 +79,39 @@ class _BodyState extends State<Body> {
                                   (index2) =>
                                   GestureDetector(
                                     onTap: () {
+                                      _customerSchedule.data[index].bookingDetailSteps[index2].treatmentService!=null?
                                       _customerSchedule.data[index].bookingDetailSteps[index2].treatmentService.spaService.type == "ONESTEP"
                                           ? Navigator.push(context, MaterialPageRoute(builder: (context) => OneStepProcessScreen(bookingDetailId: _customerSchedule.data[index].bookingDetailSteps[index2].bookingDetail.id)),)
                                           : {
+                                        showDialog(
+                                          context: context,
+                                          builder: (builder) {
+                                            return Padding(
+                                              padding: const EdgeInsets.symmetric(
+                                                  horizontal: 80),
+                                              child: Dialog(
+                                                child: Container(
+                                                  height: 150,
+                                                  child: Lottie.asset(
+                                                      "assets/lottie/circle_loading.json"),
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                        BookingDetailServices.getBookingDetailById(_customerSchedule.data[index].bookingDetailSteps[index2].bookingDetail.id).then((value) =>
+                                        {
+                                          setState(() {
+                                            Navigator.pop(context);
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      CustomerProcessDetail(processDetail: value.data,)),
+                                            );
+                                          })
+                                        })
+                                      } : {
                                         showDialog(
                                           context: context,
                                           builder: (builder) {
@@ -187,47 +217,15 @@ class _BodyState extends State<Body> {
                                                   Text(_customerSchedule
                                                       .data[index]
                                                       .bookingDetailSteps[
-                                                  index2]
-                                                      .bookingDetail
-                                                      .booking
-                                                      .spa
-                                                      .street +
-                                                      _customerSchedule
-                                                          .data[index]
-                                                          .bookingDetailSteps[
-                                                      index2]
-                                                          .bookingDetail
-                                                          .booking
-                                                          .spa
-                                                          .district +
-                                                      _customerSchedule
-                                                          .data[index]
-                                                          .bookingDetailSteps[
-                                                      index2]
-                                                          .bookingDetail
-                                                          .booking
-                                                          .spa
-                                                          .city),
-                                                  Text(_customerSchedule
-                                                      .data[index]
-                                                      .bookingDetailSteps[
-                                                  index2]
-                                                      .treatmentService ==
-                                                      null
-                                                      ? _customerSchedule
-                                                      .data[index]
-                                                      .bookingDetailSteps[
-                                                  index2]
-                                                      .consultant
-                                                      .user
-                                                      .fullname
-                                                      : _customerSchedule
-                                                      .data[
-                                                  index]
-                                                      .bookingDetailSteps[
-                                                  index2]
-                                                      .staff ==
-                                                      null
+                                                  index2].bookingDetail.booking.spa.street +" "+
+                                                      _customerSchedule.data[index].bookingDetailSteps[index2].bookingDetail.booking.spa.district +" "+
+                                                      _customerSchedule.data[index].bookingDetailSteps[index2].bookingDetail.booking.spa.city),
+                                                  Text(_customerSchedule.data[index].bookingDetailSteps[index2].treatmentService == null
+                                                      ?
+                                                  _customerSchedule.data[index].bookingDetailSteps[index2].consultant == null ?"Chưa có tư vấn viên"
+
+                                                  :_customerSchedule.data[index].bookingDetailSteps[index2].consultant.user.fullname
+                                                      : _customerSchedule.data[index].bookingDetailSteps[index2].staff == null
                                                       ? "Chưa có nhân viên"
                                                       : _customerSchedule
                                                       .data[index]
