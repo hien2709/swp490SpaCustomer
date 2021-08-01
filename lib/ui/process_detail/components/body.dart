@@ -236,34 +236,37 @@ class ProcessStepSection extends StatelessWidget {
                 padding: EdgeInsets.only(right: 10),
                 child: Row(
                   children: [
-                    GestureDetector(
-                      onTap: () {
-                        showDialog(
-                            context: context,
-                            barrierDismissible: true,
-                            builder: (context) {
-                              return RatingDialog(
-                                  title: "Đánh giá dịch vụ",
-                                  image: Icon(
-                                    Icons.star_rate,
-                                    color: Colors.amberAccent,
-                                    size: 100,
-                                  ),
-                                  message: "Bạn có hài lòng về dịch vụ không?",
-                                  commentHint: "nhận xét của bạn",
-                                  submitButton: "Gửi",
-                                  onSubmitted: (response) {
-                                    print("rating: " +
-                                        response.rating.toString());
-                                    print("comment: " + response.comment);
-                                    GeneralServices.editRating(
-                                        staffId, ratingId, response.comment, response.rating.toDouble());
-                                  });
-                            });
-                      },
-                      child: Icon(
-                        Icons.rate_review,
-                        color: kGreen,
+                    Visibility(
+                      visible: status == "FINISH" && stepName != "Tư Vấn",
+                      child: GestureDetector(
+                        onTap: () {
+                          showDialog(
+                              context: context,
+                              barrierDismissible: true,
+                              builder: (context) {
+                                return RatingDialog(
+                                    title: "Đánh giá dịch vụ",
+                                    image: Icon(
+                                      Icons.star_rate,
+                                      color: Colors.amberAccent,
+                                      size: 100,
+                                    ),
+                                    message: "Bạn có hài lòng về dịch vụ không?",
+                                    commentHint: "nhận xét của bạn",
+                                    submitButton: "Gửi",
+                                    onSubmitted: (response) {
+                                      print("rating: " +
+                                          response.rating.toString());
+                                      print("comment: " + response.comment);
+                                      GeneralServices.editRating(
+                                          staffId, ratingId, response.comment, response.rating.toDouble());
+                                    });
+                              });
+                        },
+                        child: Icon(
+                          Icons.rate_review,
+                          color: kGreen,
+                        ),
                       ),
                     ),
                   ],

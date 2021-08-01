@@ -133,24 +133,7 @@ class ProcessItem extends StatelessWidget {
                   ],
                 ),
               ),
-              GestureDetector(
-                onTap: () {},
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.grey)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(3.0),
-                      child: Icon(
-                        Icons.chat,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+
             ],
           ),
         ),
