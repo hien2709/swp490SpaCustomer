@@ -3,11 +3,29 @@
 
 import 'package:intl/intl.dart';
 import 'package:spa_customer/models/AvailableTime.dart';
+import 'package:spa_customer/models/CustomerSchedule.dart';
 import 'package:spa_customer/models/Package.dart';
 import 'package:spa_customer/models/RequestBookingDetail.dart';
 import 'package:spa_customer/ui/home_screen/home_screen.dart';
 
 class  MyHelper{
+
+  static CustomerSchedule rearrangeSchedule(CustomerSchedule customerSchedule){
+    CustomerSchedule result;
+    result = customerSchedule;
+    for(int i = 0 ; i < customerSchedule.data.length ; i++) {
+      for (int j = 0; j < result.data[i].bookingDetailSteps.length; j++) {
+        if (result.data[i].bookingDetailSteps[j].isConsultation != "TRUE") {
+          if (result.data[i].bookingDetailSteps[j].treatmentService.spaService
+              .type == "ONESTEP" ) {
+            result.data[i].bookingDetailSteps.removeAt(j);
+          }
+        }
+      }
+    }
+    return result;
+  }
+
   static String getUserDateFromString(String date){
     DateFormat formatter = new DateFormat("yyyy-MM-dd");
     DateTime bookedDate = formatter.parse(date);
