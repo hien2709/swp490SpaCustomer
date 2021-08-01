@@ -18,7 +18,6 @@ class _CategoriesState extends State<Categories> {
   Widget build(BuildContext context) {
     
     return Wrap(
-      alignment: WrapAlignment.spaceEvenly,
       children: [
         ...List.generate(
             widget.category.data.length,
@@ -26,8 +25,8 @@ class _CategoriesState extends State<Categories> {
                 icon: widget.category.data[index].icon ,
                 text: widget.category.data[index].name,
                 press: (){
+                })),
 
-                }))
       ],
     );
   }
