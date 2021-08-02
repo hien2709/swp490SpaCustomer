@@ -19,6 +19,7 @@ class _ProcessState extends State<Process> {
         child: DefaultTabController(
           length: 2,
           child: Scaffold(
+              backgroundColor: Colors.grey[100],
               appBar: AppBar(
                 bottom: TabBar(
                   tabs: [

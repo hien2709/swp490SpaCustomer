@@ -155,8 +155,7 @@ class _BodyState extends State<Body> {
                                         padding:
                                         const EdgeInsets.all(8.0),
                                         child: Row(
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Container(
                                               decoration: BoxDecoration(

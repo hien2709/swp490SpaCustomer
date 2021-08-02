@@ -43,19 +43,19 @@ class _BodyState extends State<Body> {
           StaffSection(
             name: widget.processDetail.bookingDetailSteps[0].consultant == null
                 ? "Chưa có tư vấn viên"
-                : widget
-                .processDetail.bookingDetailSteps[0].consultant.user.fullname,
+                : widget.processDetail.bookingDetailSteps[0].consultant.user
+                    .fullname,
             phone: widget.processDetail.bookingDetailSteps[0].consultant == null
                 ? "Chưa có tư vấn viên"
                 : widget
-                .processDetail.bookingDetailSteps[0].consultant.user.phone,
+                    .processDetail.bookingDetailSteps[0].consultant.user.phone,
             id: widget.processDetail.bookingDetailSteps[0].consultant == null
                 ? null
                 : widget.processDetail.bookingDetailSteps[0].consultant.user.id,
             image: widget.processDetail.bookingDetailSteps[0].consultant == null
                 ? "https://huyhoanhotel.com/wp-content/uploads/2016/05/765-default-avatar.png"
                 : widget
-                .processDetail.bookingDetailSteps[0].consultant.user.image,
+                    .processDetail.bookingDetailSteps[0].consultant.user.image,
           ),
           Divider(
             thickness: 1,
@@ -132,30 +132,56 @@ class _ProcessSectionState extends State<ProcessSection> {
                 ),
                 ...List.generate(
                   widget.processDetail.bookingDetailSteps.length,
-                      (index) =>
-                      ProcessStepSection(
-                        ratingId: widget.processDetail.bookingDetailSteps[index].rating == null ? null : widget.processDetail.bookingDetailSteps[index].rating.id,
-                        staffId: widget.processDetail.bookingDetailSteps[index].staff == null ? null : widget.processDetail.bookingDetailSteps[index].staff.id,
-                        status: widget
-                            .processDetail.bookingDetailSteps[index]
-                            .statusBooking,
-                        date: widget.processDetail.bookingDetailSteps[index]
-                            .dateBooking ==
+                  (index) => ProcessStepSection(
+                    ratingId:
+                        widget.processDetail.bookingDetailSteps[index].rating ==
+                                null
+                            ? null
+                            : widget.processDetail.bookingDetailSteps[index]
+                                .rating.id,
+                    staffId:
+                        widget.processDetail.bookingDetailSteps[index].staff ==
+                                null
+                            ? null
+                            : widget.processDetail.bookingDetailSteps[index]
+                                .staff.id,
+                    status: widget
+                        .processDetail.bookingDetailSteps[index].statusBooking,
+                    date: widget.processDetail.bookingDetailSteps[index]
+                                .dateBooking ==
                             null
-                            ? "Chưa đặt lịch"
-                            : MyHelper.getUserDate(widget.processDetail
-                            .bookingDetailSteps[index].dateBooking) +
+                        ? "Chưa đặt lịch"
+                        : MyHelper.getUserDate(widget.processDetail
+                                .bookingDetailSteps[index].dateBooking) +
                             " Lúc " +
                             widget.processDetail.bookingDetailSteps[index]
                                 .startTime
                                 .substring(0, 5),
-                        stepName: widget.processDetail.bookingDetailSteps[index]
-                            .treatmentService ==
+                    stepName: widget.processDetail.bookingDetailSteps[index]
+                                .treatmentService ==
                             null
-                            ? "Tư Vấn"
-                            : widget.processDetail.bookingDetailSteps[index]
+                        ? "Tư Vấn"
+                        : widget.processDetail.bookingDetailSteps[index]
                             .treatmentService.spaService.name,
-                      ),
+                    description: widget.processDetail.bookingDetailSteps[index]
+                                .consultationContent !=
+                            null
+                        ? widget.processDetail.bookingDetailSteps[index]
+                            .consultationContent.description
+                        : null,
+                    expectation: widget.processDetail.bookingDetailSteps[index]
+                                .consultationContent !=
+                            null
+                        ? widget.processDetail.bookingDetailSteps[index]
+                            .consultationContent.expectation
+                        : null,
+                    result: widget.processDetail.bookingDetailSteps[index]
+                                .consultationContent !=
+                            null
+                        ? widget.processDetail.bookingDetailSteps[index]
+                            .consultationContent.result
+                        : null,
+                  ),
                 ),
               ],
             ),
@@ -167,112 +193,198 @@ class _ProcessSectionState extends State<ProcessSection> {
 }
 
 class ProcessStepSection extends StatelessWidget {
-  final String date, stepName, status;
+  final String date, stepName, status, expectation, result, description;
   final int ratingId, staffId;
 
   const ProcessStepSection({
     Key key,
     this.date,
     this.stepName,
-    this.status, this.ratingId, this.staffId,
+    this.status,
+    this.ratingId,
+    this.staffId,
+    this.expectation,
+    this.result,
+    this.description,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    Color _borderCorlor;
     return Column(
       children: [
         Row(
           children: [
-            Container(
-              width: 10,
-              height: 10,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: status == "FINISH"
-                    ? kGreen
-                    : status == "PENDING"
-                    ? Colors.black
-                    : kYellow,
-              ),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Text(
-              status == "FINISH"
-                  ? "$stepName (Đã hoàn tất)"
-                  : status == "PENDING"
-                  ? stepName
-                  : "$stepName (Đang chờ...)",
-              style: TextStyle(
+            Flexible(
+              flex: 1,
+              child: Container(
+                width: 10,
+                height: 10,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
                   color: status == "FINISH"
                       ? kGreen
                       : status == "PENDING"
-                      ? Colors.black
-                      : kYellow,
-                  fontSize: 17),
+                          ? Colors.black
+                          : kYellow,
+                ),
+              ),
+            ),
+            SizedBox(width: 5,),
+            Expanded(
+              flex: 10,
+              child: Text(
+                status == "FINISH"
+                    ? "$stepName(Đã hoàn tất)"
+                    : status == "PENDING"
+                        ? stepName
+                        : "$stepName(Đang chờ...)",
+                style: TextStyle(
+                    color: status == "FINISH"
+                        ? kGreen
+                        : status == "PENDING"
+                            ? Colors.black
+                            : kYellow,
+                    fontSize: 24),
+              ),
+            ),
+            Flexible(
+              flex: 1,
+              child: Container(
+                child: Visibility(
+                  visible: status == "FINISH" && stepName != "Tư Vấn",
+                  child: GestureDetector(
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          barrierDismissible: true,
+                          builder: (context) {
+                            return RatingDialog(
+                                title: "Đánh giá dịch vụ",
+                                image: Icon(
+                                  Icons.star_rate,
+                                  color: Colors.amberAccent,
+                                  size: 100,
+                                ),
+                                message:
+                                "Bạn có hài lòng về dịch vụ không?",
+                                commentHint: "nhận xét của bạn",
+                                submitButton: "Gửi",
+                                onSubmitted: (response) {
+                                  print("rating: " +
+                                      response.rating.toString());
+                                  print("comment: " + response.comment);
+                                  GeneralServices.editRating(
+                                      staffId,
+                                      ratingId,
+                                      response.comment,
+                                      response.rating.toDouble());
+                                });
+                          });
+                    },
+                    child: Icon(
+                      Icons.rate_review,
+                      color: kGreen,
+                    ),
+                  ),
+                ),
+              ),
             ),
           ],
         ),
         Container(
-          height: 40,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  VerticalDivider(
-                    thickness: 1,
-                    width: 10,
-                    color: Colors.grey,
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text("Ngày hẹn : $date"),
-                ],
+          child: Container(
+            padding: EdgeInsets.all(8),
+            margin: EdgeInsets.only(left: 5),
+            decoration: const BoxDecoration(
+              border: Border(
+                left: BorderSide(width: 1.0, color: Colors.grey),
               ),
-              Container(
-                padding: EdgeInsets.only(right: 10),
-                child: Row(
-                  children: [
-                    Visibility(
-                      visible: status == "FINISH" && stepName != "Tư Vấn",
-                      child: GestureDetector(
-                        onTap: () {
-                          showDialog(
-                              context: context,
-                              barrierDismissible: true,
-                              builder: (context) {
-                                return RatingDialog(
-                                    title: "Đánh giá dịch vụ",
-                                    image: Icon(
-                                      Icons.star_rate,
-                                      color: Colors.amberAccent,
-                                      size: 100,
-                                    ),
-                                    message: "Bạn có hài lòng về dịch vụ không?",
-                                    commentHint: "nhận xét của bạn",
-                                    submitButton: "Gửi",
-                                    onSubmitted: (response) {
-                                      print("rating: " +
-                                          response.rating.toString());
-                                      print("comment: " + response.comment);
-                                      GeneralServices.editRating(
-                                          staffId, ratingId, response.comment, response.rating.toDouble());
-                                    });
-                              });
-                        },
-                        child: Icon(
-                          Icons.rate_review,
-                          color: kGreen,
-                        ),
-                      ),
-                    ),
-                  ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  flex: 8,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Ngày hẹn : ", style: TextStyle(fontSize: 18, color: kBlue),),
+                      Text(date, style: TextStyle(fontSize: 18, color: kBlue),),
+                      description != null
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(height: 15,),
+                                RichText(
+                                  text: TextSpan(
+                                    children: [
+                                      WidgetSpan(
+                                        child: Icon(Icons.description_outlined, size: 24, color: kTextColor),
+                                      ),
+                                      TextSpan(
+                                        text: "Mô tả",
+                                          style: TextStyle(color: kTextColor, fontSize: 18),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Text(description),
+                              ],
+                            )
+                          : SizedBox(),
+                      expectation != null
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(height: 15,),
+                                RichText(
+                                  text: TextSpan(
+                                    children: [
+                                      WidgetSpan(
+                                        child: Icon(Icons.assistant_photo_outlined, size: 24, color: kTextColor,),
+                                      ),
+                                      TextSpan(
+                                        text: "Dự kiến",
+                                        style: TextStyle(color: kTextColor, fontSize: 18),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Text(
+                                  expectation,
+                                ),
+                              ],
+                            )
+                          : SizedBox(),
+                      result != null
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(height: 15,),
+                                RichText(
+                                  text: TextSpan(
+                                    children: [
+                                      WidgetSpan(
+                                        child: Icon(Icons.check, size: 24, color: kTextColor),
+                                      ),
+                                      TextSpan(
+                                        text: "Kết quả",
+                                        style: TextStyle(color: kTextColor, fontSize: 18),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Text(result),
+                              ],
+                            )
+                          : SizedBox(),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+
+              ],
+            ),
           ),
         ),
       ],
@@ -301,10 +413,9 @@ class _StaffSectionState extends State<StaffSection> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                ConversationScreen(
+            builder: (context) => ConversationScreen(
                   chatRoomId:
-                  "${MyApp.storage.getItem("customerId")}_${widget.id}",
+                      "${MyApp.storage.getItem("customerId")}_${widget.id}",
                   consultantPhone: widget.phone,
                   consultantName: widget.name,
                   consultantImage: widget.image,
@@ -333,7 +444,7 @@ class _StaffSectionState extends State<StaffSection> {
                     width: 5,
                   ),
                   Text(
-                    "Thông tin nhân viên",
+                    "Tư vấn viên",
                     style: TextStyle(fontSize: 15, color: Colors.black),
                   ),
                 ],

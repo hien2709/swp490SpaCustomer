@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:spa_customer/models/BookingDetail.dart';
 import 'package:spa_customer/services/BookingDetailServices.dart';
@@ -37,27 +38,28 @@ class _BodyState extends State<Body> {
       );
     }
     return SingleChildScrollView(
-      child: Column(
-        children: [
-          ...List.generate(
-              _bookingDetail.data.length,
-              (index) => Column(
-                    children: [
-                      ProcessItem(
-                        processItem: _bookingDetail.data[index],
-                        press: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => CustomerProcessDetail(processDetail: _bookingDetail.data[index],)),
-                          );
-                        },
-                      ),
-                      Divider(
-                        height: 10,
-                      )
-                    ],
-                  )),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        child: Column(
+          children: [
+            ...List.generate(
+                _bookingDetail.data.length,
+                (index) => Column(
+                      children: [
+                        ProcessItem(
+                          processItem: _bookingDetail.data[index],
+                          press: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => CustomerProcessDetail(processDetail: _bookingDetail.data[index],)),
+                            );
+                          },
+                        ),
+                        SizedBox(height: 10,)
+                      ],
+                    )),
+          ],
+        ),
       ),
     );
   }
@@ -81,7 +83,15 @@ class ProcessItem extends StatelessWidget {
       onTap: _press,
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.grey.withOpacity(0.1),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 2,
+              blurRadius: 5,
+            ),
+          ],
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -111,17 +121,31 @@ class ProcessItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "DỊCH VỤ    : ${_processItem.spaPackage.name}",
+                      "DỊCH VỤ:  ${_processItem.spaPackage.name}",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     Divider(
                       color: Colors.black,
                     ),
-                    Text("Cửa hàng  : ${_processItem.booking.spa.name}"),
+                    Row(
+                      children: [
+                        Container(
+                          child: SvgPicture.asset("assets/icons/company.svg"),
+                          width: 18,
+                          height: 18,
+                        ),
+                        SizedBox(width: 5,),
+                        Text(_processItem.booking.spa.name),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Địa chỉ       : "),
+                        Icon(Icons.location_on_outlined, size: 18,),
+                        SizedBox(width: 5,),
                         Flexible(
                             child: Text(_processItem.booking.spa.street +
                                 " " +
