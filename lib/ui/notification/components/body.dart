@@ -69,6 +69,8 @@ class _BodyState extends State<Body> {
                       image = 'assets/notification/skip.jpg';
                     } else if (notification.data[index].type == "CANCEL") {
                       image = 'assets/notification/cancel.jpg';
+                    }else{
+                      image = 'assets/notification/spa.jpg';
                     }
                     return NotificationBookingSuccessItem(
                       image: image,
