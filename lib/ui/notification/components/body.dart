@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:spa_customer/constant.dart';
 import 'package:spa_customer/models/Notification.dart';
 import 'package:spa_customer/services/CustomerProfileServices.dart';
 
@@ -37,7 +38,7 @@ class _BodyState extends State<Body> {
     if (loading) {
       return Center(
           child: SpinKitWave(
-        color: Colors.orange,
+        color: kPrimaryColor,
         size: 50,
       ));
     } else {

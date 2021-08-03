@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:spa_customer/constant.dart';
 import 'package:spa_customer/models/AllSpa.dart';
 import 'package:spa_customer/models/SpaToShow.dart';
 import 'package:spa_customer/services/CustomerProfileServices.dart';
@@ -102,7 +103,7 @@ class _NearBySpaState extends State<NearBySpa> {
       return Scaffold(
         body: Center(
             child: SpinKitWave(
-          color: Colors.orange,
+          color: kPrimaryColor,
           size: 50,
         )),
       );

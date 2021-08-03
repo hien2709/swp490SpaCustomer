@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
+import 'package:spa_customer/constant.dart';
 import 'package:spa_customer/models/BookingDetail.dart';
 import 'package:spa_customer/services/BookingDetailServices.dart';
 import 'package:spa_customer/ui/process_detail/process_detail_screen.dart';
@@ -34,7 +36,10 @@ class _BodyState extends State<Body> {
   Widget build(BuildContext context) {
     if (_loading) {
       return Container(
-        child: Lottie.asset("assets/lottie/loading.json"),
+          child: SpinKitWave(
+            color: kPrimaryColor,
+            size: 50,
+          ),
       );
     }
     return SingleChildScrollView(

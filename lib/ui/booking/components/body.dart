@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lottie/lottie.dart';
 import 'package:spa_customer/constant.dart';
 import 'package:spa_customer/helper/Helper.dart';
@@ -28,7 +29,12 @@ class BookingBody extends StatefulWidget {
   final bool isBookNow;
   final List<RequestBookingDetail> listRequestBookingDetail;
 
-  const BookingBody({Key key, @required this.package, @required this.isBookNow, this.listRequestBookingDetail, this.spa})
+  const BookingBody(
+      {Key key,
+      @required this.package,
+      @required this.isBookNow,
+      this.listRequestBookingDetail,
+      this.spa})
       : super(key: key);
 }
 
@@ -54,18 +60,19 @@ class _BookingBodyState extends State<BookingBody> {
         .then((availableTime) => {
               setState(() {
                 _availableTime = availableTime;
-                if(_availableTime.data!=null) {
+                if (_availableTime.data != null) {
                   if (widget.listRequestBookingDetail != null) {
                     _availableTime = MyHelper.getAvailableTimeForCart(
-                        availableTime, widget.listRequestBookingDetail,
-                        widget.package, requestDate);
+                        availableTime,
+                        widget.listRequestBookingDetail,
+                        widget.package,
+                        requestDate);
                   }
                 }
                 _loading = false;
-                if(_availableTime.data != null) {
-                  isSelected =
-                      List.generate(
-                          _availableTime.data.length, (index) => false);
+                if (_availableTime.data != null) {
+                  isSelected = List.generate(
+                      _availableTime.data.length, (index) => false);
                 }
               })
             });
@@ -78,7 +85,10 @@ class _BookingBodyState extends State<BookingBody> {
   Widget build(BuildContext context) {
     return _loading
         ? Container(
-            child: Lottie.asset("assets/lottie/loading.json"),
+            child: SpinKitWave(
+              color: kPrimaryColor,
+              size: 50,
+            ),
           )
         : SingleChildScrollView(
             child: SafeArea(
@@ -107,7 +117,9 @@ class _BookingBodyState extends State<BookingBody> {
                       SizedBox(
                         height: 20,
                       ),
-                      ChoosenPackage(package: widget.package,),
+                      ChoosenPackage(
+                        package: widget.package,
+                      ),
                       SizedBox(
                         height: 20,
                       ),
@@ -167,30 +179,33 @@ class _BookingBodyState extends State<BookingBody> {
                                   DateTime.now().add(Duration(days: index)));
                               requestDate = selectedDay;
                               AvailableTimeServices.getAvailableTimeForBooking(
-                                      widget.package.id, requestDate,widget.spa.id)
+                                      widget.package.id,
+                                      requestDate,
+                                      widget.spa.id)
                                   .then((availableTime) => {
                                         setState(() {
                                           _availableTime = availableTime;
-                                          if(_availableTime.data != null) {
+                                          if (_availableTime.data != null) {
                                             if (widget
-                                                .listRequestBookingDetail !=
+                                                    .listRequestBookingDetail !=
                                                 null) {
                                               _availableTime = MyHelper
                                                   .getAvailableTimeForCart(
-                                                  availableTime, widget
-                                                  .listRequestBookingDetail,
-                                                  widget.package, requestDate);
+                                                      availableTime,
+                                                      widget
+                                                          .listRequestBookingDetail,
+                                                      widget.package,
+                                                      requestDate);
                                             }
                                           }
-                                          if(_availableTime.data!=null) {
-                                            isSelected =
-                                                List.generate(
-                                                    _availableTime.data
-                                                        .length, (
-                                                    index) => false);
+                                          if (_availableTime.data != null) {
+                                            isSelected = List.generate(
+                                                _availableTime.data.length,
+                                                (index) => false);
                                           }
                                           _loadingSlot = false;
-                                          print("loading: ${_loadingSlot.toString()}");
+                                          print(
+                                              "loading: ${_loadingSlot.toString()}");
                                         })
                                       });
                             });
@@ -214,67 +229,70 @@ class _BookingBodyState extends State<BookingBody> {
                       SizedBox(
                         height: 20,
                       ),
-                      _availableTime.data != null ?
-                      Container(
-                        child: _loadingSlot
-                            ? Container(
-                                height: 200,
-                                width: double.infinity,
-                                child:
-                                    Lottie.asset("assets/lottie/loading.json"),
-                              )
-                            : WrapToggleIconButtons(
-                                iconList: List.generate(
-                                    _availableTime.data.length,
-                                    (index) => TimeSlot()),
-                                isSelected: isSelected,
-                                availableTime: _availableTime,
-                                isDisabled: List.generate(
-                                    _availableTime.data.length,
-                                    (index) => false),
-                                // isDisabled: [false,false,false,false,false,false,false,false,false,false,],
-                                onPressed: (int index) {
-                                  print(
-                                      "Package id ${widget.package.id}--${requestDate}--${_availableTime.data[index]}");
-                                  setState(() {
-                                    if (isSelected.isEmpty) {
-                                      isSelected = List.generate(
-                                          _availableTime.data.length,
-                                          (index) => false);
-                                    } else {
-                                      for (var i = 0;
-                                          i < isSelected.length;
-                                          i++) isSelected.remove(i);
-                                      isSelected = List.generate(
-                                          _availableTime.data.length,
-                                          (index) => false);
-                                    }
-                                    for (int buttonIndex = 0;
-                                        buttonIndex < isSelected.length;
-                                        buttonIndex++) {
-                                      if (buttonIndex == index) {
-                                        isSelected[buttonIndex] =
-                                            !isSelected[buttonIndex];
-                                      } else {
-                                        isSelected[buttonIndex] = false;
-                                      }
-                                    }
-                                    print("$index is selected");
-                                    slotId = index;
-                                    print(slotId.toString() + " is selected");
-                                  });
-                                },
-                              ),
-                      )
-                      :_loadingSlot
+                      _availableTime.data != null
                           ? Container(
-                        height: 200,
-                        width: double.infinity,
-                        child:
-                        Lottie.asset("assets/lottie/loading.json"),
-                      )
-                          :Container(child: Text("Không có nhân viên rảnh"))
-                      ,
+                              child: _loadingSlot
+                                  ? Container(
+                                      height: 200,
+                                      width: double.infinity,
+                                      child: SpinKitWave(
+                                        color: kPrimaryColor,
+                                        size: 50,
+                                      ),
+                                    )
+                                  : WrapToggleIconButtons(
+                                      iconList: List.generate(
+                                          _availableTime.data.length,
+                                          (index) => TimeSlot()),
+                                      isSelected: isSelected,
+                                      availableTime: _availableTime,
+                                      isDisabled: List.generate(
+                                          _availableTime.data.length,
+                                          (index) => false),
+                                      // isDisabled: [false,false,false,false,false,false,false,false,false,false,],
+                                      onPressed: (int index) {
+                                        print(
+                                            "Package id ${widget.package.id}--${requestDate}--${_availableTime.data[index]}");
+                                        setState(() {
+                                          if (isSelected.isEmpty) {
+                                            isSelected = List.generate(
+                                                _availableTime.data.length,
+                                                (index) => false);
+                                          } else {
+                                            for (var i = 0;
+                                                i < isSelected.length;
+                                                i++) isSelected.remove(i);
+                                            isSelected = List.generate(
+                                                _availableTime.data.length,
+                                                (index) => false);
+                                          }
+                                          for (int buttonIndex = 0;
+                                              buttonIndex < isSelected.length;
+                                              buttonIndex++) {
+                                            if (buttonIndex == index) {
+                                              isSelected[buttonIndex] =
+                                                  !isSelected[buttonIndex];
+                                            } else {
+                                              isSelected[buttonIndex] = false;
+                                            }
+                                          }
+                                          print("$index is selected");
+                                          slotId = index;
+                                          print(slotId.toString() +
+                                              " is selected");
+                                        });
+                                      },
+                                    ),
+                            )
+                          : _loadingSlot
+                              ? Container(
+                                  height: 200,
+                                  width: double.infinity,
+                                  child: Lottie.asset(
+                                      "assets/lottie/loading.json"),
+                                )
+                              : Container(
+                                  child: Text("Không có nhân viên rảnh")),
                       SizedBox(
                         height: 40,
                       ),
@@ -282,11 +300,13 @@ class _BookingBodyState extends State<BookingBody> {
                           ? DefaultButton(
                               text: "Xác nhận",
                               press: () {
-                                Navigator.pop(context, new RequestBookingDetail(
-                                    packageId: widget.package.id,
-                                    dateBooking: requestDate,
-                                    timeBooking:
-                                    _availableTime.data[slotId]),);
+                                Navigator.pop(
+                                  context,
+                                  new RequestBookingDetail(
+                                      packageId: widget.package.id,
+                                      dateBooking: requestDate,
+                                      timeBooking: _availableTime.data[slotId]),
+                                );
                               },
                             )
                           : DefaultButton(
@@ -308,7 +328,9 @@ class _BookingBodyState extends State<BookingBody> {
                                 //     );
                                 //   },
                                 // );
-                                List<RequestBookingDetail> listRequestBookingDetail = new List<RequestBookingDetail>();
+                                List<RequestBookingDetail>
+                                    listRequestBookingDetail =
+                                    new List<RequestBookingDetail>();
                                 listRequestBookingDetail.add(
                                     new RequestBookingDetail(
                                         packageId: widget.package.id,
@@ -317,7 +339,14 @@ class _BookingBodyState extends State<BookingBody> {
                                             _availableTime.data[slotId]));
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => BookingConfirmScreen(spa: widget.spa, listRequestBooking: listRequestBookingDetail,packageInstance: widget.package,)),
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          BookingConfirmScreen(
+                                            spa: widget.spa,
+                                            listRequestBooking:
+                                                listRequestBookingDetail,
+                                            packageInstance: widget.package,
+                                          )),
                                 );
                                 // BookingServices.createBookingRequest(
                                 //         listRequestBookingDetail, widget.spa.id)
@@ -364,8 +393,7 @@ class _BookingBodyState extends State<BookingBody> {
                                 //         );
                                 // }
                                 // );
-                              }
-                        ),
+                              }),
                     ],
                   ),
                 ),
@@ -377,8 +405,8 @@ class _BookingBodyState extends State<BookingBody> {
 
 class ChoosenPackage extends StatelessWidget {
   const ChoosenPackage({
-    Key key, this.package,
-
+    Key key,
+    this.package,
   }) : super(key: key);
 
   final PackageInstance package;
@@ -386,8 +414,7 @@ class ChoosenPackage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration:
-          BoxDecoration(color: Colors.grey.withOpacity(0.1)),
+      decoration: BoxDecoration(color: Colors.grey.withOpacity(0.1)),
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Row(
@@ -399,22 +426,31 @@ class ChoosenPackage extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(15),
                   child: package.image == null
-                      ? Image.asset("assets/images/Splash_1.PNG", fit: BoxFit.cover,)
-                      : Image.network(package.image, fit: BoxFit.cover,),
+                      ? Image.asset(
+                          "assets/images/Splash_1.PNG",
+                          fit: BoxFit.cover,
+                        )
+                      : Image.network(
+                          package.image,
+                          fit: BoxFit.cover,
+                        ),
                 ),
               ),
             ),
-            SizedBox(width: 20,),
+            SizedBox(
+              width: 20,
+            ),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(package.name,style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
+                  Text(
+                    package.name,
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  ),
                   package.description.length < 50
                       ? Text(package.description)
-                      : Text(package.description
-                              .substring(0, 49) +
-                          "..."),
+                      : Text(package.description.substring(0, 49) + "..."),
                   // Container(
                   //   width: double.infinity,
                   //   child: Text(

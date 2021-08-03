@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:spa_customer/constant.dart';
 import 'package:spa_customer/models/Category.dart';
 import 'package:spa_customer/models/Package.dart';
 import 'package:spa_customer/services/CategoryServices.dart';
@@ -59,7 +60,7 @@ class _BodyState extends State<BodyHomeScreen> {
     if (_loading) {
       return Center(
           child: SpinKitWave(
-        color: Colors.orange,
+        color: kPrimaryColor,
         size: 50,
       ));
     } else {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:spa_customer/constant.dart';
 import 'package:spa_customer/models/CustomerProfile.dart';
 import 'package:spa_customer/services/CustomerProfileServices.dart';
 import 'package:spa_customer/ui/login/components/default_button.dart';
@@ -112,7 +113,7 @@ class _ProfileFormState extends State<ProfileForm> {
     if(loading){
       return Center(
           child: SpinKitWave(
-            color: Colors.orange,
+            color: kPrimaryColor,
             size: 50,
           )
       );
