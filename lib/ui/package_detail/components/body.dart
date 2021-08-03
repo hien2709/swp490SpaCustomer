@@ -129,6 +129,8 @@ class _BodyState extends State<Body> {
                                                             .package
                                                             .services[index]
                                                             .description,
+                                                        overflow: TextOverflow.ellipsis,
+                                                        maxLines: 7,
                                                       ),
                                                     ],
                                                   ),

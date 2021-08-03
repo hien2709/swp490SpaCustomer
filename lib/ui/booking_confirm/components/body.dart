@@ -59,9 +59,11 @@ class Body extends StatelessWidget {
                 ?Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(height: 20,),
                 ChoosenPackage(
                   package: packageInstance,
                 ),
+                SizedBox(height: 10,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

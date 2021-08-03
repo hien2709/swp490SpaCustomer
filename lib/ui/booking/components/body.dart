@@ -592,26 +592,6 @@ class TimeBookingDescriptionBar extends StatelessWidget {
                 width: 50,
                 height: 25,
                 decoration: BoxDecoration(
-                  color: Colors.grey.withOpacity(0.5),
-                  borderRadius: BorderRadius.circular(5),
-                )),
-            SizedBox(
-              height: 5,
-            ),
-            Text(
-              "Hết lịch",
-              style: TextStyle(
-                color: Colors.black,
-              ),
-            ),
-          ],
-        ),
-        Column(
-          children: [
-            Container(
-                width: 50,
-                height: 25,
-                decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(5),
                   border: Border.all(color: Colors.black),

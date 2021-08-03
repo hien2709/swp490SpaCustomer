@@ -75,7 +75,7 @@ class _ChooseSpaScreenState extends State<ChooseSpaScreen> {
                               color: Colors.white,
                             ),
                             width: double.infinity,
-                            height: 90,
+                            height: 110,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -86,10 +86,12 @@ class _ChooseSpaScreenState extends State<ChooseSpaScreen> {
                                       Row(
                                         children: [
                                           SvgPicture.asset("assets/icons/herbal-spa-treatment-leaves.svg", width: 24, height: 24,),
-                                          Text(
-                                            _spa.data[index].name,
-                                            style:
-                                                TextStyle(fontSize: 20, color: kGreen),
+                                          Expanded(
+                                            child: Text(
+                                              _spa.data[index].name,
+                                              style:
+                                                  TextStyle(fontSize: 20, color: kGreen),
+                                            ),
                                           ),
                                         ],
                                       ),
