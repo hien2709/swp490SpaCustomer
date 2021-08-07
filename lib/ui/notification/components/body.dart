@@ -51,37 +51,40 @@ class _BodyState extends State<Body> {
                 fontSize: 20,
               ),
             ))
-          : Column(
-              children: [
-                ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: notification.data.length,
-                  itemBuilder: (context, index) {
-                    if (notification.data[index].type == "STEP_FINISH") {
-                      image = 'assets/notification/finish.jpg';
-                    } else if (notification.data[index].type ==
-                        "TREATMENT_FINISH") {
-                      image = 'assets/notification/finish.jpg';
-                    } else if (notification.data[index].type == "REMIND") {
-                      image = 'assets/notification/remind.jpg';
-                    } else if (notification.data[index].type == "CHANG_STAFF") {
-                      image = 'assets/notification/changStaff.jpg';
-                    } else if (notification.data[index].type == "SKIP") {
-                      image = 'assets/notification/skip.jpg';
-                    } else if (notification.data[index].type == "CANCEL") {
-                      image = 'assets/notification/cancel.jpg';
-                    }else{
-                      image = 'assets/notification/spa.jpg';
-                    }
-                    return NotificationBookingSuccessItem(
-                      image: image,
-                      title: notification.data[index].title,
-                      message: notification.data[index].message,
-                    );
-                  },
-                )
-              ],
-            );
+          : SingleChildScrollView(
+            child: Column(
+                children: [
+                  ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: notification.data.length,
+                    itemBuilder: (context, index) {
+                      if (notification.data[index].type == "STEP_FINISH") {
+                        image = 'assets/notification/finish.jpg';
+                      } else if (notification.data[index].type ==
+                          "TREATMENT_FINISH") {
+                        image = 'assets/notification/finish.jpg';
+                      } else if (notification.data[index].type == "REMIND") {
+                        image = 'assets/notification/remind.jpg';
+                      } else if (notification.data[index].type == "CHANG_STAFF") {
+                        image = 'assets/notification/changStaff.jpg';
+                      } else if (notification.data[index].type == "SKIP") {
+                        image = 'assets/notification/skip.jpg';
+                      } else if (notification.data[index].type == "CANCEL") {
+                        image = 'assets/notification/cancel.jpg';
+                      }else{
+                        image = 'assets/notification/spa.jpg';
+                      }
+                      return NotificationBookingSuccessItem(
+                        image: image,
+                        title: notification.data[index].title,
+                        message: notification.data[index].message,
+                      );
+                    },
+                  )
+                ],
+              ),
+          );
     }
   }
 }
