@@ -110,7 +110,7 @@ class _NearBySpaState extends State<NearBySpa> {
     } else {
       return Scaffold(
           appBar: AppBar(
-            backgroundColor: Colors.orange,
+            backgroundColor: kPrimaryColor,
             title: Text(
               "Những Spa gần bạn",
               style: TextStyle(

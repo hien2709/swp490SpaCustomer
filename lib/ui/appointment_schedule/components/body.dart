@@ -44,7 +44,23 @@ class _BodyState extends State<Body> {
         size: 50,
       ),
     )
-        : SingleChildScrollView(
+        : _customerSchedule.data==null?
+    Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: 150,
+            height: 150,
+            child: SvgPicture.asset("assets/icons/schedule.svg"),
+          ),
+          Text(
+              "Chưa có lịch hẹn mới", style: TextStyle(fontSize: 24),
+          )
+        ],
+      ),
+    )
+    :SingleChildScrollView(
       child: Container(
         padding: EdgeInsets.all(8),
         child: Column(

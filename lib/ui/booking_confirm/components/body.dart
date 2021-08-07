@@ -150,11 +150,13 @@ class Body extends StatelessWidget {
                         return MyCustomDialog(
                           height: 250,
                           press: () {
-                            Navigator.push(
+                            Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      BottomNavigation()),
+                                      BottomNavigation()
+                              ),
+                                (route)=>false
                             );
                           },
                           title: "Thành Công !",

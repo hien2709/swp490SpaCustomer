@@ -41,7 +41,7 @@ class _BodyState extends State<Body> {
           icon: Icon(
             Icons.security,
             size: 30,
-            color: Color(0xFFFF7643),
+            color: kPrimaryColor,
           ),
           text: "Đổi mật khẩu",
           press: () {
@@ -53,7 +53,7 @@ class _BodyState extends State<Body> {
           icon: Icon(
             Icons.notifications_none_outlined,
             size: 30,
-            color: Color(0xFFFF7643),
+            color: kPrimaryColor,
           ),
           text: "Thông báo",
           press: () {
@@ -73,9 +73,10 @@ class _BodyState extends State<Body> {
           press: () {
             MyApp.storage.deleteItem("token");
             MyApp.storage.deleteItem("customerId");
-            Navigator.push(
+            Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) => BottomNavigation()),
+                    (route)=>false
             );
           },
         ),

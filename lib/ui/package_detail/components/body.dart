@@ -130,7 +130,7 @@ class _BodyState extends State<Body> {
                                                             .services[index]
                                                             .description,
                                                         overflow: TextOverflow.ellipsis,
-                                                        maxLines: 7,
+                                                        maxLines: 6,
                                                       ),
                                                     ],
                                                   ),

@@ -229,7 +229,7 @@ class _BookingBodyState extends State<BookingBody> {
                       SizedBox(
                         height: 20,
                       ),
-                      _availableTime.data != null
+                      _availableTime.data.length != 0
                           ? Container(
                               child: _loadingSlot
                                   ? Container(
@@ -288,11 +288,13 @@ class _BookingBodyState extends State<BookingBody> {
                               ? Container(
                                   height: 200,
                                   width: double.infinity,
-                                  child: Lottie.asset(
-                                      "assets/lottie/loading.json"),
+                                  child: SpinKitWave(
+                                    color: kPrimaryColor,
+                                    size: 50,
+                                  ),
                                 )
                               : Container(
-                                  child: Text("Không có nhân viên rảnh")),
+                                  child: Text("Đã hết lịch trong ngày hôm nay hoặc không có nhân viên rảnh,xin vui lòng đặt lịch vào ngày khác.", style: TextStyle(fontSize: 20,),)),
                       SizedBox(
                         height: 40,
                       ),

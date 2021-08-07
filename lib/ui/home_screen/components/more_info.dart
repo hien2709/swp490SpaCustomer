@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spa_customer/constant.dart';
 import 'package:spa_customer/models/Package.dart';
 import 'package:spa_customer/ui/home_screen/components/search_widget.dart';
 
@@ -106,7 +107,7 @@ class _MoreInfoState extends State<MoreInfo> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.orange,
+        backgroundColor: kPrimaryColor,
         title: Text(
           "Điều trị da",
           style: TextStyle(
