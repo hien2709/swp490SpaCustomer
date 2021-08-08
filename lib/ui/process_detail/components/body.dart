@@ -7,6 +7,7 @@ import 'package:spa_customer/models/BookingDetail.dart';
 import 'package:spa_customer/services/GeneralServices.dart';
 import 'package:spa_customer/ui/chat/components/conversation_screen.dart';
 import 'package:rating_dialog/rating_dialog.dart';
+import 'package:spa_customer/ui/process_detail/components/process_step_detail.dart';
 
 class Body extends StatefulWidget {
   final Datum processDetail;
@@ -163,24 +164,8 @@ class _ProcessSectionState extends State<ProcessSection> {
                         ? "Tư Vấn"
                         : widget.processDetail.bookingDetailSteps[index]
                             .treatmentService.spaService.name,
-                    description: widget.processDetail.bookingDetailSteps[index]
-                                .consultationContent !=
-                            null
-                        ? widget.processDetail.bookingDetailSteps[index]
-                            .consultationContent.description
-                        : null,
-                    expectation: widget.processDetail.bookingDetailSteps[index]
-                                .consultationContent !=
-                            null
-                        ? widget.processDetail.bookingDetailSteps[index]
-                            .consultationContent.expectation
-                        : null,
-                    result: widget.processDetail.bookingDetailSteps[index]
-                                .consultationContent !=
-                            null
-                        ? widget.processDetail.bookingDetailSteps[index]
-                            .consultationContent.result
-                        : null,
+                    bookingDetailStep:
+                        widget.processDetail.bookingDetailSteps[index],
                   ),
                 ),
               ],
@@ -193,8 +178,9 @@ class _ProcessSectionState extends State<ProcessSection> {
 }
 
 class ProcessStepSection extends StatelessWidget {
-  final String date, stepName, status, expectation, result, description;
+  final String date, stepName, status;
   final int ratingId, staffId;
+  final BookingDetailStep bookingDetailStep;
 
   const ProcessStepSection({
     Key key,
@@ -203,9 +189,7 @@ class ProcessStepSection extends StatelessWidget {
     this.status,
     this.ratingId,
     this.staffId,
-    this.expectation,
-    this.result,
-    this.description,
+    this.bookingDetailStep,
   }) : super(key: key);
 
   @override
@@ -230,7 +214,9 @@ class ProcessStepSection extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(width: 5,),
+            SizedBox(
+              width: 5,
+            ),
             Expanded(
               flex: 10,
               child: Text(
@@ -245,49 +231,7 @@ class ProcessStepSection extends StatelessWidget {
                         : status == "PENDING"
                             ? Colors.black
                             : kYellow,
-                    fontSize: 24),
-              ),
-            ),
-            Flexible(
-              flex: 1,
-              child: Container(
-                child: Visibility(
-                  visible: status == "FINISH" && stepName != "Tư Vấn",
-                  child: GestureDetector(
-                    onTap: () {
-                      showDialog(
-                          context: context,
-                          barrierDismissible: true,
-                          builder: (context) {
-                            return RatingDialog(
-                                title: "Đánh giá dịch vụ",
-                                image: Icon(
-                                  Icons.star_rate,
-                                  color: Colors.amberAccent,
-                                  size: 100,
-                                ),
-                                message:
-                                "Bạn có hài lòng về dịch vụ không?",
-                                commentHint: "nhận xét của bạn",
-                                submitButton: "Gửi",
-                                onSubmitted: (response) {
-                                  print("rating: " +
-                                      response.rating.toString());
-                                  print("comment: " + response.comment);
-                                  GeneralServices.editRating(
-                                      staffId,
-                                      ratingId,
-                                      response.comment,
-                                      response.rating.toDouble());
-                                });
-                          });
-                    },
-                    child: Icon(
-                      Icons.rate_review,
-                      color: kGreen,
-                    ),
-                  ),
-                ),
+                    fontSize: 18),
               ),
             ),
           ],
@@ -304,85 +248,84 @@ class ProcessStepSection extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Flexible(
+                Expanded(
                   flex: 8,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Ngày hẹn : ", style: TextStyle(fontSize: 18, color: kBlue),),
-                      Text(date, style: TextStyle(fontSize: 18, color: kBlue),),
-                      description != null
-                          ? Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(height: 15,),
-                                RichText(
-                                  text: TextSpan(
-                                    children: [
-                                      WidgetSpan(
-                                        child: Icon(Icons.description_outlined, size: 24, color: kTextColor),
-                                      ),
-                                      TextSpan(
-                                        text: "Mô tả",
-                                          style: TextStyle(color: kTextColor, fontSize: 18),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Text(description),
-                              ],
-                            )
-                          : SizedBox(),
-                      expectation != null
-                          ? Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(height: 15,),
-                                RichText(
-                                  text: TextSpan(
-                                    children: [
-                                      WidgetSpan(
-                                        child: Icon(Icons.assistant_photo_outlined, size: 24, color: kTextColor,),
-                                      ),
-                                      TextSpan(
-                                        text: "Dự kiến",
-                                        style: TextStyle(color: kTextColor, fontSize: 18),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Text(
-                                  expectation,
-                                ),
-                              ],
-                            )
-                          : SizedBox(),
-                      result != null
-                          ? Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(height: 15,),
-                                RichText(
-                                  text: TextSpan(
-                                    children: [
-                                      WidgetSpan(
-                                        child: Icon(Icons.check, size: 24, color: kTextColor),
-                                      ),
-                                      TextSpan(
-                                        text: "Kết quả",
-                                        style: TextStyle(color: kTextColor, fontSize: 18),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Text(result),
-                              ],
-                            )
-                          : SizedBox(),
+                      Text(
+                        "Ngày hẹn : ",
+                        style: TextStyle(fontSize: 14),
+                      ),
+                      Text(
+                        date,
+                        style: TextStyle(fontSize: 14),
+                      ),
                     ],
                   ),
                 ),
-
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                    child: Visibility(
+                      visible: status == "FINISH" && stepName != "Tư Vấn",
+                      child: GestureDetector(
+                        onTap: () {
+                          showDialog(
+                              context: context,
+                              barrierDismissible: true,
+                              builder: (context) {
+                                return RatingDialog(
+                                    title: "Đánh giá dịch vụ",
+                                    image: Icon(
+                                      Icons.star_rate,
+                                      color: Colors.amberAccent,
+                                      size: 100,
+                                    ),
+                                    message:
+                                        "Bạn có hài lòng về dịch vụ không?",
+                                    commentHint: "nhận xét của bạn",
+                                    submitButton: "Gửi",
+                                    onSubmitted: (response) {
+                                      print("rating: " +
+                                          response.rating.toString());
+                                      print("comment: " + response.comment);
+                                      GeneralServices.editRating(
+                                          staffId,
+                                          ratingId,
+                                          response.comment,
+                                          response.rating.toDouble());
+                                    });
+                              });
+                        },
+                        child: Icon(
+                          Icons.star_rate,
+                          color: kYellow,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Visibility(
+                    visible: stepName!="Tư Vấn",
+                    child: InkWell(
+                        onTap: (){
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProcessStepDetailScreen(bookingDetailStep: bookingDetailStep,),
+                            ),
+                          );
+                        },
+                        child: Icon(
+                      Icons.more_vert,
+                      color: kTextColor,
+                          size: 28,
+                    )),
+                  ),
+                ),
               ],
             ),
           ),
