@@ -95,7 +95,10 @@ class _BodyState extends State<BodyHomeScreen> {
                     ],
                   ),
                   SizedBox(height: 30),
-                  Categories(category: _category),
+                  Categories(
+                    category: _category,
+                    package: _package,
+                  ),
                   SizedBox(height: 20),
                   Column(
                     children: [
@@ -105,7 +108,7 @@ class _BodyState extends State<BodyHomeScreen> {
                           children: [
                             SectionTitle(
                                 id: _category.data[index1].id,
-                                text: _category.data[index1].name,
+                                name: _category.data[index1].name,
                                 package: _package),
                             Wrap(
                               children: [

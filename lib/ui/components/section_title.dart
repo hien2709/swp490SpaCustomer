@@ -6,12 +6,12 @@ class SectionTitle extends StatefulWidget {
 
   const SectionTitle({
     Key key,
-    @required this.text,
+    @required this.name,
     @required this.press,
     @required this.package,
     @required this.id,
   }) : super(key: key);
-  final String text;
+  final String name;
   final GestureTapCallback press;
   final Package package;
   final int id;
@@ -43,7 +43,7 @@ class _SectionTitleState extends State<SectionTitle> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          widget.text,
+          widget.name,
           style: TextStyle(
             fontSize: 18,
             color: Colors.black,
@@ -55,7 +55,7 @@ class _SectionTitleState extends State<SectionTitle> {
                 context,
                 MaterialPageRoute(
                     builder: (context) =>
-                        MoreInfo(listPackage)
+                        MoreInfo(listPackage, widget.name)
                 ));
           },
           child: Text("Xem thêm"),

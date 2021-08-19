@@ -8,7 +8,7 @@ class SearchedCompany extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SectionTitle(text: "Các cửa hàng", press: (){}),
+        SectionTitle(name: "Các cửa hàng", press: (){}),
         Row(
           children: [
             // ...List.generate(

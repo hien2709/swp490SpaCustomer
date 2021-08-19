@@ -8,7 +8,7 @@ class SearchedServices extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SectionTitle(text: "Dịch vụ", press: () {}),
+        SectionTitle(name: "Dịch vụ", press: () {}),
         SizedBox(height: 20),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,

@@ -2,21 +2,33 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:spa_customer/models/Category.dart';
+import 'package:spa_customer/models/Package.dart';
 import 'package:spa_customer/services/CategoryServices.dart';
+
+import 'more_info.dart';
 class Categories extends StatefulWidget {
   final Category category;
+  final Package package;
 
-  const Categories({Key key, this.category}) : super(key: key);@override
+  const Categories({Key key, this.category, this.package}) : super(key: key);@override
   _CategoriesState createState() => _CategoriesState();
 }
 
 class _CategoriesState extends State<Categories> {
-  
+  List<PackageInstance> listPackage = [];
 
-  
+
+  getListPackage(id){
+    for(int i = 0; i < widget.package.data.length; i++){
+      if(widget.package.data[i].categoryId.id == id){
+        listPackage.add(widget.package.data[i]);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    
+
     return Wrap(
       children: [
         ...List.generate(
@@ -25,6 +37,14 @@ class _CategoriesState extends State<Categories> {
                 icon: widget.category.data[index].icon ,
                 text: widget.category.data[index].name,
                 press: (){
+                  listPackage.clear();
+                  getListPackage(widget.category.data[index].id);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              MoreInfo(listPackage, widget.category.data[index].name)
+                      ));
                 })),
 
       ],

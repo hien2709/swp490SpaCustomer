@@ -28,7 +28,7 @@ class ChooseSpaScreen extends StatefulWidget {
 class _ChooseSpaScreenState extends State<ChooseSpaScreen> {
   bool _loading;
   Spa _spa;
-  Position currentPosition;
+  Position currentPosition = Position(latitude: 0, longitude: 0);
   List<SpaToShow> listSpaAfterCaculateDistance = [];
 
   double coordinateDistance(lat1, lon1, lat2, lon2) {
@@ -59,6 +59,10 @@ class _ChooseSpaScreenState extends State<ChooseSpaScreen> {
           double.tryParse("${currentPosition.longitude}"),
           double.tryParse("${_spa.data[i].latitude}"),
           double.tryParse("${_spa.data[i].longitude}"));
+      if(currentPosition.latitude == 0){
+        distance = 0;
+      }
+      print("DISTANCE: $distance");
       int id = _spa.data[i].id;
       String name = _spa.data[i].name;
       String image = _spa.data[i].image;
@@ -187,6 +191,7 @@ class _ChooseSpaScreenState extends State<ChooseSpaScreen> {
                                                   fontSize: 20, color: kGreen),
                                             ),
                                           ),
+                                          listSpaAfterCaculateDistance[index].distance == 0 ? SizedBox() :
                                           Text(listSpaAfterCaculateDistance[index].distance.toStringAsFixed(2) + " km",
                                           style: TextStyle(
                                               fontSize: 14, color: Colors.grey.shade500

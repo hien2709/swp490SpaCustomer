@@ -18,9 +18,10 @@ class NearBySpa extends StatefulWidget {
 
 class _NearBySpaState extends State<NearBySpa> {
   AllSpa allSpa;
-  Position currentPosition;
+  Position currentPosition = Position(latitude: 0, longitude: 0);
   List<SpaToShow> listSpaAfterCaculateDistance = [];
   bool loading = true;
+  bool errorGPS = false;
 
   getCurrentLocation() async {
     await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
@@ -53,19 +54,32 @@ class _NearBySpaState extends State<NearBySpa> {
   }
 
   caculateDistanceToDevice() async {
-    for (int i = 0; i < allSpa.data.length; i++) {
-      double distance = coordinateDistance(
-          double.parse("${currentPosition.latitude}"),
-          double.tryParse("${currentPosition.longitude}"),
-          double.tryParse("${allSpa.data[i].latitude}"),
-          double.tryParse("${allSpa.data[i].longitude}"));
-      String street = allSpa.data[i].street;
-      String image = allSpa.data[i].image;
-      String name = allSpa.data[i].name;
-      String latitude = allSpa.data[i].latitude;
-      String longitude = allSpa.data[i].longitude;
-      listSpaAfterCaculateDistance.add(new SpaToShow(
-          name: name, street: street, distance: distance, image: image, latitude: latitude, longitude: longitude,));
+    try {
+      for (int i = 0; i < allSpa.data.length; i++) {
+        double distance = coordinateDistance(
+            double.parse("${currentPosition.latitude}"),
+            double.tryParse("${currentPosition.longitude}"),
+            double.tryParse("${allSpa.data[i].latitude}"),
+            double.tryParse("${allSpa.data[i].longitude}"));
+        if (currentPosition.latitude == 0) {
+          distance = 0;
+        }
+        String street = allSpa.data[i].street;
+        String image = allSpa.data[i].image;
+        String name = allSpa.data[i].name;
+        String latitude = allSpa.data[i].latitude;
+        String longitude = allSpa.data[i].longitude;
+        listSpaAfterCaculateDistance.add(new SpaToShow(
+          name: name,
+          street: street,
+          distance: distance,
+          image: image,
+          latitude: latitude,
+          longitude: longitude,
+        ));
+      }
+    } catch (error) {
+      print(error);
     }
   }
 
@@ -102,37 +116,45 @@ class _NearBySpaState extends State<NearBySpa> {
     if (loading) {
       return Scaffold(
         body: Center(
-            child: Text(
-              "Vui lòng bật GPS trên điện thoại",
-             style: TextStyle(
-               fontSize: 20,
-               fontWeight: FontWeight.bold,
-             ),
-            ),
-        ),
+            child: SpinKitWave(
+          color: kPrimaryColor,
+          size: 50,
+        )),
       );
     } else {
-      return Scaffold(
-          appBar: AppBar(
-            backgroundColor: kPrimaryColor,
-            title: Text(
-              "Những Spa gần bạn",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
+      return currentPosition.latitude == 0
+          ? Scaffold(
+              body: Center(
+                child: Text(
+                  "Vui lòng bật định vị GPS",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
-            ),
-            centerTitle: true,
-          ),
-          body: ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: listSpaAfterCaculateDistance.length,
-              itemBuilder: (context, index) {
-                final spa = listSpaAfterCaculateDistance[index];
+            )
+          : Scaffold(
+              appBar: AppBar(
+                backgroundColor: kPrimaryColor,
+                title: Text(
+                  "Những Spa gần bạn",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                  ),
+                ),
+                centerTitle: true,
+              ),
+              body: ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: listSpaAfterCaculateDistance.length,
+                  itemBuilder: (context, index) {
+                    final spa = listSpaAfterCaculateDistance[index];
 
-                return ListSpa(spa);
-              }));
+                    return ListSpa(spa);
+                  }));
     }
   }
 
@@ -149,8 +171,9 @@ class _NearBySpaState extends State<NearBySpa> {
                   height: 100,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: NetworkImage(
-                         spa.image == null ? "https://toplist.vn/images/800px/dang-ngoc-spa-149960.jpg" : spa.image),
+                      image: NetworkImage(spa.image == null
+                          ? "https://toplist.vn/images/800px/dang-ngoc-spa-149960.jpg"
+                          : spa.image),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -191,7 +214,11 @@ class _NearBySpaState extends State<NearBySpa> {
                             SizedBox(width: 20),
                             GestureDetector(
                               onTap: () {
-                                MapUtils.openMap(currentPosition.latitude,currentPosition.longitude,double.tryParse(spa.latitude),double.tryParse(spa.longitude));
+                                MapUtils.openMap(
+                                    currentPosition.latitude,
+                                    currentPosition.longitude,
+                                    double.tryParse(spa.latitude),
+                                    double.tryParse(spa.longitude));
                               },
                               child: Text(
                                 "xem trên map",
@@ -204,7 +231,6 @@ class _NearBySpaState extends State<NearBySpa> {
                             ),
                           ],
                         ),
-
                       ],
                     ),
                   ),

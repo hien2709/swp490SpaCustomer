@@ -5,8 +5,9 @@ import 'package:spa_customer/ui/home_screen/components/search_widget.dart';
 
 class MoreInfo extends StatefulWidget {
   List<PackageInstance> listPackage;
+  String category;
 
-  MoreInfo(this.listPackage);
+  MoreInfo(this.listPackage, this.category);
 
   @override
   _MoreInfoState createState() => _MoreInfoState();
@@ -16,8 +17,7 @@ class _MoreInfoState extends State<MoreInfo> {
   List<PackageInstance> packages;
   String query = '';
 
-  Widget buildSearch() =>
-      SearchWidget(query, searchPackage, false);
+  Widget buildSearch() => SearchWidget(query, searchPackage, false);
 
   void searchPackage(String query) {
     final packageSearch = widget.listPackage.where((package) {
@@ -41,9 +41,10 @@ class _MoreInfoState extends State<MoreInfo> {
             child: Row(
               children: <Widget>[
                 Container(
-                  width: 100,
-                  height: 100,
+                  width: 120,
+                  height: 120,
                   decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
                     image: DecorationImage(
                       image: NetworkImage(package.image == null
                           ? "https://toplist.vn/images/800px/dang-ngoc-spa-149960.jpg"
@@ -52,6 +53,7 @@ class _MoreInfoState extends State<MoreInfo> {
                     ),
                   ),
                 ),
+
                 SizedBox(
                   width: 16,
                 ),
@@ -64,15 +66,18 @@ class _MoreInfoState extends State<MoreInfo> {
                         Text(
                           package.name,
                           style: TextStyle(
+                            fontSize: 16,
                             color: Colors.black,
                           ),
                         ),
-                        SizedBox(
-                          height: 6,
-                        ),
-                        SizedBox(
-                          height: 6,
-                        ),
+                        SizedBox(height: 10),
+                        Text(package.type,
+                            style: TextStyle(
+                                fontSize: 12, color: Colors.grey.shade500)),
+                        SizedBox(height: 10),
+                        Text(package.description,
+                            style: TextStyle(
+                                fontSize: 12, color: Colors.grey.shade500)),
                       ],
                     ),
                   ),
@@ -109,7 +114,7 @@ class _MoreInfoState extends State<MoreInfo> {
       appBar: AppBar(
         backgroundColor: kPrimaryColor,
         title: Text(
-          "Điều trị da",
+          widget.category,
           style: TextStyle(
             fontSize: 25,
             color: Colors.white,
@@ -126,7 +131,6 @@ class _MoreInfoState extends State<MoreInfo> {
               itemCount: packages.length,
               itemBuilder: (context, index) {
                 final package = packages[index];
-
                 return ListPackage(package);
               },
             ),
