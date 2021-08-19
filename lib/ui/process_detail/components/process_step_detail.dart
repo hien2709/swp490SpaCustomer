@@ -44,7 +44,8 @@ class ProcessStepDetailScreen extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 20, vertical: 30),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -64,12 +65,17 @@ class ProcessStepDetailScreen extends StatelessWidget {
                         ),
                         Expanded(
                             child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Text(
-                            bookingDetailStep.consultationContent.description==""?"Không có mô tả":bookingDetailStep.consultationContent.description,
-                            style: TextStyle(fontSize: 16),
-                          ),
-                        ))
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20),
+                              child: Text(
+                                bookingDetailStep.consultationContent
+                                    .description == ""
+                                    ? "Không có mô tả"
+                                    : bookingDetailStep.consultationContent
+                                    .description,
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ))
                       ],
                     ),
                     SizedBox(
@@ -83,17 +89,22 @@ class ProcessStepDetailScreen extends StatelessWidget {
                         ),
                         Expanded(
                             child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child:
-                          bookingDetailStep.consultationContent.note == null ?
-                          Text("Chưa có ghi chú",
-                            style: TextStyle(fontSize: 16),
-                          )
-                          :Text(
-                            bookingDetailStep.consultationContent.note==""?"Không có ghi chú":bookingDetailStep.consultationContent.note,
-                            style: TextStyle(fontSize: 16),
-                          ),
-                        ))
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20),
+                              child:
+                              bookingDetailStep.consultationContent.note == null
+                                  ?
+                              Text("Chưa có ghi chú",
+                                style: TextStyle(fontSize: 16),
+                              )
+                                  : Text(
+                                bookingDetailStep.consultationContent.note == ""
+                                    ? "Không có ghi chú"
+                                    : bookingDetailStep.consultationContent
+                                    .note,
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ))
                       ],
                     ),
                     SizedBox(
@@ -107,16 +118,22 @@ class ProcessStepDetailScreen extends StatelessWidget {
                         ),
                         Expanded(
                             child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: bookingDetailStep.consultationContent.expectation==null?
-                          Text("Chưa có kết quả dự kiến",
-                            style: TextStyle(fontSize: 16),
-                          )
-                          :Text(
-                            bookingDetailStep.consultationContent.expectation==""?"Không có kết quả dự kiến":bookingDetailStep.consultationContent.expectation,
-                            style: TextStyle(fontSize: 16),
-                          ),
-                        ))
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20),
+                              child: bookingDetailStep.consultationContent
+                                  .expectation == null ?
+                              Text("Chưa có kết quả dự kiến",
+                                style: TextStyle(fontSize: 16),
+                              )
+                                  : Text(
+                                bookingDetailStep.consultationContent
+                                    .expectation == ""
+                                    ? "Không có kết quả dự kiến"
+                                    : bookingDetailStep.consultationContent
+                                    .expectation,
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ))
                       ],
                     ),
                     SizedBox(
@@ -136,20 +153,21 @@ class ProcessStepDetailScreen extends StatelessWidget {
                         CircleAvatar(
                           radius: 15.0,
                           backgroundImage:
-                              NetworkImage(bookingDetailStep.staff.user.image),
+                          NetworkImage(bookingDetailStep.staff.user.image),
                           backgroundColor: Colors.transparent,
                         ),
                         Expanded(
                             child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Text(
-                            bookingDetailStep.staff.user.fullname,
-                            style: TextStyle(fontSize: 16),
-                          ),
-                        ))
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20),
+                              child: Text(
+                                bookingDetailStep.staff.user.fullname,
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ))
                       ],
                     )
-                    :Text("Chưa có chuyên viên")
+                        : Text("Chưa có chuyên viên")
                     ,
                     SizedBox(
                       height: 40,
@@ -164,13 +182,18 @@ class ProcessStepDetailScreen extends StatelessWidget {
                     ),
                     Row(
                       children: [
+
                         Expanded(
                           flex: 1,
-                          child: Image.network('https://via.placeholder.com/150'),
+                          child: SizedBox(width: 150, height: 150,
+                            child:Image.network(bookingDetailStep.consultationContent.imageBefore == null ?'https://via.placeholder.com/150':bookingDetailStep.consultationContent.imageBefore),
+                          ),
                         ),
                         Expanded(
                           flex: 1,
-                          child: Image.network('https://via.placeholder.com/150'),
+                          child: SizedBox(width: 150, height: 150,
+                            child:Image.network(bookingDetailStep.consultationContent.imageAfter == null ?'https://via.placeholder.com/150':bookingDetailStep.consultationContent.imageAfter),
+                          ),
                         ),
                       ],
                     ),

@@ -569,6 +569,8 @@ class ConsultationContent {
     this.id,
     this.description,
     this.expectation,
+    this.imageBefore,
+    this.imageAfter,
     this.result,
     this.note,
   });
@@ -576,14 +578,18 @@ class ConsultationContent {
   int id;
   String description;
   String expectation;
-  dynamic result;
+  String imageBefore;
+  String imageAfter;
+  String result;
   String note;
 
   factory ConsultationContent.fromJson(Map<String, dynamic> json) => ConsultationContent(
     id: json["id"] == null ? null : json["id"],
     description: json["description"] == null ? null : json["description"],
     expectation: json["expectation"] == null ? null : json["expectation"],
-    result: json["result"],
+    imageBefore: json["imageBefore"] == null ? null : json["imageBefore"],
+    imageAfter: json["imageAfter"] == null ? null : json["imageAfter"],
+    result: json["result"] == null ? null : json["result"],
     note: json["note"] == null ? null : json["note"],
   );
 
@@ -591,7 +597,9 @@ class ConsultationContent {
     "id": id == null ? null : id,
     "description": description == null ? null : description,
     "expectation": expectation == null ? null : expectation,
-    "result": result,
+    "imageBefore": imageBefore == null ? null : imageBefore,
+    "imageAfter": imageAfter == null ? null : imageAfter,
+    "result": result == null ? null : result,
     "note": note == null ? null : note,
   };
 }

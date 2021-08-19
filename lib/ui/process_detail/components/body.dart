@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:spa_customer/constant.dart';
 import 'package:spa_customer/helper/Helper.dart';
 import 'package:spa_customer/main.dart';
@@ -177,7 +178,7 @@ class _ProcessSectionState extends State<ProcessSection> {
   }
 }
 
-class ProcessStepSection extends StatelessWidget {
+class ProcessStepSection extends StatefulWidget {
   final String date, stepName, status;
   final int ratingId, staffId;
   final BookingDetailStep bookingDetailStep;
@@ -193,8 +194,14 @@ class ProcessStepSection extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _ProcessStepSectionState createState() => _ProcessStepSectionState();
+}
+
+class _ProcessStepSectionState extends State<ProcessStepSection> {
+  bool _ratingVisible = true;
+  @override
   Widget build(BuildContext context) {
-    Color _borderCorlor;
+    print("rating at first: $_ratingVisible");
     return Column(
       children: [
         Row(
@@ -206,9 +213,9 @@ class ProcessStepSection extends StatelessWidget {
                 height: 10,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: status == "FINISH"
+                  color: widget.status == "FINISH"
                       ? kGreen
-                      : status == "PENDING"
+                      : widget.status == "PENDING"
                           ? Colors.black
                           : kYellow,
                 ),
@@ -220,15 +227,15 @@ class ProcessStepSection extends StatelessWidget {
             Expanded(
               flex: 10,
               child: Text(
-                status == "FINISH"
-                    ? "$stepName(Đã hoàn tất)"
-                    : status == "PENDING"
-                        ? stepName
-                        : "$stepName(Đang chờ...)",
+                widget.status == "FINISH"
+                    ? "${widget.stepName}(Đã hoàn tất)"
+                    : widget.status == "PENDING"
+                        ? widget.stepName
+                        : "${widget.stepName}(Đang chờ...)",
                 style: TextStyle(
-                    color: status == "FINISH"
+                    color: widget.status == "FINISH"
                         ? kGreen
-                        : status == "PENDING"
+                        : widget.status == "PENDING"
                             ? Colors.black
                             : kYellow,
                     fontSize: 18),
@@ -258,7 +265,7 @@ class ProcessStepSection extends StatelessWidget {
                         style: TextStyle(fontSize: 14),
                       ),
                       Text(
-                        date,
+                        widget.date,
                         style: TextStyle(fontSize: 14),
                       ),
                     ],
@@ -268,7 +275,7 @@ class ProcessStepSection extends StatelessWidget {
                   flex: 2,
                   child: Container(
                     child: Visibility(
-                      visible: status == "FINISH" && stepName != "Tư Vấn",
+                      visible: widget.status == "FINISH" && widget.stepName != "Tư Vấn" && widget.bookingDetailStep.rating.rate == null && _ratingVisible && DateTime.now().isBefore(DateFormat("yyyy-MM-dd").parse(widget.bookingDetailStep.rating.expireTime)),
                       child: GestureDetector(
                         onTap: () {
                           showDialog(
@@ -291,10 +298,14 @@ class ProcessStepSection extends StatelessWidget {
                                           response.rating.toString());
                                       print("comment: " + response.comment);
                                       GeneralServices.editRating(
-                                          staffId,
-                                          ratingId,
+                                          widget.staffId,
+                                          widget.ratingId,
                                           response.comment,
                                           response.rating.toDouble());
+                                      setState(() {
+                                        _ratingVisible = false;
+                                        print(_ratingVisible);
+                                      });
                                     });
                               });
                         },
@@ -309,13 +320,13 @@ class ProcessStepSection extends StatelessWidget {
                 Expanded(
                   flex: 1,
                   child: Visibility(
-                    visible: stepName!="Tư Vấn",
+                    visible: widget.stepName!="Tư Vấn",
                     child: InkWell(
                         onTap: (){
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ProcessStepDetailScreen(bookingDetailStep: bookingDetailStep,),
+                              builder: (context) => ProcessStepDetailScreen(bookingDetailStep: widget.bookingDetailStep,),
                             ),
                           );
                         },
