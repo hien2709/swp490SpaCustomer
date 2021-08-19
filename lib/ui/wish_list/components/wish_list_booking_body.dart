@@ -5,13 +5,14 @@ import 'package:spa_customer/main.dart';
 import 'package:spa_customer/models/Package.dart';
 import 'package:spa_customer/models/RequestBookingDetail.dart';
 import 'package:spa_customer/models/Spa.dart';
+import 'package:spa_customer/models/SpaToShow.dart';
 import 'package:spa_customer/size_config.dart';
 import 'package:spa_customer/ui/booking/components/body.dart';
 import 'package:spa_customer/ui/booking_confirm/booking_confirm_screen.dart';
 import 'package:spa_customer/ui/home_screen/home_screen.dart';
 
 class WishListBookingBody extends StatefulWidget {
-  final SpaInstance spa;
+  final SpaToShow spa;
 
   const WishListBookingBody({Key key, this.spa}) : super(key: key);
 

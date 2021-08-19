@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:spa_customer/main.dart';
 import 'package:spa_customer/models/Package.dart';
 import 'package:spa_customer/models/Spa.dart';
+import 'package:spa_customer/models/SpaToShow.dart';
 import 'package:spa_customer/ui/home_screen/home_screen.dart';
 import 'package:spa_customer/ui/wish_list/components/wish_list_booking_body.dart';
 
 class WishListBookingScreen extends StatefulWidget {
-  final SpaInstance spa;
+  final SpaToShow spa;
   const WishListBookingScreen({Key key, this.spa}) : super(key: key);
 
   @override

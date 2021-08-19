@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:spa_customer/models/Package.dart';
 import 'package:spa_customer/models/RequestBookingDetail.dart';
 import 'package:spa_customer/models/Spa.dart';
+import 'package:spa_customer/models/SpaToShow.dart';
 import 'package:spa_customer/ui/booking_confirm/components/body.dart';
 
 class BookingConfirmScreen extends StatefulWidget {
   @required final List<RequestBookingDetail> listRequestBooking;
-  final SpaInstance spa;
+  final SpaToShow spa;
   final PackageInstance packageInstance;
   const BookingConfirmScreen({Key key, this.listRequestBooking, this.spa, this.packageInstance}) : super(key: key);
 

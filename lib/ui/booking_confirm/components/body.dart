@@ -6,6 +6,7 @@ import 'package:spa_customer/helper/Helper.dart';
 import 'package:spa_customer/models/Package.dart';
 import 'package:spa_customer/models/RequestBookingDetail.dart';
 import 'package:spa_customer/models/Spa.dart';
+import 'package:spa_customer/models/SpaToShow.dart';
 import 'package:spa_customer/services/BookingServices.dart';
 import 'package:spa_customer/ui/booking/components/body.dart';
 import 'package:spa_customer/ui/bottom_navigation/bottom_navigation.dart';
@@ -14,7 +15,7 @@ import 'package:spa_customer/ui/login/components/default_button.dart';
 class Body extends StatelessWidget {
   @required
   final List<RequestBookingDetail> listRequestBooking;
-  final SpaInstance spa;
+  final SpaToShow spa;
   final PackageInstance packageInstance;
 
   const Body({Key key, @required this.listRequestBooking, this.spa, this.packageInstance}) : super(key: key);

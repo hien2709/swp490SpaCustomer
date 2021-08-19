@@ -9,6 +9,7 @@ import 'package:spa_customer/models/AvailableTime.dart';
 import 'package:spa_customer/models/Package.dart';
 import 'package:spa_customer/models/RequestBookingDetail.dart';
 import 'package:spa_customer/models/Spa.dart';
+import 'package:spa_customer/models/SpaToShow.dart';
 import 'package:spa_customer/services/AvailableTimeServices.dart';
 import 'package:spa_customer/services/BookingServices.dart';
 import 'package:spa_customer/size_config.dart';
@@ -24,7 +25,7 @@ class BookingBody extends StatefulWidget {
 
   @required
   final PackageInstance package;
-  final SpaInstance spa;
+  final SpaToShow spa;
   @required
   final bool isBookNow;
   final List<RequestBookingDetail> listRequestBookingDetail;

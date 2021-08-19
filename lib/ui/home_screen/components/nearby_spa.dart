@@ -102,10 +102,14 @@ class _NearBySpaState extends State<NearBySpa> {
     if (loading) {
       return Scaffold(
         body: Center(
-            child: SpinKitWave(
-          color: kPrimaryColor,
-          size: 50,
-        )),
+            child: Text(
+              "Vui lòng bật GPS trên điện thoại",
+             style: TextStyle(
+               fontSize: 20,
+               fontWeight: FontWeight.bold,
+             ),
+            ),
+        ),
       );
     } else {
       return Scaffold(
