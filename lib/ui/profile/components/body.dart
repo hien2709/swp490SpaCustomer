@@ -3,6 +3,7 @@ import 'package:spa_customer/constant.dart';
 import 'package:spa_customer/main.dart';
 import 'package:spa_customer/ui/bottom_navigation/bottom_navigation.dart';
 import 'package:spa_customer/ui/components/profile_pic.dart';
+import 'package:spa_customer/ui/history/history_screen.dart';
 import 'package:spa_customer/ui/notification/notification.dart';
 import 'package:spa_customer/ui/profile/change_password/change_password.dart';
 import 'package:spa_customer/ui/profile_detail/profile_detail.dart';
@@ -73,7 +74,7 @@ class _BodyState extends State<Body> {
           press: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => CustomerNotification()),
+              MaterialPageRoute(builder: (context) => HistoryScreen()),
             );
           },
         ),

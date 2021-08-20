@@ -1,75 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:spa_customer/constant.dart';
-import 'package:spa_customer/models/BookingDetail.dart';
-import 'package:spa_customer/services/BookingDetailServices.dart';
-import 'package:spa_customer/ui/process_detail/process_detail_screen.dart';
+import 'package:spa_customer/models/FinishedBookingDetail.dart';
 
-class Body extends StatefulWidget {
-  const Body({Key key}) : super(key: key);
-
-  @override
-  _BodyState createState() => _BodyState();
-}
-
-class _BodyState extends State<Body> {
-  BookingDetail _bookingDetail;
-  bool _loading;
-
-  @override
-  void initState() {
-    _loading = true;
-    super.initState();
-    BookingDetailServices.getAllBookingDetailMoreStepByCustomerId()
-        .then((value) => {
-              setState(() {
-                _bookingDetail = value;
-                _loading = false;
-              })
-            });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (_loading) {
-      return Container(
-        child: SpinKitWave(
-          color: kPrimaryColor,
-          size: 50,
-        ),
-      );
-    }
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        child: Column(
-          children: [
-            ...List.generate(
-                _bookingDetail.data.length,
-                (index) => _bookingDetail.data[index].statusBooking != "FINISH"
-                    ? ProcessItem(
-                        processItem: _bookingDetail.data[index],
-                        press: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => CustomerProcessDetail(
-                                      processDetail: _bookingDetail.data[index],
-                                    )),
-                          );
-                        },
-                      )
-                    : SizedBox()),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ProcessItem extends StatelessWidget {
-  const ProcessItem({
+class FinishedProcessItem extends StatelessWidget {
+  const FinishedProcessItem({
     Key key,
     @required Datum processItem,
     @required GestureTapCallback press,
@@ -107,13 +41,13 @@ class ProcessItem extends StatelessWidget {
                       borderRadius: BorderRadius.circular(15),
                       child: _processItem.spaPackage.image == null
                           ? Image.asset(
-                              "assets/images/Splash_1.PNG",
-                              fit: BoxFit.cover,
-                            )
+                        "assets/images/Splash_1.PNG",
+                        fit: BoxFit.cover,
+                      )
                           : Image.network(
-                              _processItem.spaPackage.image,
-                              fit: BoxFit.cover,
-                            ),
+                        _processItem.spaPackage.image,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                     width: 70,
                     height: 70,
@@ -135,8 +69,7 @@ class ProcessItem extends StatelessWidget {
                         Row(
                           children: [
                             Container(
-                              child:
-                                  SvgPicture.asset("assets/icons/company.svg"),
+                              child: SvgPicture.asset("assets/icons/company.svg"),
                               width: 18,
                               height: 18,
                             ),
@@ -174,9 +107,7 @@ class ProcessItem extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
-            height: 10,
-          )
+          SizedBox(height: 10,)
         ],
       ),
     );

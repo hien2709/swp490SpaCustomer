@@ -52,7 +52,9 @@ class _OneStepProcessBodyState extends State<OneStepProcessBody> {
               padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
               child: Column(
                 children: [
-                  TimeSection(),
+                  _bookingDetail.data.statusBooking == "FINISH"?
+                      FinishStatusSection()
+                  :TimeSection(),
                   SizedBox(
                     height: 20,
                   ),
@@ -218,6 +220,52 @@ class _OneStepProcessBodyState extends State<OneStepProcessBody> {
                     ),
                     Text(
                       "Theo dõi lịch để không bị lỡ hẹn với spa của bạn",
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+  Container FinishStatusSection() {
+    return Container(
+      height: 100,
+      decoration: BoxDecoration(color: kGreen),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 20, right: 15),
+              child: Icon(
+                Icons.check,
+                size: 50,
+                color: Colors.white,
+              ),
+            ),
+            Flexible(
+              child: Container(
+                height: 60,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text(
+                      "Dịch vụ đã hoàn thành!",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 22),
+                    ),
+                    Text(
+                      "Bạn có thể đánh giá dịch vụ sau khi đã hoàn tất",
                       style: TextStyle(
                         color: Colors.white,
                       ),

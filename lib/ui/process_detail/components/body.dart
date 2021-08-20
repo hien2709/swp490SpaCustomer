@@ -26,7 +26,11 @@ class _BodyState extends State<Body> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          StatusSection(),
+          widget.processDetail.statusBooking == "FINISH"
+              ? StatusFinishedSection()
+              : widget.processDetail.statusBooking =="CHANGE_STAFF"
+              ?StatusChangingStaffSection()
+          :StatusSection(),
           SizedBox(
             height: 10,
           ),
@@ -199,9 +203,9 @@ class ProcessStepSection extends StatefulWidget {
 
 class _ProcessStepSectionState extends State<ProcessStepSection> {
   bool _ratingVisible = true;
+
   @override
   Widget build(BuildContext context) {
-    print("rating at first: $_ratingVisible");
     return Column(
       children: [
         Row(
@@ -275,7 +279,13 @@ class _ProcessStepSectionState extends State<ProcessStepSection> {
                   flex: 2,
                   child: Container(
                     child: Visibility(
-                      visible: widget.status == "FINISH" && widget.stepName != "Tư Vấn" && widget.bookingDetailStep.rating.rate == null && _ratingVisible && DateTime.now().isBefore(DateFormat("yyyy-MM-dd").parse(widget.bookingDetailStep.rating.expireTime)),
+                      visible: widget.status == "FINISH" &&
+                          widget.stepName != "Tư Vấn" &&
+                          widget.bookingDetailStep.rating.rate == null &&
+                          _ratingVisible &&
+                          DateTime.now().isBefore(DateFormat("yyyy-MM-dd")
+                              .parse(
+                                  widget.bookingDetailStep.rating.expireTime)),
                       child: GestureDetector(
                         onTap: () {
                           showDialog(
@@ -320,21 +330,23 @@ class _ProcessStepSectionState extends State<ProcessStepSection> {
                 Expanded(
                   flex: 1,
                   child: Visibility(
-                    visible: widget.stepName!="Tư Vấn",
+                    visible: widget.stepName != "Tư Vấn",
                     child: InkWell(
-                        onTap: (){
+                        onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ProcessStepDetailScreen(bookingDetailStep: widget.bookingDetailStep,),
+                              builder: (context) => ProcessStepDetailScreen(
+                                bookingDetailStep: widget.bookingDetailStep,
+                              ),
                             ),
                           );
                         },
                         child: Icon(
-                      Icons.more_vert,
-                      color: kTextColor,
+                          Icons.more_vert,
+                          color: kTextColor,
                           size: 28,
-                    )),
+                        )),
                   ),
                 ),
               ],
@@ -535,6 +547,122 @@ class StatusSection extends StatelessWidget {
                 width: 50,
                 height: 50,
                 child: SvgPicture.asset("assets/icons/ongoing.svg"),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class StatusChangingStaffSection extends StatelessWidget {
+  const StatusChangingStaffSection({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 100,
+      decoration: BoxDecoration(color: Colors.red),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Flexible(
+              child: Container(
+                height: 60,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text(
+                      "Liệu trình đang bị gián đoạn !",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15),
+                    ),
+                    Text(
+                      "Liệu trình đang được chờ để xét duyệt đổi nhân viên",
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 20, right: 15),
+              child: Container(
+                width: 50,
+                height: 50,
+                child: Icon(
+                  Icons.close,
+                  color: Colors.white,
+                  size: 50,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class StatusFinishedSection extends StatelessWidget {
+  const StatusFinishedSection({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 100,
+      decoration: BoxDecoration(color: kGreen),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Flexible(
+              child: Container(
+                height: 60,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text(
+                      "Liệu trình đã hoàn thành",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15),
+                    ),
+                    Text(
+                      "Bạn có thể đánh giá liệu trình sau khi hoàn tất",
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 20, right: 15),
+              child: Container(
+                width: 50,
+                height: 50,
+                child: Icon(
+                  Icons.check,
+                  color: Colors.white,
+                  size: 50,
+                ),
               ),
             ),
           ],

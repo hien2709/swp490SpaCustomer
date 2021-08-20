@@ -99,39 +99,9 @@ class _BodyState extends State<Body> {
                                   (index2) =>
                                   GestureDetector(
                                     onTap: () {
-                                      _customerSchedule.data[index].bookingDetailSteps[index2].treatmentService!=null?
                                       _customerSchedule.data[index].bookingDetailSteps[index2].treatmentService.spaService.type == "ONESTEP"
                                           ? Navigator.push(context, MaterialPageRoute(builder: (context) => OneStepProcessScreen(bookingDetailId: _customerSchedule.data[index].bookingDetailSteps[index2].bookingDetail.id)),)
-                                          : {
-                                        showDialog(
-                                          context: context,
-                                          builder: (builder) {
-                                            return Padding(
-                                              padding: const EdgeInsets.symmetric(
-                                                  horizontal: 80),
-                                              child: Dialog(
-                                                child: Container(
-                                                  height: 150,
-                                                  child: Lottie.asset(
-                                                      "assets/lottie/circle_loading.json"),
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                        BookingDetailServices.getBookingDetailById(_customerSchedule.data[index].bookingDetailSteps[index2].bookingDetail.id).then((value) =>
-                                        {
-                                          setState(() {
-                                            Navigator.pop(context);
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      CustomerProcessDetail(processDetail: value.data,)),
-                                            );
-                                          })
-                                        })
-                                      }
+                                          // ignore: unnecessary_statements
                                           : {
                                         showDialog(
                                           context: context,
@@ -162,6 +132,7 @@ class _BodyState extends State<Body> {
                                           })
                                         })
                                       };
+
                                     },
                                     child: Container(
                                       margin: EdgeInsets.only(bottom: 5),
