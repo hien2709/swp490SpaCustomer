@@ -42,49 +42,61 @@ class _BodyState extends State<Body> {
         size: 50,
       ));
     } else {
-      return notification.data.length == 0
+      return notification.data == null
           ? Center(
               child: Text(
-              "Chưa có thông báo nào",
+              "Đăng nhập để xem thông báo",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
               ),
             ))
-          : SingleChildScrollView(
-            child: Column(
-                children: [
-                  ListView.builder(
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: notification.data.length,
-                    itemBuilder: (context, index) {
-                      if (notification.data[index].type == "STEP_FINISH") {
-                        image = 'assets/notification/finish.jpg';
-                      } else if (notification.data[index].type ==
-                          "TREATMENT_FINISH") {
-                        image = 'assets/notification/finish.jpg';
-                      } else if (notification.data[index].type == "REMIND") {
-                        image = 'assets/notification/remind.jpg';
-                      } else if (notification.data[index].type == "CHANG_STAFF") {
-                        image = 'assets/notification/changStaff.jpg';
-                      } else if (notification.data[index].type == "SKIP") {
-                        image = 'assets/notification/skip.jpg';
-                      } else if (notification.data[index].type == "CANCEL") {
-                        image = 'assets/notification/cancel.jpg';
-                      }else{
-                        image = 'assets/notification/spa.jpg';
-                      }
-                      return NotificationBookingSuccessItem(
-                        image: image,
-                        title: notification.data[index].title,
-                        message: notification.data[index].message,
-                      );
-                    },
-                  )
-                ],
-              ),
-          );
+          : notification.data.length == 0
+              ? Center(
+                  child: Text(
+                  "Không có thông báo nào",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ))
+              : SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      ListView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: notification.data.length,
+                        itemBuilder: (context, index) {
+                          if (notification.data[index].type == "STEP_FINISH") {
+                            image = 'assets/notification/finish.jpg';
+                          } else if (notification.data[index].type ==
+                              "TREATMENT_FINISH") {
+                            image = 'assets/notification/finish.jpg';
+                          } else if (notification.data[index].type ==
+                              "REMIND") {
+                            image = 'assets/notification/remind.jpg';
+                          } else if (notification.data[index].type ==
+                              "CHANGE_STAFF") {
+                            image = 'assets/notification/changeStaff.jpg';
+                          } else if (notification.data[index].type == "SKIP") {
+                            image = 'assets/notification/skip.jpg';
+                          } else if (notification.data[index].type ==
+                              "CANCEL") {
+                            image = 'assets/notification/cancel.jpg';
+                          } else {
+                            image = 'assets/notification/spa.jpg';
+                          }
+                          return NotificationBookingSuccessItem(
+                            image: image,
+                            title: notification.data[index].title,
+                            message: notification.data[index].message,
+                          );
+                        },
+                      )
+                    ],
+                  ),
+                );
     }
   }
 }
@@ -130,10 +142,14 @@ class NotificationBookingSuccessItem extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            Text(
-                              title,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
+                            Expanded(
+                              child: Text(
+                                title,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ],

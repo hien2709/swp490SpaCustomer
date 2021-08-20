@@ -65,6 +65,20 @@ class _BodyState extends State<Body> {
         ),
         ProfileMenu(
           icon: Icon(
+            Icons.history,
+            size: 30,
+            color: kPrimaryColor,
+          ),
+          text: "Lịch sử",
+          press: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => CustomerNotification()),
+            );
+          },
+        ),
+        ProfileMenu(
+          icon: Icon(
             Icons.logout,
             size: 30,
             color: kPrimaryColor,

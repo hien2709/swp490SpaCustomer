@@ -3,10 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
+import 'package:rating_dialog/rating_dialog.dart';
 import 'package:spa_customer/constant.dart';
 import 'package:spa_customer/helper/Helper.dart';
 import 'package:spa_customer/models/BookingDetail.dart';
 import 'package:spa_customer/services/BookingDetailServices.dart';
+import 'package:spa_customer/services/GeneralServices.dart';
+import 'package:spa_customer/ui/booking/components/body.dart';
+import 'package:spa_customer/ui/login/components/default_button.dart';
 
 class OneStepProcessBody extends StatefulWidget {
   const OneStepProcessBody({Key key, this.bookingDetailId}) : super(key: key);
@@ -30,7 +34,6 @@ class _OneStepProcessBodyState extends State<OneStepProcessBody> {
                 _loading = false;
               })
             });
-    // TODO: implement initState
     super.initState();
   }
 
@@ -62,6 +65,120 @@ class _OneStepProcessBodyState extends State<OneStepProcessBody> {
                     height: 20,
                   ),
                   ServiceSection(),
+
+                  if (_bookingDetail.data.bookingDetailSteps[0].rating != null)
+                    _bookingDetail.data.bookingDetailSteps[0].rating.rate == null &&_bookingDetail.data.statusBooking == "FINISH"
+                        ? DefaultButton(
+                            press: () {
+                              showDialog(
+                                  context: context,
+                                  barrierDismissible: true,
+                                  builder: (builder) {
+                                    return RatingDialog(
+                                        title: "Đánh giá dịch vụ",
+                                        image: Icon(
+                                          Icons.star_rate,
+                                          color: Colors.amberAccent,
+                                          size: 100,
+                                        ),
+                                        message:
+                                            "Bạn có hài lòng về dịch vụ không?",
+                                        commentHint: "nhận xét của bạn",
+                                        submitButton: "Gửi",
+                                        onSubmitted: (response) {
+                                          print("rating: " +
+                                              response.rating.toString());
+                                          print("comment: " + response.comment);
+                                          showDialog(
+                                            context: context,
+                                            builder: (builder) {
+                                              return Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 80),
+                                                child: Dialog(
+                                                  child: Container(
+                                                    height: 150,
+                                                    child: Lottie.asset(
+                                                        "assets/lottie/circle_loading.json"),
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          );
+                                          GeneralServices.editRating(
+                                                  _bookingDetail
+                                                      .data
+                                                      .bookingDetailSteps[0]
+                                                      .staff
+                                                      .user
+                                                      .id,
+                                                  _bookingDetail
+                                                      .data
+                                                      .bookingDetailSteps[0]
+                                                      .rating
+                                                      .id,
+                                                  response.comment,
+                                                  response.rating.toDouble())
+                                              .then((value) => {
+                                                    value.code == 200
+                                                        ? showDialog(
+                                                            context: context,
+                                                            builder: (context) {
+                                                              return MyCustomDialog(
+                                                                height: 250,
+                                                                press: () {
+                                                                  Navigator.pop(context);
+                                                                  Navigator.pop(context);
+                                                                  setState(() {
+                                                                    _loading = true;
+                                                                    BookingDetailServices.getBookingDetailById(widget.bookingDetailId)
+                                                                        .then((value) => {
+                                                                      setState(() {
+                                                                        _bookingDetail = value;
+                                                                        _loading = false;
+                                                                      })
+                                                                    });
+                                                                  });
+                                                                },
+                                                                title:
+                                                                    "Thành Công !",
+                                                                description:
+                                                                    "Đánh giá dịch vụ thành công",
+                                                                buttonTitle:
+                                                                    "Quay về",
+                                                                lottie:
+                                                                    "assets/lottie/success.json",
+                                                              );
+                                                            },
+                                                          )
+                                                        : showDialog(
+                                                            context: context,
+                                                            builder: (context) {
+                                                              return MyCustomDialog(
+                                                                height: 250,
+                                                                press: () {
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                },
+                                                                title:
+                                                                    "Thất bại !",
+                                                                description:
+                                                                    value.data,
+                                                                buttonTitle:
+                                                                    "Thoát",
+                                                                lottie:
+                                                                    "assets/lottie/fail.json",
+                                                              );
+                                                            },
+                                                          )
+                                                  });
+                                        });
+                                  });
+                            },
+                            text: "Đánh giá dịch vụ",
+                          )
+                        : SizedBox()
                 ],
               ),
             ),
