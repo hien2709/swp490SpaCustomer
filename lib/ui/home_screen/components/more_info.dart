@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:spa_customer/constant.dart';
 import 'package:spa_customer/models/Package.dart';
 import 'package:spa_customer/ui/home_screen/components/search_widget.dart';
+import 'package:spa_customer/ui/package_detail/package_detail.dart';
 
 class MoreInfo extends StatefulWidget {
   List<PackageInstance> listPackage;
@@ -38,51 +39,85 @@ class _MoreInfoState extends State<MoreInfo> {
       child: Row(
         children: <Widget>[
           Expanded(
-            child: Row(
-              children: <Widget>[
-                Container(
-                  width: 120,
-                  height: 120,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    image: DecorationImage(
-                      image: NetworkImage(package.image == null
-                          ? "https://toplist.vn/images/800px/dang-ngoc-spa-149960.jpg"
-                          : package.image),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-
-                SizedBox(
-                  width: 16,
-                ),
-                Expanded(
-                  child: Container(
-                    color: Colors.transparent,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          package.name,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.black,
-                          ),
+            child: InkWell(
+              onTap: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        PackageDetailScreen(
+                          package:package,
                         ),
-                        SizedBox(height: 10),
-                        Text(package.type,
-                            style: TextStyle(
-                                fontSize: 12, color: Colors.grey.shade500)),
-                        SizedBox(height: 10),
-                        Text(package.description,
-                            style: TextStyle(
-                                fontSize: 12, color: Colors.grey.shade500)),
-                      ],
-                    ),
                   ),
+                );
+              },
+              child: Container(
+                width: 120,
+                height: 120,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                    ),
+                  ],
                 ),
-              ],
+                child: Row(
+                  children: <Widget>[
+                    Container(
+                      width: 120,
+                      height: 120,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15.0),
+                          topRight: Radius.zero,
+                          bottomLeft: Radius.circular(15.0),
+                          bottomRight: Radius.zero,
+                        ),
+                        image: DecorationImage(
+                          image: NetworkImage(package.image == null
+                              ? "https://toplist.vn/images/800px/dang-ngoc-spa-149960.jpg"
+                              : package.image),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(
+                      width: 16,
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              package.name, maxLines: 1, overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.black,
+                              ),
+                            ),
+                            SizedBox(height: 5),
+
+                            Text(package.type == "ONESTEP"?"DỊCH VỤ NGẮN":"LIỆU TRÌNH DÀI",
+                                style: TextStyle(
+                                    fontSize: 12, color: Colors.grey.shade500)),
+                            SizedBox(height: 5),
+                            Text(package.description, maxLines: 3, overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    fontSize: 12, color: Colors.grey.shade500)),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         ],
@@ -112,6 +147,7 @@ class _MoreInfoState extends State<MoreInfo> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.white),
         backgroundColor: kPrimaryColor,
         title: Text(
           widget.category,

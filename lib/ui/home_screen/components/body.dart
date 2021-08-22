@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:spa_customer/constant.dart';
@@ -74,25 +75,41 @@ class _BodyState extends State<BodyHomeScreen> {
                   SizedBox(height: 20),
                   HomeHeader(),
                   SizedBox(height: 30),
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => NearBySpa()));
-                        },
-                        child: Text(
-                          "Xem những spa gần bạn",
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.blue,
-                            decoration: TextDecoration.underline,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NearBySpa()));
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade50,
+                        borderRadius: BorderRadius.circular(5),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 2,
+                            blurRadius: 5,
                           ),
-                        ),
+                        ],
                       ),
-                    ],
+                      width: double.infinity,
+                      height: 40,
+                      child: Row(
+                        children: [
+                          Icon(Icons.location_on, color: kTextColor,),
+                          Text(
+                            "Xem những spa gần bạn",
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: kTextColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                   SizedBox(height: 30),
                   Categories(

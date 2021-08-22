@@ -74,8 +74,8 @@ class _BodyState extends State<Body> {
                           Row(
                             children: [
                               Container(
-                                width: 25,
-                                height: 25,
+                                width: 35,
+                                height: 35,
                                 child: SvgPicture.asset(
                                     "assets/icons/schedule.svg"),
                               ),
@@ -83,7 +83,7 @@ class _BodyState extends State<Body> {
                                 width: 10,
                               ),
                               Text(MyHelper.getUserDate(_customerSchedule
-                                  .data[index].dateBooking))
+                                  .data[index].dateBooking), style: TextStyle(fontSize: 23),)
                             ],
                           ),
                           Divider(
