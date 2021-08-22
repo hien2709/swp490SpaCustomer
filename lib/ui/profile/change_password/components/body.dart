@@ -73,6 +73,7 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
 
   TextFormField OldPasswordTextField() {
     return TextFormField(
+      obscureText: true,
       controller: oldPasswordTextController,
       decoration: InputDecoration(
         labelText: "Mật khẩu cũ",
@@ -84,6 +85,7 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
 
   TextFormField NewPasswordTextField() {
     return TextFormField(
+      obscureText: true,
       controller: newPasswordTextController,
       decoration: InputDecoration(
         labelText: "Mật khẩu mới",
@@ -95,6 +97,7 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
 
   TextFormField ConfirmPasswordTextField() {
     return TextFormField(
+      obscureText: true,
       controller: confirmPasswordTextController,
       decoration: InputDecoration(
         labelText: "Nhập lại mật khẩu",
