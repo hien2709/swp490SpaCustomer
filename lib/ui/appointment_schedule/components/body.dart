@@ -24,13 +24,12 @@ class _BodyState extends State<Body> {
   @override
   void initState() {
     _loading = true;
-    CustomerScheduleServices.getCustomerSchedule().then((value) =>
-    {
-      setState(() {
-        _customerSchedule = value;
-        _loading = false;
-      })
-    });
+    CustomerScheduleServices.getCustomerSchedule().then((value) => {
+          setState(() {
+            _customerSchedule = value;
+            _loading = false;
+          })
+        });
     // TODO: implement initState
     super.initState();
   }
@@ -39,206 +38,374 @@ class _BodyState extends State<Body> {
   Widget build(BuildContext context) {
     return _loading
         ? Container(
-      child: SpinKitWave(
-        color: kPrimaryColor,
-        size: 50,
-      ),
-    )
-        : _customerSchedule.data==null?
-    Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: 150,
-            height: 150,
-            child: SvgPicture.asset("assets/icons/schedule.svg"),
-          ),
-          Text(
-              "Chưa có lịch hẹn mới", style: TextStyle(fontSize: 24),
+            child: SpinKitWave(
+              color: kPrimaryColor,
+              size: 50,
+            ),
           )
-        ],
-      ),
-    )
-    :SingleChildScrollView(
-      child: Container(
-        padding: EdgeInsets.all(8),
-        child: Column(
-          children: [
-            ...List.generate(
-                _customerSchedule.data.length,
-                    (index) =>
+        : _customerSchedule.data == null
+            ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
                     Container(
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Container(
-                                width: 35,
-                                height: 35,
-                                child: SvgPicture.asset(
-                                    "assets/icons/schedule.svg"),
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(MyHelper.getUserDate(_customerSchedule
-                                  .data[index].dateBooking), style: TextStyle(fontSize: 23),)
-                            ],
-                          ),
-                          Divider(
-                            height: 10,
-                            thickness: 2,
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          ...List.generate(
-                              _customerSchedule
-                                  .data[index].bookingDetailSteps.length,
-                                  (index2) =>
-                                  GestureDetector(
-                                    onTap: () {
-                                      _customerSchedule.data[index].bookingDetailSteps[index2].treatmentService.spaService.type == "ONESTEP"
-                                          ? Navigator.push(context, MaterialPageRoute(builder: (context) => OneStepProcessScreen(bookingDetailId: _customerSchedule.data[index].bookingDetailSteps[index2].bookingDetail.id)),)
-                                          // ignore: unnecessary_statements
-                                          : {
-                                        showDialog(
-                                          context: context,
-                                          builder: (builder) {
-                                            return Padding(
-                                              padding: const EdgeInsets.symmetric(
-                                                  horizontal: 80),
-                                              child: Dialog(
-                                                child: Container(
-                                                  height: 150,
-                                                  child: Lottie.asset(
-                                                      "assets/lottie/circle_loading.json"),
-                                                ),
-                                              ),
-                                            );
-                                          },
+                      width: 150,
+                      height: 150,
+                      child: SvgPicture.asset("assets/icons/schedule.svg"),
+                    ),
+                    Text(
+                      "Chưa có lịch hẹn mới",
+                      style: TextStyle(fontSize: 24),
+                    )
+                  ],
+                ),
+              )
+            : SingleChildScrollView(
+                child: Container(
+                  padding: EdgeInsets.all(8),
+                  child: Column(
+                    children: [
+                      ...List.generate(
+                          _customerSchedule.data.length,
+                          (index) => Container(
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Container(
+                                          width: 35,
+                                          height: 35,
+                                          child: SvgPicture.asset(
+                                              "assets/icons/schedule.svg"),
                                         ),
-                                        BookingDetailServices.getBookingDetailById(_customerSchedule.data[index].bookingDetailSteps[index2].bookingDetail.id).then((value) =>
-                                        {
-                                          setState(() {
-                                            Navigator.pop(context);
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      CustomerProcessDetail(processDetail: value.data,)),
-                                            );
-                                          })
-                                        })
-                                      };
-
-                                    },
-                                    child: Container(
-                                      margin: EdgeInsets.only(bottom: 5),
-                                      width: double.infinity,
-                                      height: 110,
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                          BorderRadius.circular(10)),
-                                      child: Padding(
-                                        padding:
-                                        const EdgeInsets.all(8.0),
-                                        child: Row(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                  color: kGreen,
-                                                  borderRadius:
-                                                  BorderRadius
-                                                      .circular(10)),
-                                              child: Padding(
-                                                padding: const EdgeInsets
-                                                    .symmetric(
-                                                    vertical: 4,
-                                                    horizontal: 10),
-                                                child: Text(
-                                                  _customerSchedule
-                                                      .data[index]
-                                                      .bookingDetailSteps[
-                                                  index2]
-                                                      .startTime
-                                                      .substring(0, 5),
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                      FontWeight.bold,
-                                                      fontSize: 17),
-                                                ),
-                                              ),
-                                            ),
-                                            VerticalDivider(
-                                              thickness: 1,
-                                              width: 10,
-                                              color: Colors.grey,
-                                            ),
-                                            Flexible(
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                CrossAxisAlignment
-                                                    .start,
-                                                children: [
-                                                  Text(
-                                                    _customerSchedule.data[index].bookingDetailSteps[index2].treatmentService == null
-                                                        ? "Tư vấn"
-                                                        : _customerSchedule.data[index].bookingDetailSteps[index2].treatmentService.spaService
-                                                    .type == "MORESTEP" ? _customerSchedule.data[index].bookingDetailSteps[index2].treatmentService.spaService.name :_customerSchedule.data[index].bookingDetailSteps[index2].bookingDetail.spaPackage.name,
-                                                    style: TextStyle(
-                                                        fontSize: 17,
-                                                        color: Colors
-                                                            .black
-                                                            .withOpacity(
-                                                            0.8)),
-                                                  ),
-                                                  Text(_customerSchedule
-                                                      .data[index]
-                                                      .bookingDetailSteps[
-                                                  index2]
-                                                      .bookingDetail
-                                                      .booking
-                                                      .spa
-                                                      .name),
-                                                  Text(_customerSchedule
-                                                      .data[index]
-                                                      .bookingDetailSteps[
-                                                  index2].bookingDetail.booking.spa.street +" "+
-                                                      _customerSchedule.data[index].bookingDetailSteps[index2].bookingDetail.booking.spa.district +" "+
-                                                      _customerSchedule.data[index].bookingDetailSteps[index2].bookingDetail.booking.spa.city),
-                                                  Text(_customerSchedule.data[index].bookingDetailSteps[index2].treatmentService == null
-                                                      ?
-                                                  _customerSchedule.data[index].bookingDetailSteps[index2].consultant == null ?"Chưa có tư vấn viên"
-
-                                                  :_customerSchedule.data[index].bookingDetailSteps[index2].consultant.user.fullname
-                                                      : _customerSchedule.data[index].bookingDetailSteps[index2].staff == null
-                                                      ? "Chưa có nhân viên"
-                                                      : _customerSchedule
-                                                      .data[index]
-                                                      .bookingDetailSteps[
-                                                  index2]
-                                                      .staff
-                                                      .user
-                                                      .fullname)
-                                                ],
-                                              ),
-                                            ),
-                                          ],
+                                        SizedBox(
+                                          width: 10,
                                         ),
-                                      ),
+                                        Text(
+                                          MyHelper.getUserDate(_customerSchedule
+                                              .data[index].dateBooking),
+                                          style: TextStyle(fontSize: 23),
+                                        )
+                                      ],
                                     ),
-                                  ))
-                        ],
-                      ),
-                    )),
-          ],
-        ),
-      ),
-    );
+                                    Divider(
+                                      height: 10,
+                                      thickness: 2,
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    ...List.generate(
+                                        _customerSchedule.data[index]
+                                            .bookingDetailSteps.length,
+                                        (index2) => GestureDetector(
+                                              onTap: () {
+                                                _customerSchedule
+                                                            .data[index]
+                                                            .bookingDetailSteps[
+                                                                index2]
+                                                            .treatmentService !=
+                                                        null
+                                                    ? _customerSchedule
+                                                                .data[index]
+                                                                .bookingDetailSteps[
+                                                                    index2]
+                                                                .treatmentService
+                                                                .spaService
+                                                                .type ==
+                                                            "ONESTEP"
+                                                        ? Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (context) => OneStepProcessScreen(
+                                                                    bookingDetailId: _customerSchedule
+                                                                        .data[
+                                                                            index]
+                                                                        .bookingDetailSteps[
+                                                                            index2]
+                                                                        .bookingDetail
+                                                                        .id)),
+                                                          )
+                                                        // ignore: unnecessary_statements
+                                                        : {
+                                                            showDialog(
+                                                              context: context,
+                                                              builder:
+                                                                  (builder) {
+                                                                return Padding(
+                                                                  padding: const EdgeInsets
+                                                                          .symmetric(
+                                                                      horizontal:
+                                                                          80),
+                                                                  child: Dialog(
+                                                                    child:
+                                                                        Container(
+                                                                      height:
+                                                                          150,
+                                                                      child: Lottie
+                                                                          .asset(
+                                                                              "assets/lottie/circle_loading.json"),
+                                                                    ),
+                                                                  ),
+                                                                );
+                                                              },
+                                                            ),
+                                                            BookingDetailServices.getBookingDetailById(_customerSchedule
+                                                                    .data[index]
+                                                                    .bookingDetailSteps[
+                                                                        index2]
+                                                                    .bookingDetail
+                                                                    .id)
+                                                                .then(
+                                                                    (value) => {
+                                                                          setState(
+                                                                              () {
+                                                                            Navigator.pop(context);
+                                                                            Navigator.push(
+                                                                              context,
+                                                                              MaterialPageRoute(
+                                                                                  builder: (context) => CustomerProcessDetail(
+                                                                                        processDetail: value.data,
+                                                                                      )),
+                                                                            );
+                                                                          })
+                                                                        })
+                                                          }
+                                                    : {
+                                                        showDialog(
+                                                          context: context,
+                                                          builder: (builder) {
+                                                            return Padding(
+                                                              padding: const EdgeInsets
+                                                                      .symmetric(
+                                                                  horizontal:
+                                                                      80),
+                                                              child: Dialog(
+                                                                child:
+                                                                    Container(
+                                                                  height: 150,
+                                                                  child: Lottie
+                                                                      .asset(
+                                                                          "assets/lottie/circle_loading.json"),
+                                                                ),
+                                                              ),
+                                                            );
+                                                          },
+                                                        ),
+                                                        BookingDetailServices.getBookingDetailById(
+                                                                _customerSchedule
+                                                                    .data[index]
+                                                                    .bookingDetailSteps[
+                                                                        index2]
+                                                                    .bookingDetail
+                                                                    .id)
+                                                            .then((value) => {
+                                                                  setState(() {
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                    Navigator
+                                                                        .push(
+                                                                      context,
+                                                                      MaterialPageRoute(
+                                                                          builder: (context) =>
+                                                                              CustomerProcessDetail(
+                                                                                processDetail: value.data,
+                                                                              )),
+                                                                    );
+                                                                  })
+                                                                })
+                                                      };
+
+                                              },
+                                              child: Container(
+                                                margin:
+                                                    EdgeInsets.only(bottom: 5),
+                                                width: double.infinity,
+                                                height: 110,
+                                                decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10)),
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Container(
+                                                        decoration: BoxDecoration(
+                                                            color: kGreen,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10)),
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .symmetric(
+                                                                  vertical: 4,
+                                                                  horizontal:
+                                                                      10),
+                                                          child: Text(
+                                                            _customerSchedule
+                                                                .data[index]
+                                                                .bookingDetailSteps[
+                                                                    index2]
+                                                                .startTime
+                                                                .substring(
+                                                                    0, 5),
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontSize: 17),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      VerticalDivider(
+                                                        thickness: 1,
+                                                        width: 10,
+                                                        color: Colors.grey,
+                                                      ),
+                                                      Flexible(
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text(
+                                                              _customerSchedule
+                                                                          .data[
+                                                                              index]
+                                                                          .bookingDetailSteps[
+                                                                              index2]
+                                                                          .treatmentService ==
+                                                                      null
+                                                                  ? "Tư vấn"
+                                                                  : _customerSchedule
+                                                                              .data[
+                                                                                  index]
+                                                                              .bookingDetailSteps[
+                                                                                  index2]
+                                                                              .treatmentService
+                                                                              .spaService
+                                                                              .type ==
+                                                                          "MORESTEP"
+                                                                      ? _customerSchedule
+                                                                          .data[
+                                                                              index]
+                                                                          .bookingDetailSteps[
+                                                                              index2]
+                                                                          .treatmentService
+                                                                          .spaService
+                                                                          .name
+                                                                      : _customerSchedule
+                                                                          .data[
+                                                                              index]
+                                                                          .bookingDetailSteps[
+                                                                              index2]
+                                                                          .bookingDetail
+                                                                          .spaPackage
+                                                                          .name,
+                                                              style: TextStyle(
+                                                                  fontSize: 17,
+                                                                  color: Colors
+                                                                      .black
+                                                                      .withOpacity(
+                                                                          0.8)),
+                                                            ),
+                                                            Text(_customerSchedule
+                                                                .data[index]
+                                                                .bookingDetailSteps[
+                                                                    index2]
+                                                                .bookingDetail
+                                                                .booking
+                                                                .spa
+                                                                .name),
+                                                            Text(_customerSchedule
+                                                                    .data[index]
+                                                                    .bookingDetailSteps[
+                                                                        index2]
+                                                                    .bookingDetail
+                                                                    .booking
+                                                                    .spa
+                                                                    .street +
+                                                                " " +
+                                                                _customerSchedule
+                                                                    .data[index]
+                                                                    .bookingDetailSteps[
+                                                                        index2]
+                                                                    .bookingDetail
+                                                                    .booking
+                                                                    .spa
+                                                                    .district +
+                                                                " " +
+                                                                _customerSchedule
+                                                                    .data[index]
+                                                                    .bookingDetailSteps[
+                                                                        index2]
+                                                                    .bookingDetail
+                                                                    .booking
+                                                                    .spa
+                                                                    .city),
+                                                            Text(_customerSchedule
+                                                                        .data[
+                                                                            index]
+                                                                        .bookingDetailSteps[
+                                                                            index2]
+                                                                        .treatmentService ==
+                                                                    null
+                                                                ? _customerSchedule
+                                                                            .data[
+                                                                                index]
+                                                                            .bookingDetailSteps[
+                                                                                index2]
+                                                                            .consultant ==
+                                                                        null
+                                                                    ? "Chưa có tư vấn viên"
+                                                                    : _customerSchedule
+                                                                        .data[
+                                                                            index]
+                                                                        .bookingDetailSteps[
+                                                                            index2]
+                                                                        .consultant
+                                                                        .user
+                                                                        .fullname
+                                                                : _customerSchedule
+                                                                            .data[
+                                                                                index]
+                                                                            .bookingDetailSteps[
+                                                                                index2]
+                                                                            .staff ==
+                                                                        null
+                                                                    ? "Chưa có nhân viên"
+                                                                    : _customerSchedule
+                                                                        .data[
+                                                                            index]
+                                                                        .bookingDetailSteps[
+                                                                            index2]
+                                                                        .staff
+                                                                        .user
+                                                                        .fullname)
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ))
+                                  ],
+                                ),
+                              )),
+                    ],
+                  ),
+                ),
+              );
   }
 }
