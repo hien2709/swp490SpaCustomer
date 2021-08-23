@@ -214,14 +214,6 @@ class _SignFormState extends State<SignForm> {
           SizedBox(height: 20),
           buildPasswordFormField(),
           SizedBox(height: 20),
-          SizedBox(
-            width: double.infinity,
-            child: Text(
-              "QUÊN MẬT KHẨU?",
-              textAlign: TextAlign.right,
-              style: TextStyle(decoration: TextDecoration.underline),
-            ),
-          ),
           SizedBox(height: 20),
           FormError(errors: errors),
           SizedBox(height: SizeConfig.screenHeight * 0.08),
