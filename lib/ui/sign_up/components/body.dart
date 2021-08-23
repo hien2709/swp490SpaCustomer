@@ -81,7 +81,7 @@ class _SignUpFormState extends State<SignUpForm> {
         MaterialPageRoute(builder: (context) => OtpScreen(phone: phoneNumber,)),
       );
     }else{
-      print("Response status ????:  $jsonResponse");
+      print("Response status ????:  ${res.body}");
     }
   }
 

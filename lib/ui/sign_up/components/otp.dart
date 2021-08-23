@@ -101,7 +101,7 @@ class _OtpFormState extends State<OtpForm> {
       print("Response body: ${res.body}");
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => Login()),
+        MaterialPageRoute(builder: (context) => Login(isMainLogin: true,)),
       );
     }else{
       print("Response status ????:  $jsonResponse");

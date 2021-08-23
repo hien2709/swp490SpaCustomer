@@ -41,7 +41,7 @@ class _ProfileFormState extends State<ProfileForm> {
     genderTextController =
         TextEditingController(text: customerProfile.data.user.gender);
     dateOfBirthTextController =
-        TextEditingController(text: customerProfile.data.user.birthdate.toString().substring(0,10));
+        TextEditingController(text: customerProfile.data.user.birthdate==null? "" :customerProfile.data.user.birthdate.toString().substring(0,10));
     phoneTextController =
         TextEditingController(text: customerProfile.data.user.phone);
     emailTextController =
@@ -205,7 +205,7 @@ class _ProfileFormState extends State<ProfileForm> {
   TextFormField BirthDateTextField() {
     return TextFormField(
       controller: dateOfBirthTextController,
-      enabled: false,
+      enabled: widget.edit,
       decoration: InputDecoration(
         labelText: "Ngày sinh",
         floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -231,7 +231,7 @@ class _ProfileFormState extends State<ProfileForm> {
   Widget GenderField() {
     return TextFormField(
       controller: genderTextController,
-      enabled: false,
+      enabled: widget.edit,
       decoration: InputDecoration(
         labelText: "Giới tính",
         floatingLabelBehavior: FloatingLabelBehavior.always,

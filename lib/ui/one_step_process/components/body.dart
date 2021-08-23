@@ -457,6 +457,8 @@ class _OneStepProcessBodyState extends State<OneStepProcessBody> {
                                                 .treatmentService
                                                 .spaService
                                                 .description,
+                                            maxLines: 5,
+                                            overflow: TextOverflow.ellipsis,
                                           ),
                                         ),
                                       ],
